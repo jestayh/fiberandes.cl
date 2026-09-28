@@ -215,53 +215,65 @@
   }
 
   // -------------------------------------------------------------
-  // BUILD: Underground Tunnels & Galerías
+  // BUILD: Underground Tunnels & Galerías (Semi-Transparent X-Ray)
   // -------------------------------------------------------------
   function buildUndergroundTunnels() {
+    // Semi-transparent holographic glass-tunnel material to see interior sensors & fiber
     const tunnelMat = new THREE.MeshStandardMaterial({
-      color: 0x223552,
-      roughness: 0.6,
-      metalness: 0.3,
-      emissive: 0x0a1424,
-      emissiveIntensity: 0.4
+      color: 0x182c44,
+      roughness: 0.3,
+      metalness: 0.15,
+      emissive: 0x091b2e,
+      emissiveIntensity: 0.45,
+      transparent: true,
+      opacity: 0.38,
+      side: THREE.DoubleSide,
+      depthWrite: false
     });
+
+    const tunnelWireMat = new THREE.MeshBasicMaterial({
+      color: 0x00e1ff,
+      wireframe: true,
+      transparent: true,
+      opacity: 0.18
+    });
+
+    function addDrift(geo, x, y, z, rotX = 0, rotZ = 0) {
+      if (rotX) geo.rotateX(rotX);
+      if (rotZ) geo.rotateZ(rotZ);
+      const mesh = new THREE.Mesh(geo, tunnelMat);
+      mesh.position.set(x, y, z);
+      groupTunnels.add(mesh);
+
+      const wireMesh = new THREE.Mesh(geo, tunnelWireMat);
+      wireMesh.position.set(x, y, z);
+      groupTunnels.add(wireMesh);
+    }
 
     // 1. Production Level (-1.800m): Grid of extraction drifts
     const driftSpacing = 4.2;
     for (let x = -8.4; x <= 8.4; x += driftSpacing) {
-      const driftGeo = new THREE.CylinderGeometry(0.55, 0.55, 20, 12);
-      driftGeo.rotateX(Math.PI / 2);
-      const driftMesh = new THREE.Mesh(driftGeo, tunnelMat);
-      driftMesh.position.set(x, Y_PRODUCTION, 0);
-      groupTunnels.add(driftMesh);
+      const driftGeo = new THREE.CylinderGeometry(0.58, 0.58, 20, 14);
+      addDrift(driftGeo, x, Y_PRODUCTION, 0, Math.PI / 2, 0);
     }
 
     // Cross-cuts (perpendicular connecting drifts)
     for (let z = -8; z <= 8; z += 8) {
-      const crossGeo = new THREE.CylinderGeometry(0.55, 0.55, 19, 12);
-      crossGeo.rotateZ(Math.PI / 2);
-      const crossMesh = new THREE.Mesh(crossGeo, tunnelMat);
-      crossMesh.position.set(0, Y_PRODUCTION, z);
-      groupTunnels.add(crossMesh);
+      const crossGeo = new THREE.CylinderGeometry(0.58, 0.58, 19, 14);
+      addDrift(crossGeo, 0, Y_PRODUCTION, z, 0, Math.PI / 2);
     }
 
     // 2. Undercut Level (-1.550m, slightly above production)
     for (let x = -6.3; x <= 6.3; x += driftSpacing) {
-      const ucGeo = new THREE.CylinderGeometry(0.45, 0.45, 16, 10);
-      ucGeo.rotateX(Math.PI / 2);
-      const ucMesh = new THREE.Mesh(ucGeo, tunnelMat);
-      ucMesh.position.set(x, Y_PRODUCTION + 2.2, 0);
-      groupTunnels.add(ucMesh);
+      const ucGeo = new THREE.CylinderGeometry(0.48, 0.48, 16, 12);
+      addDrift(ucGeo, x, Y_PRODUCTION + 2.2, 0, Math.PI / 2, 0);
     }
 
     // 3. Haulage / Transport Drift (-2.000m)
-    const haulageGeo = new THREE.CylinderGeometry(0.7, 0.7, 24, 12);
-    haulageGeo.rotateZ(Math.PI / 2);
-    const haulageMesh = new THREE.Mesh(haulageGeo, tunnelMat);
-    haulageMesh.position.set(0, Y_BOTTOM + 1.2, -9);
-    groupTunnels.add(haulageMesh);
+    const haulageGeo = new THREE.CylinderGeometry(0.72, 0.72, 24, 14);
+    addDrift(haulageGeo, 0, Y_BOTTOM + 1.2, -9, 0, Math.PI / 2);
 
-    // 4. Helical / Incline Access Ramp (connecting levels)
+    // 4. Helical / Incline Access Ramp (connecting surface to interior mina)
     const rampPoints = [];
     const rampTurns = 3.2;
     for (let t = 0; t <= 100; t++) {
@@ -274,23 +286,26 @@
       rampPoints.push(new THREE.Vector3(x, y, z));
     }
     const rampCurve = new THREE.CatmullRomCurve3(rampPoints);
-    const rampGeo = new THREE.TubeGeometry(rampCurve, 80, 0.5, 8, false);
+    const rampGeo = new THREE.TubeGeometry(rampCurve, 80, 0.55, 8, false);
     const rampMesh = new THREE.Mesh(rampGeo, tunnelMat);
     groupTunnels.add(rampMesh);
 
+    const rampWire = new THREE.Mesh(rampGeo, tunnelWireMat);
+    groupTunnels.add(rampWire);
+
     // 5. Ventilation Shaft (Pique vertical)
-    const shaftGeo = new THREE.CylinderGeometry(0.5, 0.5, Y_SURFACE - Y_PRODUCTION, 12);
-    const shaftMesh = new THREE.Mesh(shaftGeo, tunnelMat);
-    shaftMesh.position.set(-13, (Y_SURFACE + Y_PRODUCTION) / 2, 7);
-    groupTunnels.add(shaftMesh);
+    const shaftGeo = new THREE.CylinderGeometry(0.52, 0.52, Y_SURFACE - Y_PRODUCTION, 12);
+    addDrift(shaftGeo, -13, (Y_SURFACE + Y_PRODUCTION) / 2, 7);
   }
 
   // -------------------------------------------------------------
-  // BUILD: Block Cave Geometry (Translucent Red Cave-Back, Muckpile, Drawbells)
-  // Direct aesthetic inspiration from Ideon REVEAL™ Block Caving render
+  // BUILD: Block Cave Geometry & Dynamic Seismicity
   // -------------------------------------------------------------
+  let dynamicEvents = [];
+  const MAX_DYNAMIC_EVENTS = 140;
+
   function buildBlockCaveGeometry() {
-    // 1. Drawbells / Conical Funnels at Base (Extraction points)
+    // 1. Drawbells / Conical Funnels at Base
     const drawbellMat = new THREE.MeshStandardMaterial({
       color: 0x1f2733,
       roughness: 0.85,
@@ -318,7 +333,7 @@
       bellWire.position.copy(bellMesh.position);
       groupCave.add(bellWire);
 
-      // Floor marker plate / Drawpoint base pad (like orange pads in Ideon render)
+      // Floor marker plate
       const padGeo = new THREE.BoxGeometry(1.6, 0.2, 1.6);
       const padMat = new THREE.MeshStandardMaterial({
         color: 0xff6600,
@@ -331,8 +346,7 @@
       groupCave.add(padMesh);
     });
 
-    // 2. Muckpile (Pila de Mineral Quebrado / Broken Rock Column)
-    // Dark fractured ore mass resting over the drawbells
+    // 2. Muckpile (Broken Rock Mass)
     const muckpileGeo = new THREE.CylinderGeometry(6.8, 8.8, 4.5, 24, 4);
     const muckpileMat = new THREE.MeshStandardMaterial({
       color: 0x22262d,
@@ -345,7 +359,7 @@
     muckpileMesh.position.set(0, Y_PRODUCTION + 3.8, 0);
     groupCave.add(muckpileMesh);
 
-    // Clustered broken rock boulders on muckpile surface (giving fractured gravel texture)
+    // Clustered broken rock boulders
     const rockGeo = new THREE.DodecahedronGeometry(0.45, 0);
     for (let r = 0; r < 65; r++) {
       const angle = Math.random() * Math.PI * 2;
@@ -367,7 +381,6 @@
     }
 
     // 3. Volumetric Translucent Red Cave-Back Dome & Air Gap Envelope
-    // Exact visual signature seen in Ideon's 3D render (crimson translucent dome)
     const caveBackGeo = new THREE.SphereGeometry(7.2, 28, 20, 0, Math.PI * 2, 0, Math.PI / 1.7);
     caveBackGeo.scale(1.15, 0.85, 1.0);
     const caveBackMat = new THREE.MeshStandardMaterial({
@@ -385,7 +398,6 @@
     caveBackMesh.position.set(0, Y_AIR_GAP + 1.2, 0);
     groupCave.add(caveBackMesh);
 
-    // Glowing Wireframe contour lines on the Cave-Back envelope
     const caveBackWireMat = new THREE.MeshBasicMaterial({
       color: 0xff6644,
       wireframe: true,
@@ -396,86 +408,91 @@
     caveBackWire.position.copy(caveBackMesh.position);
     groupCave.add(caveBackWire);
 
-    // Interior Crimson Glow Light inside the cave back
     const caveGlowLight = new THREE.PointLight(0xff3311, 2.2, 22);
     caveGlowLight.position.set(0, Y_CAVE_TOP + 0.5, 0);
     groupCave.add(caveGlowLight);
 
-    // 4. Seismogenic Zone: Particle Swarm (Microseismic Cloud Mw < 0)
-    // Arching microseismic cloud around and above the cave-back failure envelope
-    const particleCount = 750;
-    const positions = new Float32Array(particleCount * 3);
-    const colors = new Float32Array(particleCount * 3);
-    const sizes = new Float32Array(particleCount);
+    // 4. Dynamic Microseismicity (Appearing and Disappearing Fractures)
+    // Instead of a static crowded swarm, events burst, radiate and fade away organically
+    dynamicEvents = [];
+    const positions = new Float32Array(MAX_DYNAMIC_EVENTS * 3);
+    const colors = new Float32Array(MAX_DYNAMIC_EVENTS * 3);
 
-    const cBlue = new THREE.Color(0x00c7ff);
+    const cCyan = new THREE.Color(0x00f0ff);
     const cGreen = new THREE.Color(0x00ffa3);
-    const cYellow = new THREE.Color(0xffb020);
+    const cYellow = new THREE.Color(0xffc83b);
     const cRed = new THREE.Color(0xff4b55);
+    const cFlash = new THREE.Color(0xffffff);
 
-    for (let i = 0; i < particleCount; i++) {
-      // Parabolic / Arch shell distribution
+    for (let i = 0; i < MAX_DYNAMIC_EVENTS; i++) {
+      // Natural arching distribution around cave-back
       const theta = Math.random() * Math.PI * 2;
-      const r = 2.5 + Math.random() * 5.8;
+      const r = 2.2 + Math.random() * 5.8;
       const x = Math.cos(theta) * r;
       const z = Math.sin(theta) * r * 0.85;
-
-      // Vertical arch: highest in center, dropping on sides
       const arch = Math.max(0, 1 - (r * r) / 64);
-      const y = Y_CAVE_TOP + (arch * 4.8) + (Math.random() - 0.5) * 2.2;
+      const y = Y_CAVE_TOP + (arch * 4.6) + (Math.random() - 0.5) * 2.2;
 
-      positions[i * 3] = x;
-      positions[i * 3 + 1] = y;
-      positions[i * 3 + 2] = z;
-
-      // Magnitude distribution: mostly low magnitudes Mw < 0
       const magRand = Math.random();
-      let pColor = cBlue;
-      let pSize = 1.4;
+      let baseColor = cCyan;
+      let mag = -1.8;
 
-      if (magRand > 0.92) {
-        pColor = cRed; // Rare large event Mw > 0.5
-        pSize = 2.8;
-      } else if (magRand > 0.75) {
-        pColor = cYellow; // Moderate event Mw ~ 0
-        pSize = 2.2;
-      } else if (magRand > 0.40) {
-        pColor = cGreen; // Microevent Mw ~ -1.0
-        pSize = 1.8;
-      } else {
-        pColor = cBlue; // Ultra-microevent Mw < -1.5
-        pSize = 1.4;
+      if (magRand > 0.93) {
+        baseColor = cRed;
+        mag = 0.5;
+      } else if (magRand > 0.78) {
+        baseColor = cYellow;
+        mag = -0.2;
+      } else if (magRand > 0.45) {
+        baseColor = cGreen;
+        mag = -1.0;
       }
 
-      colors[i * 3] = pColor.r;
-      colors[i * 3 + 1] = pColor.g;
-      colors[i * 3 + 2] = pColor.b;
-      sizes[i] = pSize;
+      const isInitiallyActive = Math.random() < 0.12; // Start with only ~12-16 active events
+
+      dynamicEvents.push({
+        homePos: new THREE.Vector3(x, y, z),
+        baseColor,
+        flashColor: cFlash,
+        mag,
+        active: isInitiallyActive,
+        age: isInitiallyActive ? Math.random() * 1.5 : 0,
+        lifespan: 1.2 + Math.random() * 1.6
+      });
+
+      positions[i * 3] = x;
+      positions[i * 3 + 1] = isInitiallyActive ? y : -999;
+      positions[i * 3 + 2] = z;
+
+      colors[i * 3] = baseColor.r;
+      colors[i * 3 + 1] = baseColor.g;
+      colors[i * 3 + 2] = baseColor.b;
     }
 
     const pGeo = new THREE.BufferGeometry();
     pGeo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
     pGeo.setAttribute('color', new THREE.BufferAttribute(colors, 3));
 
-    // Custom circle particle texture
+    // Custom glowing circle particle texture
     const pCanvas = document.createElement('canvas');
-    pCanvas.width = 32;
-    pCanvas.height = 32;
+    pCanvas.width = 64;
+    pCanvas.height = 64;
     const pCtx = pCanvas.getContext('2d');
-    const grad = pCtx.createRadialGradient(16, 16, 0, 16, 16, 16);
+    const grad = pCtx.createRadialGradient(32, 32, 0, 32, 32, 32);
     grad.addColorStop(0, 'rgba(255,255,255,1)');
-    grad.addColorStop(0.3, 'rgba(0,240,255,0.9)');
+    grad.addColorStop(0.3, 'rgba(0,240,255,0.95)');
+    grad.addColorStop(0.7, 'rgba(0,240,255,0.3)');
     grad.addColorStop(1, 'rgba(0,240,255,0)');
     pCtx.fillStyle = grad;
-    pCtx.fillRect(0, 0, 32, 32);
+    pCtx.fillRect(0, 0, 64, 64);
     const pTex = new THREE.CanvasTexture(pCanvas);
 
     const pMat = new THREE.PointsMaterial({
-      size: 1.6,
+      size: 2.4,
       vertexColors: true,
       map: pTex,
       transparent: true,
-      opacity: 0.92,
+      opacity: 0.95,
       blending: THREE.AdditiveBlending,
       depthWrite: false
     });
@@ -483,7 +500,7 @@
     seismogenicParticles = new THREE.Points(pGeo, pMat);
     groupCave.add(seismogenicParticles);
 
-    // 5. Elastic Zone (Boundary outer iso-contour)
+    // 5. Elastic Zone boundary outer iso-contour
     const elasticGeo = new THREE.SphereGeometry(12.5, 24, 16, 0, Math.PI * 2, 0, Math.PI / 2);
     const elasticEdges = new THREE.EdgesGeometry(elasticGeo);
     const elasticMat = new THREE.LineBasicMaterial({ color: 0x71829e, transparent: true, opacity: 0.22 });
@@ -493,92 +510,184 @@
   }
 
   // -------------------------------------------------------------
-  // BUILD: Boreholes & Fiber Optic Cable Array (FiberAndes DAS)
+  // BUILD: Boreholes & Fiber Optic Cable Array (Jedi Lightsaber Style)
+  // Continuous optical nervous system in boreholes + galleries
   // -------------------------------------------------------------
   function buildBoreholeFiberArray() {
-    // Borehole Paths: Surface to Deep Rock & around caving
+    laserPulseMeshes = [];
+
+    // Helper: Build Jedi Lightsaber Fiber Cable with intense propagating light solitons
+    function addLightsaberLine(points, colorHex, pulseCount = 2, pulseSpeed = 0.012) {
+      const curve = new THREE.CatmullRomCurve3(points);
+
+      // 1. White-hot luminous central core
+      const coreGeo = new THREE.BufferGeometry().setFromPoints(points);
+      const coreMat = new THREE.LineBasicMaterial({
+        color: 0xffffff,
+        linewidth: 2,
+        transparent: true,
+        opacity: 0.95
+      });
+      const coreLine = new THREE.Line(coreGeo, coreMat);
+      groupBoreholes.add(coreLine);
+
+      // 2. Jedi Lightsaber Neon Plasma Aura (Glowing additive tube)
+      const auraGeo = new THREE.TubeGeometry(curve, Math.max(16, points.length * 6), 0.12, 8, false);
+      const auraMat = new THREE.MeshBasicMaterial({
+        color: colorHex,
+        transparent: true,
+        opacity: 0.72,
+        blending: THREE.AdditiveBlending,
+        depthWrite: false,
+        side: THREE.DoubleSide
+      });
+      const auraMesh = new THREE.Mesh(auraGeo, auraMat);
+      groupBoreholes.add(auraMesh);
+
+      // 3. Virtual Sensor Channels along cable (1 channel every ~1.2 units)
+      const totalLen = curve.getLength();
+      const nodeCount = Math.floor(totalLen / 1.1);
+      for (let n = 1; n < nodeCount; n++) {
+        const pt = curve.getPointAt(n / nodeCount);
+        const nodeGeo = new THREE.SphereGeometry(0.12, 6, 6);
+        const nodeMat = new THREE.MeshBasicMaterial({ color: 0x00ffa3 });
+        const nodeMesh = new THREE.Mesh(nodeGeo, nodeMat);
+        nodeMesh.position.copy(pt);
+        groupBoreholes.add(nodeMesh);
+      }
+
+      // 4. Intense Propagating Laser Soliton Pulses (Jedi Light Packets)
+      for (let p = 0; p < pulseCount; p++) {
+        const pulseGroup = new THREE.Group();
+
+        // High-intensity white core
+        const pCore = new THREE.Mesh(
+          new THREE.SphereGeometry(0.36, 10, 10),
+          new THREE.MeshBasicMaterial({ color: 0xffffff })
+        );
+        pulseGroup.add(pCore);
+
+        // Radiant neon halo
+        const pHalo = new THREE.Mesh(
+          new THREE.SphereGeometry(0.72, 10, 10),
+          new THREE.MeshBasicMaterial({
+            color: colorHex,
+            transparent: true,
+            opacity: 0.85,
+            blending: THREE.AdditiveBlending,
+            depthWrite: false
+          })
+        );
+        pulseGroup.add(pHalo);
+
+        pulseGroup.userData = {
+          curve,
+          speed: pulseSpeed * (0.85 + Math.random() * 0.3),
+          progress: (p / pulseCount) + Math.random() * 0.15
+        };
+
+        groupBoreholes.add(pulseGroup);
+        laserPulseMeshes.push(pulseGroup);
+      }
+    }
+
+    // A. DEEP BOREHOLES: Drilling through virgin rock mass into seismogenic zone
     const boreholeConfigs = [
-      // 1. Central Deep Borehole (passes right through seismogenic zone)
-      { start: [0, Y_SURFACE, 0], end: [0, Y_CAVE_TOP + 1.2, 0], type: 'central' },
+      // 1. Central Deep Borehole
+      { points: [new THREE.Vector3(0, Y_SURFACE, 0), new THREE.Vector3(0, Y_CAVE_TOP + 1.2, 0)], color: 0x00f0ff },
       // 2. North Vertical Borehole
-      { start: [-3.8, Y_SURFACE, 2.5], end: [-3.8, Y_BOTTOM + 2, 2.5], type: 'deep' },
+      { points: [new THREE.Vector3(-3.8, Y_SURFACE, 2.5), new THREE.Vector3(-3.8, Y_BOTTOM + 2, 2.5)], color: 0x00f0ff },
       // 3. South Vertical Borehole
-      { start: [3.8, Y_SURFACE, -2.5], end: [3.8, Y_BOTTOM + 2, -2.5], type: 'deep' },
-      // 4. East Inclined Borehole (65° angle flanking cave)
-      { start: [8.5, Y_SURFACE, 0], end: [1.5, Y_BOTTOM + 1, 0], type: 'inclined' },
+      { points: [new THREE.Vector3(3.8, Y_SURFACE, -2.5), new THREE.Vector3(3.8, Y_BOTTOM + 2, -2.5)], color: 0x00f0ff },
+      // 4. East Inclined Borehole
+      { points: [new THREE.Vector3(8.5, Y_SURFACE, 0), new THREE.Vector3(1.5, Y_BOTTOM + 1, 0)], color: 0x00f0ff },
       // 5. West Inclined Borehole
-      { start: [-8.5, Y_SURFACE, 0], end: [-1.5, Y_BOTTOM + 1, 0], type: 'inclined' },
-      // 6. Underground sub-horizontal probe drilled from Ramp into rock mass
-      { start: [11.5, Y_CAVE_TOP + 3, 0], end: [2, Y_CAVE_TOP + 2.5, 0], type: 'horizontal' },
-      { start: [-11.5, Y_CAVE_TOP + 3, 0], end: [-2, Y_CAVE_TOP + 2.5, 0], type: 'horizontal' }
+      { points: [new THREE.Vector3(-8.5, Y_SURFACE, 0), new THREE.Vector3(-1.5, Y_BOTTOM + 1, 0)], color: 0x00f0ff },
+      // 6. Underground probes into virgin rock
+      { points: [new THREE.Vector3(11.5, Y_CAVE_TOP + 3, 0), new THREE.Vector3(2, Y_CAVE_TOP + 2.5, 0)], color: 0x00f0ff },
+      { points: [new THREE.Vector3(-11.5, Y_CAVE_TOP + 3, 0), new THREE.Vector3(-2, Y_CAVE_TOP + 2.5, 0)], color: 0x00f0ff }
     ];
 
-    const fiberMat = new THREE.MeshBasicMaterial({ color: 0x00f0ff });
     const boreholeCasingMat = new THREE.MeshStandardMaterial({
       color: 0x0b2038,
       roughness: 0.4,
       metalness: 0.8,
       transparent: true,
-      opacity: 0.55
+      opacity: 0.45
     });
 
     boreholeConfigs.forEach((bh, idx) => {
-      const p1 = new THREE.Vector3(...bh.start);
-      const p2 = new THREE.Vector3(...bh.end);
+      const p1 = bh.points[0];
+      const p2 = bh.points[1];
       const dir = new THREE.Vector3().subVectors(p2, p1);
       const len = dir.length();
       const mid = new THREE.Vector3().addVectors(p1, p2).multiplyScalar(0.5);
 
       // Casing tube
-      const casingGeo = new THREE.CylinderGeometry(0.22, 0.22, len, 8);
+      const casingGeo = new THREE.CylinderGeometry(0.24, 0.24, len, 8);
       const casingMesh = new THREE.Mesh(casingGeo, boreholeCasingMat);
       casingMesh.position.copy(mid);
       casingMesh.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), dir.clone().normalize());
       groupBoreholes.add(casingMesh);
 
-      // Fiber Core line (Glowing Laser Line)
-      const fiberLineGeo = new THREE.BufferGeometry().setFromPoints([p1, p2]);
-      const fiberLineMat = new THREE.LineBasicMaterial({
-        color: 0x00f0ff,
-        linewidth: 2,
-        transparent: true,
-        opacity: 0.95
-      });
-      const fiberLine = new THREE.Line(fiberLineGeo, fiberLineMat);
-      groupBoreholes.add(fiberLine);
-
-      // Virtual Sensor Nodes along borehole (one every ~1 unit / 50m)
-      const nodeCount = Math.floor(len / 1.1);
-      for (let n = 1; n < nodeCount; n++) {
-        const nodePos = new THREE.Vector3().lerpVectors(p1, p2, n / nodeCount);
-        const nodeGeo = new THREE.SphereGeometry(0.12, 6, 6);
-        const nodeMat = new THREE.MeshBasicMaterial({ color: 0x00ffa3 });
-        const nodeMesh = new THREE.Mesh(nodeGeo, nodeMat);
-        nodeMesh.position.copy(nodePos);
-        groupBoreholes.add(nodeMesh);
-      }
-
-      // Animated Laser Pulse
-      const pulseGeo = new THREE.SphereGeometry(0.32, 8, 8);
-      const pulseMat = new THREE.MeshBasicMaterial({ color: 0xffffff });
-      const pulseMesh = new THREE.Mesh(pulseGeo, pulseMat);
-      pulseMesh.userData = { p1, p2, speed: 0.008 + (idx * 0.002), progress: Math.random() };
-      groupBoreholes.add(pulseMesh);
-      laserPulseMeshes.push(pulseMesh);
+      // Jedi lightsaber cable
+      addLightsaberLine(bh.points, bh.color, 2, 0.012 + (idx * 0.002));
     });
 
-    // Also connect horizontal tunnels with fiber (gallery loop)
-    const galleryFiberPoints = [
-      new THREE.Vector3(-8.4, Y_PRODUCTION, -8),
-      new THREE.Vector3(8.4, Y_PRODUCTION, -8),
-      new THREE.Vector3(8.4, Y_PRODUCTION, 8),
-      new THREE.Vector3(-8.4, Y_PRODUCTION, 8),
-      new THREE.Vector3(-8.4, Y_PRODUCTION, -8)
-    ];
-    const galLineGeo = new THREE.BufferGeometry().setFromPoints(galleryFiberPoints);
-    const galLineMat = new THREE.LineBasicMaterial({ color: 0x00ffa3, linewidth: 2 });
-    const galLine = new THREE.Line(galLineGeo, galLineMat);
-    groupBoreholes.add(galLine);
+    // B. FIBER OPTIC IN TUNNELS & GALERÍAS (Production Drifts, Cross-cuts, Ramp Trunk)
+    // 1. Fiber along crowns of all 5 production drifts
+    const driftXs = [-8.4, -4.2, 0, 4.2, 8.4];
+    driftXs.forEach((x, i) => {
+      const tunnelFiberPoints = [
+        new THREE.Vector3(x, Y_PRODUCTION + 0.35, -9.5),
+        new THREE.Vector3(x, Y_PRODUCTION + 0.35, 9.5)
+      ];
+      // Alternate between cyan (DAS Acústico) and emerald (DSS Deformación)
+      const color = i % 2 === 0 ? 0x00f0ff : 0x00ffa3;
+      addLightsaberLine(tunnelFiberPoints, color, 2, 0.010 + (i * 0.002));
+    });
+
+    // 2. Cross-cut fiber links connecting the drifts
+    const crossZ = [-8, 0, 8];
+    crossZ.forEach(z => {
+      const crossPoints = [
+        new THREE.Vector3(-8.4, Y_PRODUCTION + 0.35, z),
+        new THREE.Vector3(8.4, Y_PRODUCTION + 0.35, z)
+      ];
+      addLightsaberLine(crossPoints, 0x00ffa3, 1, 0.008);
+    });
+
+    // 3. Main Optical Trunk Cable down the spiral access ramp
+    const rampFiberPoints = [];
+    const rampTurns = 3.2;
+    for (let t = 0; t <= 60; t++) {
+      const p = t / 60;
+      const angle = p * Math.PI * 2 * rampTurns;
+      const radius = 12 + Math.sin(p * Math.PI) * 2;
+      const x = Math.cos(angle) * radius;
+      const z = Math.sin(angle) * radius;
+      const y = THREE.MathUtils.lerp(Y_SURFACE, Y_PRODUCTION, p) + 0.35;
+      rampFiberPoints.push(new THREE.Vector3(x, y, z));
+    }
+    addLightsaberLine(rampFiberPoints, 0x00f0ff, 4, 0.006);
+
+    // 4. Interrogator Rack Unit in transport drift (-2.000m)
+    const rackGeo = new THREE.BoxGeometry(1.4, 2.0, 1.0);
+    const rackMat = new THREE.MeshStandardMaterial({
+      color: 0x0e243d,
+      roughness: 0.3,
+      metalness: 0.8
+    });
+    const rackMesh = new THREE.Mesh(rackGeo, rackMat);
+    rackMesh.position.set(-8.4, Y_BOTTOM + 1.2, -9);
+    groupBoreholes.add(rackMesh);
+
+    // Pulsing LED panel on interrogator
+    const ledGeo = new THREE.BoxGeometry(0.8, 0.3, 0.1);
+    const ledMat = new THREE.MeshBasicMaterial({ color: 0x00f0ff });
+    const ledMesh = new THREE.Mesh(ledGeo, ledMat);
+    ledMesh.position.set(-8.4, Y_BOTTOM + 1.6, -8.45);
+    groupBoreholes.add(ledMesh);
   }
 
   // -------------------------------------------------------------
@@ -848,17 +957,79 @@
 
     if (controls) controls.update();
 
-    // 1. Animate Laser pulses traveling down boreholes
+    // 1. Animate Jedi Lightsaber Laser Pulses along boreholes & tunnels
     laserPulseMeshes.forEach(p => {
-      p.userData.progress += p.userData.speed;
-      if (p.userData.progress > 1) p.userData.progress = 0;
-      p.position.lerpVectors(p.userData.p1, p.userData.p2, p.userData.progress);
+      if (p.userData && p.userData.curve) {
+        p.userData.progress += p.userData.speed;
+        if (p.userData.progress > 1) p.userData.progress = 0;
+        const pt = p.userData.curve.getPointAt(p.userData.progress);
+        p.position.copy(pt);
+
+        // Subtle energy vibration on pulse
+        const s = 1.0 + Math.sin(pulseTime * 12 + p.userData.progress * 20) * 0.12;
+        p.scale.set(s, s, s);
+      }
     });
 
-    // 2. Animate Seismogenic cloud subtle breathing
-    if (seismogenicParticles) {
-      const pScale = 1 + Math.sin(pulseTime * 1.5) * 0.02;
-      seismogenicParticles.scale.set(pScale, pScale, pScale);
+    // 2. Animate Dynamic Microseismicity (Appearing and Disappearing Fractures)
+    if (seismogenicParticles && dynamicEvents.length > 0) {
+      const posAttr = seismogenicParticles.geometry.attributes.position;
+      const colAttr = seismogenicParticles.geometry.attributes.color;
+      let needsUpdate = false;
+
+      // Periodic natural fracture trigger: spawns 1-2 new microevents organically
+      if (Math.random() < 0.09) {
+        const deadEvents = dynamicEvents.filter(e => !e.active);
+        if (deadEvents.length > 0) {
+          const ev = deadEvents[Math.floor(Math.random() * deadEvents.length)];
+          ev.active = true;
+          ev.age = 0;
+          ev.lifespan = 1.0 + Math.random() * 1.8;
+        }
+      }
+
+      for (let i = 0; i < dynamicEvents.length; i++) {
+        const ev = dynamicEvents[i];
+        if (ev.active) {
+          ev.age += 0.022;
+          const progress = ev.age / ev.lifespan;
+
+          if (progress < 1.0) {
+            posAttr.setXYZ(i, ev.homePos.x, ev.homePos.y, ev.homePos.z);
+
+            // Initial explosive fracture flash (first 18% of life)
+            if (progress < 0.18) {
+              const flashIntensity = 1.0 - (progress / 0.18) * 0.25;
+              colAttr.setXYZ(
+                i,
+                ev.flashColor.r * flashIntensity,
+                ev.flashColor.g * flashIntensity,
+                ev.flashColor.b * flashIntensity
+              );
+            } else {
+              // Smooth acoustic radiation decay to extinction
+              const decay = Math.pow(1.0 - ((progress - 0.18) / 0.82), 1.5);
+              colAttr.setXYZ(
+                i,
+                ev.baseColor.r * decay,
+                ev.baseColor.g * decay,
+                ev.baseColor.b * decay
+              );
+            }
+          } else {
+            // Fracture finished, hide below ground until next rupture
+            ev.active = false;
+            posAttr.setXYZ(i, ev.homePos.x, -999, ev.homePos.z);
+            colAttr.setXYZ(i, 0, 0, 0);
+          }
+          needsUpdate = true;
+        }
+      }
+
+      if (needsUpdate) {
+        posAttr.needsUpdate = true;
+        colAttr.needsUpdate = true;
+      }
     }
 
     // 3. Shockwave expansion
