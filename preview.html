@@ -86,7 +86,8 @@
 
       <nav class="nav-links" role="navigation" aria-label="Menú principal">
         <a href="#comparativa">¿Por Qué DFOS?</a>
-        <a href="#tecnologias">Tecnologías (DAS/DSS/DTS)</a>
+        <a href="#tecnologias">Tecnologías</a>
+        <a href="#evidencia">Ciencia & Papers</a>
         <a href="#aplicaciones">Aplicaciones</a>
         <a href="#tecnologia-modelo">Sondajes & Modelo</a>
         <a href="#plataforma">Software Hub</a>
@@ -119,10 +120,12 @@
   <div class="mobile-nav" role="navigation" aria-label="Menú móvil">
     <a href="#comparativa" data-i18n="nav.why">¿Por Qué DFOS?</a>
     <a href="#tecnologias" data-i18n="nav.tech">Tecnologías</a>
+    <a href="#evidencia">Ciencia & Papers</a>
     <a href="#aplicaciones" data-i18n="nav.apps">Aplicaciones</a>
-    <a href="#hardware" data-i18n="nav.hardware">Hardware</a>
+    <a href="#tecnologia-modelo">Sondajes & Modelo</a>
     <a href="#plataforma" data-i18n="nav.platform">Plataforma Hub</a>
     <a href="#configurador" data-i18n="nav.configurator">Cotizador</a>
+    <a href="#nosotros">Equipo Científico</a>
     <a href="#contacto" data-i18n="nav.contact">Contacto</a>
     <a href="#contacto" class="btn btn-primary" style="margin-top:20px;" data-i18n="nav.cta">Cotizar Proyecto</a>
   </div>
@@ -400,11 +403,149 @@
       </div>
     </section>
 
-    <!-- ============================ SECTION 03: APLICACIONES ============================ -->
-    <section class="section-pad" id="aplicaciones">
+    <!-- ============================ SECTION 03: FUNDAMENTOS CIENTÍFICOS & PAPERS ============================ -->
+    <section class="section-pad" id="evidencia" style="background: var(--bg);">
       <div class="wrap">
         <div class="section-head reveal">
-          <span class="eyebrow"><span class="idx">03</span> <span data-i18n="app.eyebrow">03 · Aplicaciones Industriales</span></span>
+          <span class="eyebrow"><span class="idx">03</span> <span>03 · Evidencia Científica & Papers</span></span>
+          <h2 class="h-section">Validación empírica en minería y macizos rocosos profundos</h2>
+          <p class="lead">
+            Nuestros principios de diseño no son supuestos teóricos: se basan en el cuerpo de investigación científica más reciente sobre Distributed Acoustic Sensing aplicado a condiciones extremas de esfuerzo minero (como el proyecto Onaping Depth de Glencore y el Bedretto Underground Lab).
+          </p>
+        </div>
+
+        <!-- Scientific Case Cards Grid -->
+        <div class="science-grid reveal">
+          <!-- Card 1: Monitoreo de Doble Banda -->
+          <div class="science-card">
+            <div>
+              <div class="science-header">
+                <span class="science-badge">Paradigma Científico</span>
+                <span class="science-stat">&lt; 0.1 Hz a kHz</span>
+              </div>
+              <h3 class="science-title">Monitoreo de Doble Banda: Sismos y Deformación Lenta</h3>
+              <p class="science-text">
+                Los sensores sísmicos convencionales poseen filtros paso-alto que ignoran frecuencias inferiores a 5–10 Hz. DAS opera en <strong>Doble Banda simultánea</strong>: captura la microsismicidad dinámica de alta frecuencia (&gt;10 Hz) y, al mismo tiempo, mide la <strong>tasa de deformación lenta (slow-strain, &lt;0.1 Hz)</strong>. Esta deformación cuasi-estática revela la redistribución de esfuerzos y la relajación asísmica del macizo rocoso horas y días antes de un estallido de roca (strainburst).
+              </p>
+            </div>
+            <div class="science-footnote">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+              <span>Paper Ref: Karrenbach et al. / EAGE &amp; Mining Geophysics Review</span>
+            </div>
+          </div>
+
+          <!-- Card 2: Caso Onaping Depth -->
+          <div class="science-card">
+            <div>
+              <div class="science-header">
+                <span class="science-badge copper">Caso Real · Glencore Onaping</span>
+                <span class="science-stat">-40% Incertidumbre</span>
+              </div>
+              <h3 class="science-title">Reducción de Incertidumbre Espacial en Sondajes</h3>
+              <p class="science-text">
+                En el proyecto minero <strong>Onaping Depth (Glencore, Canadá)</strong>, la incorporación de arreglos de fibra óptica DAS en sondajes profundos integrados a la red de geófonos triaxiales demostró una reducción contundente del error de localización hipocentral: la desviación estándar del error bajó de <strong>5 m a 3 m</strong> (~40% de mejora). La densidad continua de trayectorias de rayos a lo largo del pozo elimina ambigüedades espaciales de estaciones discretas.
+              </p>
+            </div>
+            <div class="science-footnote">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+              <span>Paper Ref: Glencore Onaping Depth DAS Trial / Caving &amp; Seismicity</span>
+            </div>
+          </div>
+
+          <!-- Card 3: Caving & Cave-Back -->
+          <div class="science-card">
+            <div>
+              <div class="science-header">
+                <span class="science-badge emerald">Block &amp; Panel Caving</span>
+                <span class="science-stat">M &lt; 0 hasta M -2</span>
+              </div>
+              <h3 class="science-title">Seguimiento de Cave-Back y Zona Plastificada</h3>
+              <p class="science-text">
+                En métodos de hundimiento por bloques masivos, predecir la propagación vertical del quiebre (cave-back) es vital. La fibra óptica instalada en sondajes sub-verticales sobre el bloque detecta eventos de magnitudes extremadamente bajas (hasta Mw -2.0) asociados al quiebre inicial y mapea la expansión de la <strong>zona plastificada (yielded zone)</strong>. Además, la tasa de deformación entrega advertencia anticipada días antes de que el cizalle corte el cable.
+              </p>
+            </div>
+            <div class="science-footnote">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+              <span>Paper Ref: Bedretto Underground Laboratory &amp; Mine Seismology Studies</span>
+            </div>
+          </div>
+
+          <!-- Card 4: Borehole Daisy-Chaining & Engineered Fiber -->
+          <div class="science-card">
+            <div>
+              <div class="science-header">
+                <span class="science-badge purple">Ingeniería de Faena</span>
+                <span class="science-stat">+20 dB SNR · 120 dB Rango</span>
+              </div>
+              <h3 class="science-title">Sondajes Daisy-Chaining &amp; Fibras de Alta Dispersión</h3>
+              <p class="science-text">
+                Para optimizar la inversión en faena, desplegamos arreglos <strong>daisy-chain</strong>: un único cable continuo entra y sale de múltiples sondajes geomecánicos mediante bucles de fondo de pozo (*downhole turnarounds*). Con el uso de <em>engineered fibers</em> (fibras con micro-reflectores), se incrementa la retrodispersión Rayleigh en +20 dB, alcanzando un rango dinámico de 120 dB idéntico al de un geófono de laboratorio, pero distribuido en miles de metros.
+              </p>
+            </div>
+            <div class="science-footnote">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+              <span>Paper Ref: Advances in Downhole Optoelectronics &amp; Specialty Fibers</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Comparative Matrix Table -->
+        <div class="science-table-wrap reveal">
+          <table class="science-table" aria-label="Matriz comparativa Geófono vs FiberAndes DFOS">
+            <thead>
+              <tr>
+                <th scope="col">Parámetro Técnico</th>
+                <th scope="col">Red Convencional de Geófonos / ESI</th>
+                <th scope="col">FiberAndes DFOS (DAS + DSS + DTS)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Densidad de Muestreo</td>
+                <td>10 a 30 puntos discretos en toda la mina</td>
+                <td><strong>10.000 sensores virtuales</strong> por cada 10 km (cada 1 m continuo)</td>
+              </tr>
+              <tr>
+                <td>Banda de Frecuencia</td>
+                <td>Alta frecuencia (&gt;10 Hz a 2 kHz) únicamente</td>
+                <td><strong>Doble Banda:</strong> Ondas dinámicas (&gt;10 Hz) + Slow-strain (&lt;0.1 Hz)</td>
+              </tr>
+              <tr>
+                <td>Sensibilidad a Microeventos</td>
+                <td>Típicamente limitada a Mw &gt; -0.5 en redes amplias</td>
+                <td><strong>Hasta Mw &lt; -2.0</strong> en proximidad del cable cementado</td>
+              </tr>
+              <tr>
+                <td>Deformación Previa al Colapso</td>
+                <td>Ciego a la deformación asísmica lenta</td>
+                <td><strong>Monitoreo continuo</strong> de acumulación de esfuerzo y cizallamiento</td>
+              </tr>
+              <tr>
+                <td>Incertidumbre de Localización</td>
+                <td>Desviación estándar típica: ~5 metros</td>
+                <td><strong>Reducción comprobada a 3 metros</strong> (-40% incertidumbre en sondajes)</td>
+              </tr>
+              <tr>
+                <td>Supervivencia en Tronaduras</td>
+                <td>Geófonos expuestos en galerías y frentes</td>
+                <td><strong>Cable blindado</strong> cementado en sondajes y bajo shotcrete</td>
+              </tr>
+              <tr>
+                <td>Parámetro Físico Fundamental</td>
+                <td>Velocidad / Aceleración puntual de partícula (v)</td>
+                <td><strong>Tasa de Deformación Dinámica Continua (ε̇)</strong></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================ SECTION 04: APLICACIONES ============================ -->
+    <section class="section-pad" id="aplicaciones" style="background: var(--bg-alt);">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <span class="eyebrow"><span class="idx">04</span> <span data-i18n="app.eyebrow">04 · Aplicaciones Industriales</span></span>
           <h2 class="h-section" data-i18n="app.title">Diseñado para la geología extrema de los Andes</h2>
           <p class="lead" data-i18n="app.lead">
             Desde las profundidades de la minería subterránea chilena hasta tranques de relave y obras civiles de gran envergadura.
@@ -476,12 +617,12 @@
       </div>
     </section>
 
-    <!-- ============================ SECTION 04: MODELO TECNOLÓGICO ============================ -->
+    <!-- ============================ SECTION 05: MODELO TECNOLÓGICO ============================ -->
     <section class="section-pad" id="tecnologia-modelo" style="background: var(--bg-alt);">
       <div class="wrap">
         <div class="hw-layout">
           <div class="reveal">
-            <span class="eyebrow"><span class="idx">04</span> <span>04 · Arquitectura & Modelo de Despliegue</span></span>
+            <span class="eyebrow"><span class="idx">05</span> <span>05 · Arquitectura & Modelo de Despliegue</span></span>
             <h2 class="h-section">Ingeniería de despliegue y procesamiento avanzado</h2>
             <p class="lead">
               No nos limitamos a instalar cables: integramos la mejor optoelectrónica mundial y diseñamos redes de sensoramiento adaptadas a la geología minera más desafiante.
@@ -534,13 +675,13 @@
       </div>
     </section>
 
-    <!-- ============================ SECTION 05: PLATAFORMA HUB ============================ -->
+    <!-- ============================ SECTION 06: PLATAFORMA HUB ============================ -->
     <section class="section-pad" id="plataforma">
       <div class="wrap">
         <div class="hub-banner reveal">
           <div class="hub-grid">
             <div>
-              <span class="eyebrow"><span class="idx">05</span> <span data-i18n="hub.eyebrow">05 · Software & Analítica</span></span>
+              <span class="eyebrow"><span class="idx">06</span> <span data-i18n="hub.eyebrow">06 · Software & Analítica</span></span>
               <h2 class="h-section" style="margin-top: 14px;" data-i18n="hub.title">FiberAndes Hub: De la luz al insight operacional</h2>
               <p class="lead" data-i18n="hub.lead">
                 Visualización en cascada (Waterfall plots) 2D/3D en tiempo real, correlación geotécnica y alarmas instantáneas.
@@ -594,11 +735,11 @@
       </div>
     </section>
 
-    <!-- ============================ SECTION 06: CONFIGURADOR INTERACTIVO ============================ -->
+    <!-- ============================ SECTION 07: CONFIGURADOR INTERACTIVO ============================ -->
     <section class="section-pad" id="configurador" style="background: var(--bg-alt);">
       <div class="wrap">
         <div class="section-head reveal">
-          <span class="eyebrow"><span class="idx">06</span> <span data-i18n="cfg.eyebrow">06 · Asesor Interactivo</span></span>
+          <span class="eyebrow"><span class="idx">07</span> <span data-i18n="cfg.eyebrow">07 · Asesor Interactivo</span></span>
           <h2 class="h-section" data-i18n="cfg.title">Configura la arquitectura para tu proyecto</h2>
           <p class="lead" data-i18n="cfg.lead">
             Selecciona tu tipo de activo y objetivo para obtener una recomendación preliminar de instrumentación DFOS.
@@ -671,11 +812,11 @@
       </div>
     </section>
 
-    <!-- ============================ SECTION 07: EQUIPO & CIENCIA ============================ -->
+    <!-- ============================ SECTION 08: EQUIPO & CIENCIA ============================ -->
     <section class="section-pad" id="nosotros">
       <div class="wrap">
         <div class="section-head reveal" style="max-width:820px;">
-          <span class="eyebrow"><span class="idx">07</span> <span>Equipo Fundador & Respaldo Científico</span></span>
+          <span class="eyebrow"><span class="idx">08</span> <span>08 · Equipo Fundador & Respaldo Científico</span></span>
           <h2 class="h-section">Ciencia de frontera para la minería chilena</h2>
           <p class="lead">
             FiberAndes nace de la unión entre la investigación pionera en sismología con fibra óptica y la experiencia en terreno en geología de peligros en los Andes.
@@ -714,11 +855,11 @@
       </div>
     </section>
 
-    <!-- ============================ SECTION 08: CONTACTO ============================ -->
+    <!-- ============================ SECTION 09: CONTACTO ============================ -->
     <section class="section-pad" id="contacto">
       <div class="wrap contact-layout">
         <div class="contact-info reveal">
-          <span class="eyebrow"><span class="idx">08</span> <span>08 · Hablemos de Ingeniería & Pilotos</span></span>
+          <span class="eyebrow"><span class="idx">09</span> <span>09 · Hablemos de Ingeniería & Pilotos</span></span>
           <h2 class="big-cta" style="margin-top: 18px;" data-i18n="ct.title">Convierte tu infraestructura en una red inteligente.</h2>
           <p class="lead" data-i18n="ct.lead">
             Nuestro equipo de ingenieros ópticos y geofísicos está listo para desplegar pilotos en faena y proyectos industriales en todo Chile.

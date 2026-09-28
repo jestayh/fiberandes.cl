@@ -279,6 +279,62 @@
       color: var(--fg-1);
     }
 
+    /* Scientific Proof Ribbon */
+    .metrics-ribbon {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      max-width: 820px;
+      margin: 42px auto 0;
+      padding: 18px 24px;
+      border-radius: var(--r-md);
+      background: rgba(13, 22, 39, 0.65);
+      border: 1px solid var(--line-light);
+      backdrop-filter: blur(12px);
+    }
+    .metric-cell {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+    .metric-cell:not(:last-child) {
+      border-right: 1px solid var(--line-light);
+      padding-right: 16px;
+    }
+    .metric-num {
+      font-family: var(--font-display);
+      font-size: clamp(20px, 2.2vw, 26px);
+      font-weight: 700;
+      color: #fff;
+      letter-spacing: -0.02em;
+    }
+    .metric-label {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--cyan);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-top: 2px;
+    }
+    .metric-sub {
+      font-size: 11.5px;
+      color: var(--fg-2);
+      margin-top: 4px;
+    }
+    @media (max-width: 640px) {
+      .metrics-ribbon {
+        grid-template-columns: 1fr;
+        gap: 16px;
+      }
+      .metric-cell:not(:last-child) {
+        border-right: none;
+        border-bottom: 1px solid var(--line-light);
+        padding-right: 0;
+        padding-bottom: 16px;
+      }
+    }
+
     /* Bottom Bar */
     .bottom-bar {
       display: flex;
@@ -337,14 +393,14 @@
       </h1>
 
       <p class="minimal-sub">
-        Transformamos la fibra óptica en una red densa y continua de sensores en tiempo real. En túneles, galerías y cavidades de sondajes profundos, dotamos a tu infraestructura de <strong>detección acústica (DAS)</strong>, <strong>deformación milimétrica (DSS)</strong> y <strong>termometría continua (DTS)</strong> sin puntos ciegos.
+        Transformamos la fibra óptica en una red densa y continua de sensores en tiempo real. Mediante <strong>detección de doble banda (DAS)</strong>, capturamos simultáneamente la microsismicidad dinámica (&lt; Mw 0) y la acumulación lenta de deformación (slow-strain) que precede al estallido de roca, junto a <strong>deformación milimétrica (DSS)</strong> y <strong>termometría continua (DTS)</strong> en galerías y sondajes profundos sin puntos ciegos.
       </p>
 
       <!-- Signals Pills -->
       <div class="pill-group">
         <div class="pill-item das">
           <span class="dot"></span>
-          <span><strong>DAS</strong> · Acústica & Microsismicidad</span>
+          <span><strong>DAS</strong> · Doble Banda: Microsismicidad (&lt;Mw 0) + Slow-Strain</span>
         </div>
         <div class="pill-item dss">
           <span class="dot"></span>
@@ -367,6 +423,25 @@
           <svg width="18" height="18" viewBox="0 0 24 24" fill="#25D366"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.816 9.816 0 0 0 12.04 2m.01 1.67c2.2 0 4.26.86 5.82 2.42a8.225 8.225 0 0 1 2.41 5.83c0 4.54-3.7 8.24-8.24 8.24-1.48 0-2.93-.4-4.2-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.196 8.196 0 0 1-1.26-4.38c0-4.54 3.7-8.24 8.24-8.24m4.52 11.66c-.25-.13-1.47-.72-1.7-.81-.23-.08-.39-.13-.56.13-.16.25-.64.81-.78.98-.15.16-.29.18-.53.06-.25-.13-1.05-.39-1.99-1.23-.74-.66-1.23-1.47-1.38-1.72-.14-.25-.02-.38.11-.5.11-.11.25-.29.37-.43.13-.15.16-.25.25-.41.08-.16.04-.31-.02-.43-.06-.13-.56-1.35-.77-1.85-.2-.49-.41-.42-.56-.43h-.48c-.16 0-.43.06-.66.31-.23.25-.87.85-.87 2.07s.89 2.41 1.01 2.57c.13.16 1.76 2.69 4.26 3.77.6.26 1.06.41 1.43.53.6.19 1.15.16 1.58.1.48-.07 1.47-.6 1.68-1.18.21-.58.21-1.07.15-1.18-.07-.1-.23-.16-.47-.29"/></svg>
           WhatsApp Directo (+56 9 9429 0168)
         </a>
+      </div>
+
+      <!-- Scientific Proof Ribbon from Papers -->
+      <div class="metrics-ribbon">
+        <div class="metric-cell">
+          <span class="metric-num">10.000</span>
+          <span class="metric-label">Sensores / 10 km</span>
+          <span class="metric-sub">Resolución continua métrica</span>
+        </div>
+        <div class="metric-cell">
+          <span class="metric-num">Doble Banda</span>
+          <span class="metric-label">&lt; 0.1 Hz a kHz</span>
+          <span class="metric-sub">Ondas dinámicas + Slow-Strain</span>
+        </div>
+        <div class="metric-cell">
+          <span class="metric-num">-40%</span>
+          <span class="metric-label">Incertidumbre Espacial</span>
+          <span class="metric-sub">Reducción de error hipocentral</span>
+        </div>
       </div>
 
       <!-- Founder Scientific Footnote -->
@@ -394,13 +469,13 @@
   <script>
     (function() {
       const words = [
-        'el macizo rocoso',
+        'el macizo rocoso profundo',
+        'frentes de caving',
         'presas de relave',
-        'puentes y viaductos',
-        'túneles y sondajes',
-        'mineroductos',
-        'infraestructura crítica',
-        'taludes en rajo'
+        'sondajes geomecánicos',
+        'túneles y galerías',
+        'taludes en rajo',
+        'mineroductos críticos'
       ];
 
       let currentIndex = 0;
