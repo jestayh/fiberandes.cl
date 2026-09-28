@@ -570,6 +570,7 @@ h1, h2, h3, h4, h5 {
   font-size: 11.5px;
   color: var(--fg-2);
   pointer-events: none;
+  z-index: 5;
 }
 .sim-status-banner {
   position: absolute;
@@ -581,16 +582,113 @@ h1, h2, h3, h4, h5 {
   border-radius: var(--r-sm);
   font-weight: 600;
   transition: all .2s ease;
+  z-index: 6;
+  max-width: calc(100% - 32px);
 }
 .sim-status-banner.detected {
   background: rgba(0, 255, 163, 0.15);
   color: var(--emerald);
   border: 1px solid var(--emerald);
+  backdrop-filter: blur(8px);
 }
 .sim-status-banner.blindspot {
   background: rgba(255, 75, 85, 0.2);
   color: var(--danger);
   border: 1px solid var(--danger);
+  backdrop-filter: blur(8px);
+}
+
+/* 3D WebGL Mine Geomechanics Simulator */
+.sim-3d-visual {
+  position: relative;
+  height: 560px;
+  background: #03060C;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r-lg);
+  overflow: hidden;
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.6);
+  cursor: grab;
+}
+.sim-3d-visual:active {
+  cursor: grabbing;
+}
+.sim-3d-visual canvas {
+  width: 100% !important;
+  height: 100% !important;
+  display: block;
+}
+
+.sim-3d-telemetry {
+  position: absolute;
+  bottom: 14px;
+  right: 14px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  background: rgba(6, 11, 20, 0.88);
+  border: 1px solid var(--line-light);
+  border-radius: var(--r-sm);
+  padding: 10px 18px;
+  backdrop-filter: blur(10px);
+  z-index: 5;
+}
+.sim-tel-cell {
+  display: flex;
+  flex-direction: column;
+}
+.sim-tel-cell .l {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--fg-2);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.sim-tel-cell .v {
+  font-family: var(--font-display);
+  font-size: 15px;
+  font-weight: 700;
+  margin-top: 2px;
+}
+
+.sim-3d-legend {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  background: rgba(6, 11, 20, 0.82);
+  border: 1px solid var(--line-light);
+  border-radius: var(--r-sm);
+  padding: 10px 14px;
+  backdrop-filter: blur(8px);
+  z-index: 5;
+  pointer-events: none;
+}
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--fg-1);
+}
+.legend-color {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.legend-color.cyan { background: var(--cyan); box-shadow: 0 0 6px var(--cyan); }
+.legend-color.blue { background: #3b82f6; box-shadow: 0 0 6px #3b82f6; }
+.legend-color.green { background: var(--emerald); box-shadow: 0 0 6px var(--emerald); }
+.legend-color.dark { background: #1b434d; border: 1px solid #00f0ff; }
+.legend-color.red { background: var(--danger); box-shadow: 0 0 6px var(--danger); }
+
+@media (max-width: 900px) {
+  .sim-3d-visual { height: 460px; }
+  .sim-3d-telemetry { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+  .sim-3d-legend { display: none; }
 }
 
 /* Comparison side-by-side cards */

@@ -207,31 +207,70 @@
       <div class="wrap">
         <div class="section-head reveal">
           <span class="eyebrow"><span class="idx">01</span> <span data-i18n="comp.eyebrow">01 · Cambio de Paradigma</span></span>
-          <h2 class="h-section" data-i18n="comp.title">DFOS vs. Sensores Discretos (ESI): Fin a los puntos ciegos</h2>
+          <h2 class="h-section" data-i18n="comp.title">Modelo 3D: Sondajes con DAS vs. Geófonos en Galerías</h2>
           <p class="lead" data-i18n="comp.lead">
-            Las redes tradicionales tipo ESI instalan sensores cada 50, 100 o 200 metros. Si una microfractura o filtración ocurre en el espacio intermedio, el sistema no la ve hasta que es demasiado tarde. Con FiberAndes, cada metro de fibra es un sensor activo.
+            Los geófonos tradicionales solo se pueden instalar en las paredes de los túneles transitables, dejando el 70% del macizo rocoso profundo y el avance del cave-back en un punto ciego crítico. Con FiberAndes, perforamos e inyectamos fibra óptica en sondajes profundos (daisy-chaining), monitoreando el corazón de la roca sin puntos ciegos.
           </p>
         </div>
 
-        <!-- Interactive Comparison Arena & Live Simulator -->
+        <!-- Interactive 3D Comparison Arena & Live Simulator -->
         <div class="comparison-box reveal">
           <div class="sim-controls">
             <div class="sim-title">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
-              <span data-i18n="comp.sim.title">SIMULADOR EN VIVO · PRUEBA EL IMPACTO DE UN EVENTO</span>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+              <span>MODELO 3D INTERACTIVO · BLOCK CAVING, TÚNELES Y SONDAJES</span>
             </div>
             <div class="sim-modes">
-              <button class="sim-mode-btn active" data-sim="dfos" id="btn-mode-dfos">FiberAndes DFOS (Continuo)</button>
-              <button class="sim-mode-btn" data-sim="esi" id="btn-mode-esi">Sensores Discretos ESI (Puntual)</button>
+              <button class="sim-mode-btn active" data-sim="dfos" id="btn-mode-dfos">FiberAndes DAS (Sondajes + Túneles)</button>
+              <button class="sim-mode-btn" data-sim="esi" id="btn-mode-esi">Geófonos Convencionales (Solo Túneles)</button>
+            </div>
+            <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
+              <button class="sim-mode-btn" id="btn-simulate-event" style="background:rgba(0,240,255,0.15); color:var(--cyan); border:1px solid var(--cyan); display:flex; align-items:center; gap:6px;">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                Simular Fractura en Cave-Back
+              </button>
+              <button class="sim-mode-btn" id="btn-reset-cam" title="Restablecer Cámara">
+                ↺ Vista 3D
+              </button>
             </div>
           </div>
 
-          <div class="sim-visual" id="sim-canvas-container" title="Haz clic o arrastra para simular un evento sísmico o fractura">
-            <div class="sim-overlay-hint" data-i18n="comp.sim.hint">
-              Arrastra o haz clic sobre la línea para mover el evento (microfractura/fuga) y comparar la detección.
+          <!-- 3D WebGL Canvas Container -->
+          <div class="sim-3d-visual" id="mine-3d-canvas-container" title="Arrastra con el ratón para rotar 360° · Rueda para Zoom">
+            <div class="sim-overlay-hint">
+              <span>🖱️ Arrastra para rotar en 360° · Rueda para Zoom · Pulsa "Simular Fractura" para probar la detección</span>
             </div>
             <div class="sim-status-banner detected" id="sim-status-banner">
-              <strong>EVENTO LOCALIZADO CON PRECISIÓN MÉTRICA</strong> — Punto exacto: Km 4.2 · Cobertura 100% continua
+              <strong>FIBERANDES DFOS: SONDAJES + GALERÍAS</strong> — 8.500 sensores continuos · Cobertura 98% · Detección Mw &lt; 0 y Slow-Strain en roca profunda
+            </div>
+
+            <!-- 3D Legend -->
+            <div class="sim-3d-legend">
+              <div class="legend-item"><span class="legend-color cyan"></span><span>Sondajes con Fibra Óptica (DAS)</span></div>
+              <div class="legend-item"><span class="legend-color blue"></span><span>Túneles &amp; Galerías Subterráneas</span></div>
+              <div class="legend-item"><span class="legend-color green"></span><span>Zona Sismogénica (Cave-Back, M &lt; 0)</span></div>
+              <div class="legend-item"><span class="legend-color dark"></span><span>Yielded Zone &amp; Air Gap (Mineral Quebrado)</span></div>
+              <div class="legend-item"><span class="legend-color red"></span><span>Punto Ciego Geomecánico</span></div>
+            </div>
+
+            <!-- Real-time 3D Telemetry Strip -->
+            <div class="sim-3d-telemetry">
+              <div class="sim-tel-cell">
+                <span class="l">COBERTURA VOLUMÉTRICA</span>
+                <span class="v" id="tel-val-cov" style="color:var(--emerald);">98%</span>
+              </div>
+              <div class="sim-tel-cell">
+                <span class="l">SENSORES ACTIVOS</span>
+                <span class="v" id="tel-val-sens" style="color:#fff;">8.500 Sensores</span>
+              </div>
+              <div class="sim-tel-cell">
+                <span class="l">INCERTIDUMBRE HIPOCENTRO</span>
+                <span class="v" id="tel-val-uncert" style="color:var(--cyan);">±2.5 metros</span>
+              </div>
+              <div class="sim-tel-cell">
+                <span class="l">SLOW-STRAIN EN ROCA</span>
+                <span class="v" id="tel-val-strain" style="color:var(--emerald);">Activo (Doble Banda)</span>
+              </div>
             </div>
           </div>
 
@@ -1053,7 +1092,12 @@
   <script src="js/drawer-data.js"></script>
   <script src="js/i18n.js"></script>
   <script src="js/hero-canvas.js"></script>
-  <script src="js/simulator.js"></script>
+
+  <!-- Three.js Engine for 3D Mine Geomechanics & Caving Simulator -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+  <script src="js/mine-3d-simulator.js"></script>
+
   <script src="js/configurator.js"></script>
   <script src="js/app.js"></script>
 </body>
