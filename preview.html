@@ -37,7 +37,148 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700;800&display=swap" rel="stylesheet">
 
-  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/styles.css?v=20260928_05">
+
+  <style>
+    /* Direct Layout Guarantee for 3D Simulator */
+    .sim-3d-visual {
+      position: relative !important;
+      height: 560px !important;
+      background: #03060C !important;
+      border: 1px solid var(--line-strong) !important;
+      border-radius: var(--r-lg) !important;
+      overflow: hidden !important;
+      box-shadow: 0 16px 48px rgba(0, 0, 0, 0.6) !important;
+    }
+    .sim-3d-viewport {
+      position: absolute !important;
+      inset: 0 !important;
+      width: 100% !important;
+      height: 100% !important;
+      z-index: 1 !important;
+      cursor: grab;
+    }
+    .sim-3d-viewport:active { cursor: grabbing; }
+    .sim-3d-viewport canvas {
+      width: 100% !important;
+      height: 100% !important;
+      display: block !important;
+      outline: none !important;
+    }
+    .sim-3d-legend {
+      position: absolute !important;
+      top: 16px !important;
+      left: 16px !important;
+      display: flex !important;
+      flex-direction: column !important;
+      gap: 6px !important;
+      background: rgba(6, 11, 20, 0.88) !important;
+      border: 1px solid rgba(255, 255, 255, 0.12) !important;
+      border-radius: var(--r-sm) !important;
+      padding: 10px 14px !important;
+      backdrop-filter: blur(12px) !important;
+      -webkit-backdrop-filter: blur(12px) !important;
+      z-index: 10 !important;
+      pointer-events: none !important;
+    }
+    .legend-item {
+      display: flex !important;
+      align-items: center !important;
+      gap: 8px !important;
+      font-family: var(--font-mono) !important;
+      font-size: 11px !important;
+      color: var(--fg-1) !important;
+    }
+    .legend-color {
+      width: 10px !important;
+      height: 10px !important;
+      border-radius: 50% !important;
+      flex-shrink: 0 !important;
+    }
+    .legend-color.cyan { background: var(--cyan) !important; box-shadow: 0 0 6px var(--cyan) !important; }
+    .legend-color.blue { background: #3b82f6 !important; box-shadow: 0 0 6px #3b82f6 !important; }
+    .legend-color.green { background: var(--emerald) !important; box-shadow: 0 0 6px var(--emerald) !important; }
+    .legend-color.dark { background: #1b434d !important; border: 1px solid #00f0ff !important; }
+    .legend-color.red { background: var(--danger) !important; box-shadow: 0 0 6px var(--danger) !important; }
+
+    .sim-status-banner {
+      position: absolute !important;
+      top: 16px !important;
+      right: 16px !important;
+      font-family: var(--font-mono) !important;
+      font-size: 11.5px !important;
+      padding: 8px 16px !important;
+      border-radius: var(--r-sm) !important;
+      font-weight: 600 !important;
+      z-index: 10 !important;
+      backdrop-filter: blur(12px) !important;
+      -webkit-backdrop-filter: blur(12px) !important;
+      max-width: min(540px, calc(100% - 32px)) !important;
+    }
+    .sim-status-banner.detected {
+      background: rgba(0, 255, 163, 0.15) !important;
+      color: var(--emerald) !important;
+      border: 1px solid var(--emerald) !important;
+    }
+    .sim-status-banner.blindspot {
+      background: rgba(255, 75, 85, 0.22) !important;
+      color: var(--danger) !important;
+      border: 1px solid var(--danger) !important;
+    }
+
+    .sim-3d-telemetry {
+      position: absolute !important;
+      bottom: 16px !important;
+      right: 16px !important;
+      display: grid !important;
+      grid-template-columns: repeat(4, 1fr) !important;
+      gap: 16px !important;
+      background: rgba(6, 11, 20, 0.90) !important;
+      border: 1px solid rgba(255, 255, 255, 0.12) !important;
+      border-radius: var(--r-sm) !important;
+      padding: 10px 18px !important;
+      backdrop-filter: blur(12px) !important;
+      -webkit-backdrop-filter: blur(12px) !important;
+      z-index: 10 !important;
+    }
+    .sim-tel-cell { display: flex !important; flex-direction: column !important; }
+    .sim-tel-cell .l {
+      font-family: var(--font-mono) !important;
+      font-size: 10px !important;
+      color: var(--fg-2) !important;
+      letter-spacing: 0.08em !important;
+      text-transform: uppercase !important;
+    }
+    .sim-tel-cell .v {
+      font-family: var(--font-display) !important;
+      font-size: 14px !important;
+      font-weight: 700 !important;
+      margin-top: 2px !important;
+    }
+
+    .sim-overlay-hint {
+      position: absolute !important;
+      bottom: 16px !important;
+      left: 16px !important;
+      font-family: var(--font-mono) !important;
+      font-size: 11px !important;
+      color: var(--fg-2) !important;
+      background: rgba(6, 11, 20, 0.75) !important;
+      padding: 6px 12px !important;
+      border-radius: 4px !important;
+      border: 1px solid rgba(255, 255, 255, 0.08) !important;
+      backdrop-filter: blur(8px) !important;
+      z-index: 10 !important;
+      pointer-events: none !important;
+    }
+
+    @media (max-width: 900px) {
+      .sim-3d-visual { height: 460px !important; }
+      .sim-3d-telemetry { grid-template-columns: repeat(2, 1fr) !important; gap: 8px !important; }
+      .sim-3d-legend { display: none !important; }
+      .sim-overlay-hint { display: none !important; }
+    }
+  </style>
 
   <!-- Structured Data JSON-LD -->
   <script type="application/ld+json">
@@ -237,6 +378,9 @@
 
           <!-- 3D WebGL Canvas Container -->
           <div class="sim-3d-visual" id="mine-3d-canvas-container" title="Arrastra con el ratón para rotar 360° · Rueda para Zoom">
+            <!-- Dedicated WebGL Mounting Element -->
+            <div id="mine-3d-viewport" class="sim-3d-viewport"></div>
+
             <div class="sim-overlay-hint">
               <span>🖱️ Arrastra para rotar en 360° · Rueda para Zoom · Pulsa "Simular Fractura" para probar la detección</span>
             </div>

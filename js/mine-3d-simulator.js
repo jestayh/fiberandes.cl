@@ -44,8 +44,9 @@
   const Y_BOTTOM = -15;
 
   function init() {
-    const width = container.clientWidth || 800;
-    const height = container.clientHeight || 540;
+    const mountPoint = document.getElementById('mine-3d-viewport') || container;
+    const width = mountPoint.clientWidth || container.clientWidth || 800;
+    const height = mountPoint.clientHeight || container.clientHeight || 540;
 
     // 1. Scene & Renderer
     scene = new THREE.Scene();
@@ -56,20 +57,20 @@
     renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
     renderer.setSize(width, height);
     renderer.shadowMap.enabled = false;
-    container.appendChild(renderer.domElement);
+    mountPoint.appendChild(renderer.domElement);
 
-    // 2. Camera
-    camera = new THREE.PerspectiveCamera(42, width / height, 0.5, 300);
-    camera.position.set(38, 16, 42);
+    // 2. Camera: Optimized framing for Block Cave & Tunnels
+    camera = new THREE.PerspectiveCamera(40, width / height, 0.5, 300);
+    camera.position.set(24, 11, 28);
 
     // 3. OrbitControls
     if (typeof THREE.OrbitControls !== 'undefined') {
       controls = new THREE.OrbitControls(camera, renderer.domElement);
       controls.enableDamping = true;
       controls.dampingFactor = 0.06;
-      controls.target.set(0, -3, 0);
+      controls.target.set(0, -3.5, 0);
       controls.minDistance = 14;
-      controls.maxDistance = 120;
+      controls.maxDistance = 100;
       controls.maxPolarAngle = Math.PI / 2 + 0.15; // Don't flip all the way underneath
     }
 
