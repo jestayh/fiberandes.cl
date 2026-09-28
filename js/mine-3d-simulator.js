@@ -120,13 +120,40 @@
   }
 
   // -------------------------------------------------------------
-  // BUILD: Bounding Box & Depth Grid
+  // BUILD: Rock Mass Cutaway Diorama & Depth Grid
   // -------------------------------------------------------------
   function buildBoundingBoxAndDepthGrid() {
-    // Outer wireframe block
+    // 1. Cutaway Diorama Rock Walls (Back & Left Rock Face, like Ideon cutaway render)
+    const rockWallMat = new THREE.MeshStandardMaterial({
+      color: 0x141822,
+      roughness: 0.92,
+      metalness: 0.15,
+      transparent: true,
+      opacity: 0.88
+    });
+
+    // Back Rock Face
+    const backWallGeo = new THREE.BoxGeometry(32, Y_SURFACE - Y_BOTTOM, 1.2);
+    const backWall = new THREE.Mesh(backWallGeo, rockWallMat);
+    backWall.position.set(0, (Y_SURFACE + Y_BOTTOM) / 2, -13);
+    groupRock.add(backWall);
+
+    // Left Rock Face
+    const leftWallGeo = new THREE.BoxGeometry(1.2, Y_SURFACE - Y_BOTTOM, 26);
+    const leftWall = new THREE.Mesh(leftWallGeo, rockWallMat);
+    leftWall.position.set(-16, (Y_SURFACE + Y_BOTTOM) / 2, 0);
+    groupRock.add(leftWall);
+
+    // Bottom Base Slab
+    const baseGeo = new THREE.BoxGeometry(32.5, 1.2, 26.5);
+    const baseMesh = new THREE.Mesh(baseGeo, rockWallMat);
+    baseMesh.position.set(0, Y_BOTTOM - 0.6, 0);
+    groupRock.add(baseMesh);
+
+    // Outer wireframe outline
     const boxGeo = new THREE.BoxGeometry(32, Y_SURFACE - Y_BOTTOM, 26);
     const boxEdges = new THREE.EdgesGeometry(boxGeo);
-    const boxMat = new THREE.LineBasicMaterial({ color: 0x00f0ff, transparent: true, opacity: 0.18 });
+    const boxMat = new THREE.LineBasicMaterial({ color: 0x00f0ff, transparent: true, opacity: 0.22 });
     const wireframeBox = new THREE.LineSegments(boxEdges, boxMat);
     wireframeBox.position.set(0, (Y_SURFACE + Y_BOTTOM) / 2, 0);
     groupRock.add(wireframeBox);
@@ -135,8 +162,8 @@
     const depthLevels = [
       { y: Y_SURFACE, label: "0 m (Superficie)", color: 0x71829e },
       { y: 4, label: "-600 m", color: 0x4d5c75 },
-      { y: Y_CAVE_TOP, label: "-1.000 m (Cave-Back)", color: 0x00f0ff },
-      { y: Y_AIR_GAP, label: "-1.400 m (Air Gap)", color: 0xe27d60 },
+      { y: Y_CAVE_TOP, label: "-1.000 m (Cave-Back)", color: 0xff3b30 },
+      { y: Y_AIR_GAP, label: "-1.400 m (Air Gap)", color: 0xff7733 },
       { y: Y_PRODUCTION, label: "-1.800 m (Producción)", color: 0xffb020 },
       { y: Y_BOTTOM, label: "-2.000 m (Fondo)", color: 0x4d5c75 }
     ];
@@ -163,7 +190,7 @@
     for (let i = 0; i < pos.count; i++) {
       const x = pos.getX(i);
       const z = pos.getZ(i);
-      // Gentle Andean slope topography
+      // Andean mountain slope topography
       const elevation = Y_SURFACE + Math.sin(x * 0.18) * 0.8 + Math.cos(z * 0.15) * 0.6 + (x * 0.05);
       pos.setY(i, elevation);
     }
@@ -175,14 +202,14 @@
       metalness: 0.1,
       wireframe: false,
       transparent: true,
-      opacity: 0.75
+      opacity: 0.82
     });
 
     const terrainMesh = new THREE.Mesh(terrainGeo, terrainMat);
     groupRock.add(terrainMesh);
 
     // Surface wireframe overlay
-    const wireMat = new THREE.MeshBasicMaterial({ color: 0x00f0ff, wireframe: true, transparent: true, opacity: 0.15 });
+    const wireMat = new THREE.MeshBasicMaterial({ color: 0x00f0ff, wireframe: true, transparent: true, opacity: 0.16 });
     const wireMesh = new THREE.Mesh(terrainGeo, wireMat);
     groupRock.add(wireMesh);
   }
@@ -259,44 +286,123 @@
   }
 
   // -------------------------------------------------------------
-  // BUILD: Block Cave Geometry (Yielded Zone, Air Gap, Seismogenic Zone)
+  // BUILD: Block Cave Geometry (Translucent Red Cave-Back, Muckpile, Drawbells)
+  // Direct aesthetic inspiration from Ideon REVEAL™ Block Caving render
   // -------------------------------------------------------------
   function buildBlockCaveGeometry() {
-    // 1. Yielded Zone (Muckpile / Broken rock cone above drawpoints)
-    const yieldedGeo = new THREE.ConeGeometry(8.5, 5.5, 24, 6, true);
-    yieldedGeo.rotateX(Math.PI);
-    const yieldedMat = new THREE.MeshStandardMaterial({
-      color: 0x1b434d,
-      roughness: 0.9,
+    // 1. Drawbells / Conical Funnels at Base (Extraction points)
+    const drawbellMat = new THREE.MeshStandardMaterial({
+      color: 0x1f2733,
+      roughness: 0.85,
       metalness: 0.2,
-      wireframe: false,
-      transparent: true,
-      opacity: 0.85
+      side: THREE.DoubleSide
     });
-    const yieldedMesh = new THREE.Mesh(yieldedGeo, yieldedMat);
-    yieldedMesh.position.set(0, Y_PRODUCTION + 3.2, 0);
-    groupCave.add(yieldedMesh);
+    const drawbellWireMat = new THREE.MeshBasicMaterial({ color: 0x00f0ff, wireframe: true, transparent: true, opacity: 0.25 });
 
-    // Drawbells / Funnel shape representation at base
-    const drawbellMat = new THREE.MeshBasicMaterial({ color: 0x00f0ff, wireframe: true, transparent: true, opacity: 0.2 });
-    const drawbellMesh = new THREE.Mesh(yieldedGeo, drawbellMat);
-    drawbellMesh.position.copy(yieldedMesh.position);
-    groupCave.add(drawbellMesh);
+    const bellPositions = [
+      [-4.2, Y_PRODUCTION + 1.2, -3.5],
+      [-4.2, Y_PRODUCTION + 1.2, 3.5],
+      [4.2, Y_PRODUCTION + 1.2, -3.5],
+      [4.2, Y_PRODUCTION + 1.2, 3.5],
+      [0, Y_PRODUCTION + 1.2, 0]
+    ];
 
-    // 2. Air Gap (Cavity void dome)
-    const airGapGeo = new THREE.SphereGeometry(6.2, 20, 14, 0, Math.PI * 2, 0, Math.PI / 2);
-    const airGapMat = new THREE.MeshBasicMaterial({
-      color: 0x070b14,
-      side: THREE.BackSide,
-      transparent: true,
-      opacity: 0.95
+    bellPositions.forEach(bPos => {
+      const bellGeo = new THREE.ConeGeometry(2.4, 2.5, 16, 2, true);
+      bellGeo.rotateX(Math.PI);
+      const bellMesh = new THREE.Mesh(bellGeo, drawbellMat);
+      bellMesh.position.set(...bPos);
+      groupCave.add(bellMesh);
+
+      const bellWire = new THREE.Mesh(bellGeo, drawbellWireMat);
+      bellWire.position.copy(bellMesh.position);
+      groupCave.add(bellWire);
+
+      // Floor marker plate / Drawpoint base pad (like orange pads in Ideon render)
+      const padGeo = new THREE.BoxGeometry(1.6, 0.2, 1.6);
+      const padMat = new THREE.MeshStandardMaterial({
+        color: 0xff6600,
+        emissive: 0xff4400,
+        emissiveIntensity: 0.8,
+        roughness: 0.3
+      });
+      const padMesh = new THREE.Mesh(padGeo, padMat);
+      padMesh.position.set(bPos[0], Y_PRODUCTION - 0.2, bPos[2]);
+      groupCave.add(padMesh);
     });
-    const airGapMesh = new THREE.Mesh(airGapGeo, airGapMat);
-    airGapMesh.position.set(0, Y_AIR_GAP + 0.8, 0);
-    groupCave.add(airGapMesh);
 
-    // 3. Seismogenic Zone: Particle Swarm (Microseismic Cloud)
-    // Cloud of ~750 microseismic events arching above the cave back
+    // 2. Muckpile (Pila de Mineral Quebrado / Broken Rock Column)
+    // Dark fractured ore mass resting over the drawbells
+    const muckpileGeo = new THREE.CylinderGeometry(6.8, 8.8, 4.5, 24, 4);
+    const muckpileMat = new THREE.MeshStandardMaterial({
+      color: 0x22262d,
+      roughness: 0.95,
+      metalness: 0.1,
+      transparent: true,
+      opacity: 0.88
+    });
+    const muckpileMesh = new THREE.Mesh(muckpileGeo, muckpileMat);
+    muckpileMesh.position.set(0, Y_PRODUCTION + 3.8, 0);
+    groupCave.add(muckpileMesh);
+
+    // Clustered broken rock boulders on muckpile surface (giving fractured gravel texture)
+    const rockGeo = new THREE.DodecahedronGeometry(0.45, 0);
+    for (let r = 0; r < 65; r++) {
+      const angle = Math.random() * Math.PI * 2;
+      const radius = Math.random() * 6.2;
+      const rx = Math.cos(angle) * radius;
+      const rz = Math.sin(angle) * radius * 0.9;
+      const ry = Y_PRODUCTION + 4.2 + (Math.random() * 1.8) - ((radius / 6.2) * 0.8);
+
+      const rMat = new THREE.MeshStandardMaterial({
+        color: Math.random() > 0.5 ? 0x2e353f : 0x1b2028,
+        roughness: 0.95
+      });
+      const rMesh = new THREE.Mesh(rockGeo, rMat);
+      rMesh.position.set(rx, ry, rz);
+      rMesh.rotation.set(Math.random() * 3, Math.random() * 3, Math.random() * 3);
+      const s = 0.6 + Math.random() * 0.8;
+      rMesh.scale.set(s, s, s);
+      groupCave.add(rMesh);
+    }
+
+    // 3. Volumetric Translucent Red Cave-Back Dome & Air Gap Envelope
+    // Exact visual signature seen in Ideon's 3D render (crimson translucent dome)
+    const caveBackGeo = new THREE.SphereGeometry(7.2, 28, 20, 0, Math.PI * 2, 0, Math.PI / 1.7);
+    caveBackGeo.scale(1.15, 0.85, 1.0);
+    const caveBackMat = new THREE.MeshStandardMaterial({
+      color: 0xff281a,
+      emissive: 0xaa1205,
+      emissiveIntensity: 0.7,
+      roughness: 0.25,
+      metalness: 0.1,
+      transparent: true,
+      opacity: 0.52,
+      side: THREE.DoubleSide,
+      depthWrite: false
+    });
+    const caveBackMesh = new THREE.Mesh(caveBackGeo, caveBackMat);
+    caveBackMesh.position.set(0, Y_AIR_GAP + 1.2, 0);
+    groupCave.add(caveBackMesh);
+
+    // Glowing Wireframe contour lines on the Cave-Back envelope
+    const caveBackWireMat = new THREE.MeshBasicMaterial({
+      color: 0xff6644,
+      wireframe: true,
+      transparent: true,
+      opacity: 0.35
+    });
+    const caveBackWire = new THREE.Mesh(caveBackGeo, caveBackWireMat);
+    caveBackWire.position.copy(caveBackMesh.position);
+    groupCave.add(caveBackWire);
+
+    // Interior Crimson Glow Light inside the cave back
+    const caveGlowLight = new THREE.PointLight(0xff3311, 2.2, 22);
+    caveGlowLight.position.set(0, Y_CAVE_TOP + 0.5, 0);
+    groupCave.add(caveGlowLight);
+
+    // 4. Seismogenic Zone: Particle Swarm (Microseismic Cloud Mw < 0)
+    // Arching microseismic cloud around and above the cave-back failure envelope
     const particleCount = 750;
     const positions = new Float32Array(particleCount * 3);
     const colors = new Float32Array(particleCount * 3);
@@ -377,7 +483,7 @@
     seismogenicParticles = new THREE.Points(pGeo, pMat);
     groupCave.add(seismogenicParticles);
 
-    // 4. Elastic Zone (Boundary iso-contour)
+    // 5. Elastic Zone (Boundary outer iso-contour)
     const elasticGeo = new THREE.SphereGeometry(12.5, 24, 16, 0, Math.PI * 2, 0, Math.PI / 2);
     const elasticEdges = new THREE.EdgesGeometry(elasticGeo);
     const elasticMat = new THREE.LineBasicMaterial({ color: 0x71829e, transparent: true, opacity: 0.22 });
@@ -476,10 +582,11 @@
   }
 
   // -------------------------------------------------------------
-  // BUILD: Traditional Geophone Array & Massive Blind Spot
+  // BUILD: Traditional Geophone Array & Discrete Subsurface Beacons
+  // (Traditional / Ideon-style discrete battery beacons vs. continuous DAS)
   // -------------------------------------------------------------
   function buildGeophoneArray() {
-    // Discrete geophones are strictly confined to accessible tunnels
+    // 1. Discrete geophones strictly confined to accessible tunnels
     const geophonePositions = [
       [-8.4, Y_PRODUCTION, -6],
       [-8.4, Y_PRODUCTION, 2],
@@ -517,7 +624,56 @@
       groupGeophones.add(ringMesh);
     });
 
-    // Massive Blind Spot Volume (Rock mass & Cave-back inaccessible from tunnels)
+    // 2. Discrete Subsurface Beacons (Balizas Subterráneas tipo Ideon/Smart Marker)
+    // In traditional setups, boreholes only host 3-4 battery beacons with huge 60-100m blind gaps between them
+    const beaconBoreholes = [
+      { start: [-3.8, Y_SURFACE, 2.5], end: [-3.8, Y_BOTTOM + 2, 2.5] },
+      { start: [3.8, Y_SURFACE, -2.5], end: [3.8, Y_BOTTOM + 2, -2.5] }
+    ];
+
+    const beaconGeo = new THREE.SphereGeometry(0.35, 12, 12);
+    const beaconMat = new THREE.MeshStandardMaterial({
+      color: 0xff6600,
+      emissive: 0xff4400,
+      emissiveIntensity: 0.9,
+      roughness: 0.2
+    });
+
+    beaconBoreholes.forEach(bh => {
+      const p1 = new THREE.Vector3(...bh.start);
+      const p2 = new THREE.Vector3(...bh.end);
+
+      // Dashed line trajectory indicating sparse borehole
+      const lineGeo = new THREE.BufferGeometry().setFromPoints([p1, p2]);
+      const lineMat = new THREE.LineDashedMaterial({
+        color: 0xff7722,
+        dashSize: 0.7,
+        gapSize: 0.7,
+        transparent: true,
+        opacity: 0.65
+      });
+      const dashedLine = new THREE.Line(lineGeo, lineMat);
+      dashedLine.computeLineDistances();
+      groupGeophones.add(dashedLine);
+
+      // Only 3 or 4 discrete beacons along the entire 1,500m pozo!
+      const beaconFractions = [0.25, 0.45, 0.70, 0.90];
+      beaconFractions.forEach(frac => {
+        const bPos = new THREE.Vector3().lerpVectors(p1, p2, frac);
+        const bMesh = new THREE.Mesh(beaconGeo, beaconMat);
+        bMesh.position.copy(bPos);
+        groupGeophones.add(bMesh);
+
+        // Crosshair / glowing ring indicator around beacon (like in Ideon render)
+        const crossGeo = new THREE.RingGeometry(0.45, 0.62, 12);
+        const crossMat = new THREE.MeshBasicMaterial({ color: 0xffaa00, side: THREE.DoubleSide, transparent: true, opacity: 0.75 });
+        const crossMesh = new THREE.Mesh(crossGeo, crossMat);
+        crossMesh.position.copy(bPos);
+        groupGeophones.add(crossMesh);
+      });
+    });
+
+    // 3. Massive Blind Spot Volume (Rock mass & Cave-back inaccessible from discrete points)
     // Red/Amber volumetric dome covering the entire virgin rock
     const blindGeo = new THREE.SphereGeometry(10.5, 20, 14, 0, Math.PI * 2, 0, Math.PI / 2);
     blindGeo.rotateX(Math.PI);
@@ -593,13 +749,13 @@
       shockwaveMesh.material.color.setHex(0xff4b55);
       if (banner) {
         banner.className = 'sim-status-banner blindspot';
-        banner.innerHTML = `<strong>❌ EVENTO EN PUNTO CIEGO DE ROCA PROFUNDA</strong> — Geófonos en túneles a >400m de distancia · Señal atenuada · Incertidumbre: ±26 m · 0% datos de deformación`;
+        banner.innerHTML = `<strong>❌ EVENTO EN PUNTO CIEGO DE ROCA PROFUNDA</strong> — Ocurrió en el vacío ciego entre balizas a >350m · Señal atenuada en túneles · Incertidumbre: ±25 m · 0% datos de deformación continua`;
       }
     }
   }
 
   // -------------------------------------------------------------
-  // MODE TOGGLE: DFOS (Sondajes) vs Geófonos (Solo Túneles)
+  // MODE TOGGLE: DFOS (Sondajes) vs Balizas / Geófonos (Puntual)
   // -------------------------------------------------------------
   function setMode(mode) {
     activeMode = mode;
@@ -612,10 +768,10 @@
       const banner = document.getElementById('sim-status-banner');
       if (banner) {
         banner.className = 'sim-status-banner detected';
-        banner.innerHTML = `<strong>FIBERANDES DFOS: SONDAJES + GALERÍAS</strong> — 8.500 sensores continuos · Cobertura 98% · Detección Mw &lt; 0 y Slow-Strain en roca profunda`;
+        banner.innerHTML = `<strong>FIBERANDES DFOS: SONDAJES + GALERÍAS</strong> — 8.500 canales ópticos continuos (sin baterías) · Cobertura 98% · Captura sísmica Mw &lt; 0 y perfil continuo Slow-Strain`;
       }
 
-      updateTelemetry(98, "8.500 Sensores", "±2.5 metros", "Activo (Doble Banda)");
+      updateTelemetry(98, "8.500 Canales Ópticos", "±2.1 metros", "Activo (Doble Banda)");
     } else {
       groupBoreholes.visible = false;
       groupGeophones.visible = true;
@@ -624,10 +780,10 @@
       const banner = document.getElementById('sim-status-banner');
       if (banner) {
         banner.className = 'sim-status-banner blindspot';
-        banner.innerHTML = `<strong>GEÓFONOS CONVENCIONALES: SOLO EN TÚNELES</strong> — 12 puntos discretos · 76% de la roca en punto ciego · Ciego a deformación lenta`;
+        banner.innerHTML = `<strong>TECNOLOGÍA TRADICIONAL: BALIZAS DE BATERÍA &amp; GEÓFONOS</strong> — 8 balizas en sondajes + 12 geófonos en túneles · 78% de la roca en punto ciego · Ciego a deformación continua`;
       }
 
-      updateTelemetry(24, "12 Estaciones", "±24 metros", "0% (Ciego fuera de túneles)");
+      updateTelemetry(22, "20 Puntos Discretos", "±25 metros", "0% (Ciego entre balizas)");
     }
   }
 
