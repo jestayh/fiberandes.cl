@@ -362,8 +362,8 @@
               <span>CORTE TRANSVERSAL GEOMECÁNICO INTERACTIVO · BLOCK CAVING &amp; DFOS</span>
             </div>
             <div class="sim-modes">
-              <button class="sim-mode-btn active" data-sim="dfos" id="btn-mode-dfos">FiberAndes DAS (Sondajes + Túneles)</button>
-              <button class="sim-mode-btn" data-sim="esi" id="btn-mode-esi">Balizas &amp; Geófonos Tradicionales (Puntual)</button>
+              <button class="sim-mode-btn active" data-sim="dfos" id="btn-mode-dfos">FiberAndes DAS (Sondajes + Galerías)</button>
+              <button class="sim-mode-btn" data-sim="esi" id="btn-mode-esi">Red Sísmica Tradicional (Geófonos en Túneles)</button>
             </div>
             <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
               <button class="sim-mode-btn" id="btn-simulate-event" style="background:rgba(0,240,255,0.15); color:var(--cyan); border:1px solid var(--cyan); display:flex; align-items:center; gap:6px;">
@@ -420,25 +420,25 @@
           <!-- Side-by-side Comparative Cards -->
           <div class="comp-grid">
             <div class="comp-card discrete">
-              <span class="comp-badge">Tecnología Tradicional (Balizas &amp; Geófonos)</span>
-              <h3>Sensores Discretos / Balizas</h3>
-              <p>Mide exclusivamente en puntos aislados (geófonos en túneles o 3-4 balizas de batería por pozo).</p>
+              <span class="comp-badge">Red Sísmica Tradicional (Geófonos &amp; Sismógrafos)</span>
+              <h3>Geófonos &amp; Sismógrafos en Túneles</h3>
+              <p>Instrumentación sísmica convencional restringida estrictamente al interior de túneles y galerías accesibles.</p>
               <ul class="comp-list">
                 <li>
                   <svg class="icon-x" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m15 9-6 6M9 9l6 6"/></svg>
-                  <span><strong>Grandes vacíos ciegos:</strong> Decenas a cientos de metros sin información entre una baliza y otra.</span>
+                  <span><strong>Fuerte Atenuación Inelástica (Q):</strong> Las altas frecuencias (&gt;150 Hz) de microsismos ($M_W &lt; 0$) se disipan en &lt;200 m de roca fracturada. A &gt;300 m en túneles, la señal se pierde bajo el ruido de fondo.</span>
                 </li>
                 <li>
                   <svg class="icon-x" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m15 9-6 6M9 9l6 6"/></svg>
-                  <span><strong>Baterías y electrónica en pozo:</strong> Riesgo de descarga o falla prematura antes de que el frente de socavación alcance la zona.</span>
+                  <span><strong>Enorme Zona Ciega en el Macizo Rocoso:</strong> El cave-back y la roca sobre la zona de socavación quedan desprotegidos al no haber túneles donde atornillar geófonos.</span>
                 </li>
                 <li>
                   <svg class="icon-x" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m15 9-6 6M9 9l6 6"/></svg>
-                  <span><strong>Sin perfil de deformación continua:</strong> No puede medir la redistribución tensocional completa previa al estallido de roca.</span>
+                  <span><strong>Incertidumbre de Localización (±15 a ±30 m):</strong> Sensores distantes y con mala cobertura azimutal generan gran dispersión de error en los hipocentros.</span>
                 </li>
                 <li>
                   <svg class="icon-x" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m15 9-6 6M9 9l6 6"/></svg>
-                  <span><strong>Monoparámetro:</strong> Una estación sísmica solo mide sismicidad; no detecta filtraciones de agua ni deformación pura.</span>
+                  <span><strong>Cero Medición de Deformación Lenta (Slow-Strain):</strong> Un geófono dinámico es 100% ciego a la acumulación cuasi-estática de esfuerzos que antecede al estallido de roca (*rockburst*).</span>
                 </li>
               </ul>
             </div>
@@ -1242,7 +1242,7 @@
   <script src="js/hero-canvas.js"></script>
 
   <!-- 2D Mine Geomechanics & Caving Simulator (3D simulator preserved in js/mine-3d-simulator.js) -->
-  <script src="js/mine-2d-simulator.js?v=20260928_01"></script>
+  <script src="js/mine-2d-simulator.js?v=20260928_02"></script>
 
   <script src="js/configurator.js"></script>
   <script src="js/app.js"></script>
