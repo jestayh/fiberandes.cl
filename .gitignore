@@ -1,0 +1,5 @@
+# Local and data folders
+data_ignorar/
+*.log
+.DS_Store
+Thumbs.db
