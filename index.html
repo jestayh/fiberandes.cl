@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>FiberAndes — Un sistema nervioso para el macizo rocoso | DFOS en Chile (DAS · DSS · DTS)</title>
-  <meta name="description" content="Startup chilena de base científica pionera en Distributed Fiber Optic Sensing (DFOS). Transformamos el macizo rocoso, túneles, sondajes y relaves en un sistema nervioso continuo en tiempo real (DAS, DSS, DTS). Buscamos alianzas para pilotos mineros.">
+  <title>FiberAndes — Un sistema nervioso para el macizo rocoso y la infraestructura</title>
+  <meta name="description" content="Primera empresa en Chile de Distributed Fiber Optic Sensing (DFOS) a escala industrial. Dotamos al macizo rocoso, presas de relaves, puentes y ductos de un sistema nervioso en tiempo real (DAS, DSS, DTS).">
   <meta name="author" content="FiberAndes SpA">
   <meta name="robots" content="index, follow">
   <link rel="canonical" href="https://www.fiberandes.cl/">
@@ -14,8 +14,8 @@
   <meta property="og:url" content="https://www.fiberandes.cl/">
   <meta property="og:site_name" content="FiberAndes">
   <meta property="og:locale" content="es_CL">
-  <meta property="og:title" content="FiberAndes — Un sistema nervioso para el macizo rocoso">
-  <meta property="og:description" content="Dotamos al macizo rocoso e infraestructura minera de un sistema nervioso con fibra óptica distribuida. Detección continua de vibraciones (DAS), deformación (DSS) y temperatura (DTS) en túneles y sondajes.">
+  <meta property="og:title" content="FiberAndes — Un sistema nervioso para el macizo rocoso y la infraestructura">
+  <meta property="og:description" content="Transformamos la fibra óptica en un sistema nervioso continuo para el macizo rocoso, relaves, puentes y mineroductos. DFOS (DAS, DSS, DTS).">
   <meta property="og:image" content="https://www.fiberandes.cl/assets/og-image.jpg">
 
   <meta name="theme-color" content="#060911">
@@ -31,39 +31,81 @@
   <link rel="stylesheet" href="css/styles.css">
 
   <style>
-    /* Estilos específicos para la identidad científica y startup de FiberAndes */
+    /* Estilos de la página mínima y limpia */
     :root {
       --copper: #E27D60;
-      --copper-glow: rgba(226, 125, 96, 0.25);
-      --copper-dim: rgba(226, 125, 96, 0.1);
+      --copper-glow: rgba(226, 125, 96, 0.3);
     }
 
-    .startup-header {
-      padding: 24px 0;
-      border-bottom: 1px solid var(--line-light);
+    body {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      overflow-x: hidden;
+      background: #060911;
+      position: relative;
     }
-    .startup-header .wrap {
+
+    /* Minimal Canvas Overlay */
+    #hero-canvas {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      pointer-events: auto;
+    }
+    .canvas-veil {
+      position: fixed;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+      background: radial-gradient(ellipse 70% 60% at 50% 45%, rgba(6,9,17,0.45) 0%, #060911 90%);
+    }
+
+    .main-wrap {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: clamp(24px, 4vw, 48px) var(--pad);
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      justify-content: space-between;
+    }
+
+    /* Header */
+    .top-bar {
       display: flex;
       justify-content: space-between;
       align-items: center;
+      width: 100%;
+    }
+    .logo-img {
+      height: 48px;
+      width: auto;
+      display: block;
     }
 
-    .badge-pilot {
+    .status-badge {
       display: inline-flex;
       align-items: center;
       gap: 8px;
       padding: 6px 14px;
       border-radius: 999px;
-      background: var(--copper-dim);
-      border: 1px solid rgba(226, 125, 96, 0.4);
+      background: rgba(226, 125, 96, 0.08);
+      border: 1px solid rgba(226, 125, 96, 0.35);
       color: var(--copper);
       font-family: var(--font-mono);
-      font-size: 11.5px;
+      font-size: 11px;
       letter-spacing: 0.12em;
       text-transform: uppercase;
       font-weight: 600;
     }
-    .badge-pilot-dot {
+    .status-badge-dot {
       width: 7px;
       height: 7px;
       border-radius: 50%;
@@ -72,412 +114,319 @@
       animation: pulse-dot 2s ease-in-out infinite;
     }
 
-    .hero-manifesto {
-      padding-top: clamp(60px, 8vw, 110px);
-      padding-bottom: clamp(60px, 8vw, 100px);
+    /* Center Hero Area */
+    .center-hero {
+      margin: auto 0;
+      padding-block: clamp(40px, 6vw, 80px);
       text-align: center;
-      position: relative;
     }
-    .hero-manifesto .manifesto-content {
-      max-width: 940px;
+
+    .eyebrow-tag {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--cyan);
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 24px;
+    }
+    .eyebrow-tag::before {
+      content: "";
+      width: 20px;
+      height: 1.5px;
+      background: var(--cyan);
+      display: inline-block;
+    }
+
+    /* Dynamic Rotating Headline */
+    .dynamic-h1 {
+      font-family: var(--font-display);
+      font-size: clamp(38px, 6vw, 76px);
+      font-weight: 800;
+      line-height: 1.08;
+      letter-spacing: -0.035em;
+      color: #FFFFFF;
+      text-wrap: balance;
+      max-width: 980px;
       margin: 0 auto;
     }
 
-    .h-manifesto {
-      font-size: clamp(38px, 5.8vw, 76px);
-      font-weight: 800;
-      line-height: 1.04;
-      letter-spacing: -0.035em;
-      margin-top: 18px;
-      text-wrap: balance;
-    }
-    .h-manifesto .copper-highlight {
+    .rotating-container {
+      display: inline-block;
+      position: relative;
+      white-space: nowrap;
       color: var(--copper);
       text-shadow: 0 0 35px var(--copper-glow);
-    }
-    .h-manifesto .cyan-highlight {
-      background: linear-gradient(135deg, #FFFFFF 40%, var(--cyan) 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
+      border-bottom: 2px solid rgba(226, 125, 96, 0.4);
+      padding-bottom: 2px;
+      min-width: 260px;
+      text-align: left;
     }
 
-    .lead-manifesto {
-      font-size: clamp(18px, 1.6vw, 22px);
+    .rotating-word {
+      display: inline-block;
+      transition: opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1), transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .rotating-word.out {
+      opacity: 0;
+      transform: translateY(-12px);
+    }
+    .rotating-word.in {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .minimal-sub {
+      font-size: clamp(17px, 1.5vw, 21px);
       color: var(--fg-1);
+      max-width: 66ch;
       margin: 28px auto 0;
-      max-width: 72ch;
       line-height: 1.6;
       font-weight: 300;
     }
-    .lead-manifesto strong {
-      color: #fff;
-      font-weight: 600;
-    }
 
-    /* Founder & Scientific Backing Banner */
-    .science-banner {
-      margin-top: 48px;
-      background: rgba(13, 22, 39, 0.7);
-      border: 1px solid var(--line-strong);
-      border-radius: var(--r-xl);
-      padding: clamp(24px, 3.5vw, 40px);
-      backdrop-filter: blur(14px);
-      display: grid;
-      grid-template-columns: auto 1fr;
-      gap: 28px;
-      align-items: center;
-      text-align: left;
-    }
-    .science-badge-icon {
-      width: 64px;
-      height: 64px;
-      border-radius: var(--r);
-      background: var(--bg-alt);
-      border: 1px solid var(--cyan);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: var(--cyan);
-      flex: none;
-      box-shadow: 0 0 25px var(--cyan-dim);
-    }
-    .science-title {
-      font-family: var(--font-mono);
-      font-size: 11.5px;
-      letter-spacing: 0.16em;
-      text-transform: uppercase;
-      color: var(--cyan);
-      margin-bottom: 6px;
-    }
-    .science-text {
-      font-size: 15px;
-      color: var(--fg-1);
-      line-height: 1.6;
-    }
-    .science-text strong {
-      color: #fff;
-    }
-
-    /* The Nervous System Pillars */
-    .nervous-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 24px;
-      margin-top: 48px;
-    }
-    .nervous-card {
-      background: var(--bg-card);
-      border: 1px solid var(--line);
-      border-radius: var(--r-lg);
-      padding: 32px 28px;
-      text-align: left;
-      transition: all .25s ease;
-      position: relative;
-      overflow: hidden;
-    }
-    .nervous-card:hover {
-      border-color: var(--cyan);
-      transform: translateY(-4px);
-      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6);
-    }
-    .nervous-card .organ-label {
-      font-family: var(--font-mono);
-      font-size: 11px;
-      letter-spacing: 0.16em;
-      text-transform: uppercase;
-      margin-bottom: 12px;
-      display: inline-block;
-    }
-    .nervous-card[data-sense="das"] .organ-label { color: var(--cyan); }
-    .nervous-card[data-sense="dss"] .organ-label { color: var(--emerald); }
-    .nervous-card[data-sense="dts"] .organ-label { color: var(--copper); }
-
-    .nervous-card h3 {
-      font-size: 24px;
-      margin-bottom: 10px;
-    }
-    .nervous-card p {
-      font-size: 14.5px;
-      color: var(--fg-1);
-      line-height: 1.6;
-    }
-
-    /* Borehole / Sondajes Innovation Card */
-    .borehole-feature {
-      margin-top: 40px;
-      background:
-        radial-gradient(ellipse at 80% 20%, rgba(0, 240, 255, 0.08), transparent 60%),
-        var(--bg-alt);
-      border: 1px solid var(--line-strong);
-      border-radius: var(--r-xl);
-      padding: clamp(28px, 4vw, 48px);
-      text-align: left;
-    }
-    .borehole-grid {
-      display: grid;
-      grid-template-columns: 1.2fr 1fr;
-      gap: 36px;
-      align-items: center;
-    }
-    .borehole-feature h3 {
-      font-size: clamp(24px, 3vw, 34px);
-      margin-bottom: 14px;
-    }
-    .borehole-feature p {
-      font-size: 15px;
-      color: var(--fg-1);
-      line-height: 1.6;
-      margin-bottom: 16px;
-    }
-
-    /* Pilot Call to Action */
-    .pilot-cta-box {
-      margin-top: 60px;
-      background: linear-gradient(135deg, rgba(226, 125, 96, 0.08) 0%, rgba(0, 240, 255, 0.08) 100%);
-      border: 1px solid rgba(226, 125, 96, 0.35);
-      border-radius: var(--r-xl);
-      padding: clamp(32px, 5vw, 60px);
-      text-align: center;
-    }
-    .pilot-cta-box h2 {
-      font-size: clamp(28px, 3.8vw, 46px);
-      letter-spacing: -0.02em;
-    }
-    .pilot-cta-box p {
-      font-size: 17px;
-      color: var(--fg-1);
-      max-width: 68ch;
-      margin: 16px auto 32px;
-      line-height: 1.6;
-    }
-    .pilot-cta-buttons {
+    /* Technology Pills */
+    .pill-group {
       display: flex;
       justify-content: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 36px;
+    }
+    .pill-item {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      padding: 7px 16px;
+      border-radius: 999px;
+      background: rgba(13, 22, 39, 0.8);
+      border: 1px solid var(--line-light);
+      color: var(--fg);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      backdrop-filter: blur(8px);
+    }
+    .pill-item .dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+    }
+    .pill-item.das .dot { background: var(--cyan); box-shadow: 0 0 6px var(--cyan); }
+    .pill-item.dss .dot { background: var(--emerald); box-shadow: 0 0 6px var(--emerald); }
+    .pill-item.dts .dot { background: var(--copper); box-shadow: 0 0 6px var(--copper); }
+
+    /* Buttons / Contact CTA */
+    .action-row {
+      margin-top: 44px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
       gap: 16px;
       flex-wrap: wrap;
     }
 
-    @media (max-width: 900px) {
-      .nervous-grid { grid-template-columns: 1fr; }
-      .borehole-grid { grid-template-columns: 1fr; }
-      .science-banner { grid-template-columns: 1fr; }
+    .btn-mail {
+      background: linear-gradient(135deg, var(--cyan), #00B8D9);
+      color: #040911;
+      font-weight: 600;
+      padding: 13px 26px;
+      border-radius: var(--r-sm);
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 15px;
+      transition: all .2s ease;
+      box-shadow: 0 4px 20px var(--cyan-glow);
+    }
+    .btn-mail:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 28px rgba(0, 240, 255, 0.45);
+      background: linear-gradient(135deg, #33F4FF, #00C7E6);
+    }
+
+    .btn-wa {
+      background: rgba(17, 27, 46, 0.85);
+      color: #fff;
+      font-weight: 500;
+      padding: 13px 24px;
+      border-radius: var(--r-sm);
+      border: 1px solid rgba(37, 211, 102, 0.4);
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 15px;
+      backdrop-filter: blur(8px);
+      transition: all .2s ease;
+    }
+    .btn-wa:hover {
+      border-color: #25D366;
+      background: rgba(21, 36, 61, 0.95);
+      transform: translateY(-2px);
+    }
+
+    /* Founder Credibility Note */
+    .founder-note {
+      margin-top: 44px;
+      font-size: 13.5px;
+      color: var(--fg-2);
+      line-height: 1.6;
+      max-width: 60ch;
+      margin-inline: auto;
+    }
+    .founder-note strong {
+      color: var(--fg-1);
+    }
+
+    /* Bottom Bar */
+    .bottom-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: var(--font-mono);
+      font-size: 11.5px;
+      color: var(--fg-2);
+      border-top: 1px solid var(--line-light);
+      padding-top: 24px;
+      flex-wrap: wrap;
+      gap: 14px;
+    }
+
+    @media (max-width: 640px) {
+      .top-bar { justify-content: center; flex-direction: column; gap: 14px; }
+      .rotating-container { min-width: 220px; display: block; text-align: center; }
+      .action-row { flex-direction: column; align-items: stretch; }
+      .action-row a { justify-content: center; }
+      .bottom-bar { justify-content: center; text-align: center; }
     }
   </style>
 </head>
 <body>
 
-  <!-- Fullscreen Interactive Laser Wave Canvas -->
-  <canvas id="hero-canvas" style="position:fixed; inset:0; width:100%; height:100%; z-index:0; pointer-events:auto;" aria-hidden="true"></canvas>
-  <div style="position:fixed; inset:0; z-index:1; pointer-events:none; background: radial-gradient(ellipse at 50% 30%, rgba(6,9,17,0.3) 0%, var(--bg) 92%);"></div>
+  <!-- Interactive Fiber Optic Laser Canvas -->
+  <canvas id="hero-canvas" aria-hidden="true"></canvas>
+  <div class="canvas-veil"></div>
 
   <!-- Main Container -->
-  <div style="position:relative; z-index:2;">
+  <div class="main-wrap">
 
-    <!-- ============================ HEADER ============================ -->
-    <header class="startup-header">
-      <div class="wrap">
-        <a class="brand" href="index.html" aria-label="FiberAndes Inicio">
-          <img class="logo-svg" src="assets/logo.svg" alt="FiberAndes" style="height:46px;">
-        </a>
+    <!-- Top Navigation / Brand -->
+    <header class="top-bar">
+      <a href="index.html" aria-label="FiberAndes Inicio">
+        <img class="logo-img" src="assets/logo.svg" alt="FiberAndes — Distributed Fiber Optic Sensing Chile">
+      </a>
 
-        <div style="display:flex; align-items:center; gap:16px;">
-          <div class="badge-pilot">
-            <span class="badge-pilot-dot"></span>
-            <span>ABIERTO A PILOTOS MINEROS 2026</span>
-          </div>
-
-          <a href="#contacto" class="btn btn-primary btn-sm">
-            Contactar Fundadores <span class="arr">→</span>
-          </a>
-        </div>
+      <div class="status-badge">
+        <span class="status-badge-dot"></span>
+        <span>PILOTOS MINEROS & ALIANZAS 2026</span>
       </div>
     </header>
 
-    <!-- ============================ HERO MANIFESTO ============================ -->
-    <section class="hero-manifesto">
-      <div class="wrap">
-        <div class="manifesto-content reveal">
-          <span class="eyebrow"><span class="idx">DFOS CHILE</span> DEEP-TECH EN GEOCIENCIAS APLICADAS</span>
+    <!-- Center Hero -->
+    <main class="center-hero">
+      <div class="eyebrow-tag">
+        DISTRIBUTED FIBER OPTIC SENSING · CHILE
+      </div>
 
-          <h1 class="h-manifesto">
-            Un <span class="cyan-highlight">sistema nervioso</span> artificial para el <span class="copper-highlight">macizo rocoso</span>.
-          </h1>
+      <h1 class="dynamic-h1">
+        Un sistema nervioso para<br>
+        <span class="rotating-container">
+          <span class="rotating-word in" id="rotating-word">el macizo rocoso</span>
+        </span>.
+      </h1>
 
-          <p class="lead-manifesto">
-            Transformamos la fibra óptica en miles de sensores continuos y en tiempo real. En túneles, galerías y cavidades de sondajes profundos, dotamos a la roca de <strong>oído acústico (DAS)</strong>, <strong>tacto de deformación (DSS)</strong> y <strong>termometría continua (DTS)</strong>.
-          </p>
+      <p class="minimal-sub">
+        Transformamos la fibra óptica en una red densa y continua de sensores en tiempo real. En túneles, galerías y cavidades de sondajes profundos, dotamos a tu infraestructura de <strong>detección acústica (DAS)</strong>, <strong>deformación milimétrica (DSS)</strong> y <strong>termometría continua (DTS)</strong> sin puntos ciegos.
+      </p>
 
-          <div style="margin-top: 36px; display: flex; justify-content: center; gap: 16px; flex-wrap: wrap;">
-            <a href="#contacto" class="btn btn-primary">
-              Proponer Piloto en Faena <span class="arr">→</span>
-            </a>
-            <a href="#concepto" class="btn btn-secondary">
-              Conoce el Enfoque Científico
-            </a>
-          </div>
-
-          <!-- Scientific Credibility Banner -->
-          <div class="science-banner reveal">
-            <div class="science-badge-icon" aria-hidden="true">
-              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/><circle cx="12" cy="12" r="3"/></svg>
-            </div>
-            <div>
-              <div class="science-title">RESPALDO CIENTÍFICO Y GEOLÓGICO</div>
-              <p class="science-text">
-                Co-fundada por una <strong>Doctoranda en Geofísica (Earth and Space Sciences) de la University of Washington</strong> (especialista en DAS aplicado a sismicidad volcánica, zonas de subducción y procesamiento de señales) y un <strong>Geólogo especializado en Peligros Geológicos y Geomecánica</strong> en Chile.
-              </p>
-            </div>
-          </div>
+      <!-- Signals Pills -->
+      <div class="pill-group">
+        <div class="pill-item das">
+          <span class="dot"></span>
+          <span><strong>DAS</strong> · Acústica & Microsismicidad</span>
+        </div>
+        <div class="pill-item dss">
+          <span class="dot"></span>
+          <span><strong>DSS</strong> · Deformación Continua</span>
+        </div>
+        <div class="pill-item dts">
+          <span class="dot"></span>
+          <span><strong>DTS</strong> · Temperatura & Filtraciones</span>
         </div>
       </div>
-    </section>
 
-    <!-- ============================ THE NERVOUS SYSTEM PILLARS ============================ -->
-    <section class="section-pad" id="concepto" style="background: rgba(9, 14, 26, 0.7); backdrop-filter: blur(12px); border-block: 1px solid var(--line-light);">
-      <div class="wrap">
-        <div class="section-head reveal" style="text-align:center; margin-inline:auto;">
-          <span class="eyebrow"><span class="idx">01</span> LAS TRES SEÑALES VITALES</span>
-          <h2 class="h-section">Toda la fibra siente. Cero puntos ciegos.</h2>
-          <p class="lead" style="margin-inline:auto;">
-            Mientras los sensores tradicionales solo escuchan en puntos aislados cada 100 metros, la fibra óptica instalada en la mina mide cada metro de forma continua.
-          </p>
-        </div>
+      <!-- Action / Contact Buttons -->
+      <div class="action-row">
+        <a href="mailto:contacto@fiberandes.cl?subject=Contacto%20Piloto%20FiberAndes" class="btn-mail">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 7L2 7"/></svg>
+          Hablemos: contacto@fiberandes.cl
+        </a>
 
-        <div class="nervous-grid">
-          <!-- DAS -->
-          <div class="nervous-card reveal" data-sense="das">
-            <span class="organ-label">🔊 EL OÍDO DEL MACIZO · DAS</span>
-            <h3>Distributed Acoustic Sensing</h3>
-            <p>
-              Interrogación por dispersión Rayleigh para registrar la <strong>microsismicidad inducida</strong>, propagación de ondas de voladura, fracturación del macizo y vibraciones de tráfico pesado a frecuencias de hasta 20 kHz.
-            </p>
-            <div style="margin-top:20px; font-family:var(--font-mono); font-size:12px; color:var(--cyan);">
-              ▸ Muestreo: 1 m continuo<br>
-              ▸ Respuesta: Dinámica e instantánea
-            </div>
-          </div>
-
-          <!-- DSS -->
-          <div class="nervous-card reveal" data-sense="dss">
-            <span class="organ-label">📏 EL TACTO Y TENSIÓN · DSS</span>
-            <h3>Distributed Strain Sensing</h3>
-            <p>
-              Medición inelástica Brillouin para captar la <strong>micro-deformación milimétrica ($\pm 2\,\mu\varepsilon$)</strong> a lo largo de galerías subterráneas, subsidencia en block caving, convergencia de túneles y cizallamiento en taludes.
-            </p>
-            <div style="margin-top:20px; font-family:var(--font-mono); font-size:12px; color:var(--emerald);">
-              ▸ Precisión: Micro-deformación<br>
-              ▸ Alerta: Semanas antes de falla visible
-            </div>
-          </div>
-
-          <!-- DTS -->
-          <div class="nervous-card reveal" data-sense="dts">
-            <span class="organ-label">🌡️ LA TEMPERATURA CRÍTICA · DTS</span>
-            <h3>Distributed Temperature Sensing</h3>
-            <p>
-              Medición térmica Raman continua (hasta 0.01 °C). Permite la <strong>detección inmediata de filtraciones (seepage) en tranques de relaves</strong>, monitoreo de líneas de saturación freática y gradiente geotérmico en profundidad.
-            </p>
-            <div style="margin-top:20px; font-family:var(--font-mono); font-size:12px; color:var(--copper);">
-              ▸ Sensibilidad: 0.01 °C<br>
-              ▸ Detección: Filtraciones freáticas
-            </div>
-          </div>
-        </div>
-
-        <!-- Borehole Sondajes Innovation -->
-        <div class="borehole-feature reveal">
-          <div class="borehole-grid">
-            <div>
-              <span class="eyebrow" style="color:var(--copper);"><span class="idx" style="color:var(--copper);">FRONTERA TÉCNICA</span> DESPLIEGUE EN SONDAJES (DAISY-CHAIN)</span>
-              <h3>Más allá de los túneles: Instrumentación 3D en profundidad</h3>
-              <p>
-                El verdadero potencial del DFOS en minería no se limita a las galerías y pernos superficiales: desplegar fibra óptica en <strong>cavidades de sondajes mediante arreglos tipo daisy-chain</strong> permite introducir termómetros, extensómetros y sismómetros continuos en cualquier dirección y profundidad geológica.
-              </p>
-              <p>
-                Esto convierte sondeos existentes o dedicados en una red de tomografía geomecánica profunda continua, imposible de replicar con sensores discretos convencionales.
-              </p>
-            </div>
-            <div style="background:var(--bg-card); border:1px solid var(--line-strong); border-radius:var(--r); padding:24px; font-family:var(--font-mono); font-size:13px; line-height:1.7;">
-              <span style="color:var(--cyan); font-weight:700;">// ENFOQUE FIBERANDES</span><br>
-              <span style="color:var(--fg-2);">01.</span> Diseño de tendido y anclaje en sondaje<br>
-              <span style="color:var(--fg-2);">02.</span> Selección de cable óptico especializado<br>
-              <span style="color:var(--fg-2);">03.</span> Interrogación con equipos líderes mundiales<br>
-              <span style="color:var(--fg-2);">04.</span> <strong>Algoritmos propios de procesamiento de señal</strong><br>
-              <span style="color:var(--fg-2);">05.</span> Plataforma de analítica geotécnica
-            </div>
-          </div>
-        </div>
+        <a href="https://wa.me/56994290168?text=Hola%20FiberAndes%2C%20me%20gustar%C3%ADa%20conversar%20sobre%20una%20reuni%C3%B3n%20o%20piloto%20DFOS." target="_blank" rel="noopener" class="btn-wa">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="#25D366"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.816 9.816 0 0 0 12.04 2m.01 1.67c2.2 0 4.26.86 5.82 2.42a8.225 8.225 0 0 1 2.41 5.83c0 4.54-3.7 8.24-8.24 8.24-1.48 0-2.93-.4-4.2-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.196 8.196 0 0 1-1.26-4.38c0-4.54 3.7-8.24 8.24-8.24m4.52 11.66c-.25-.13-1.47-.72-1.7-.81-.23-.08-.39-.13-.56.13-.16.25-.64.81-.78.98-.15.16-.29.18-.53.06-.25-.13-1.05-.39-1.99-1.23-.74-.66-1.23-1.47-1.38-1.72-.14-.25-.02-.38.11-.5.11-.11.25-.29.37-.43.13-.15.16-.25.25-.41.08-.16.04-.31-.02-.43-.06-.13-.56-1.35-.77-1.85-.2-.49-.41-.42-.56-.43h-.48c-.16 0-.43.06-.66.31-.23.25-.87.85-.87 2.07s.89 2.41 1.01 2.57c.13.16 1.76 2.69 4.26 3.77.6.26 1.06.41 1.43.53.6.19 1.15.16 1.58.1.48-.07 1.47-.6 1.68-1.18.21-.58.21-1.07.15-1.18-.07-.1-.23-.16-.47-.29"/></svg>
+          WhatsApp Directo (+56 9 9429 0168)
+        </a>
       </div>
-    </section>
 
-    <!-- ============================ PILOT CALL TO ACTION ============================ -->
-    <section class="section-pad" id="contacto">
-      <div class="wrap">
-        <div class="pilot-cta-box reveal">
-          <span class="badge-pilot" style="margin-bottom:16px;">
-            <span class="badge-pilot-dot"></span>
-            INNOVACIÓN MINERA ABIERTA
-          </span>
+      <!-- Founder Scientific Footnote -->
+      <p class="founder-note">
+        Startup chilena co-fundada por <strong>Dra. (c) en Geofísica de la University of Washington</strong> (especialista en DAS y sismicidad) y <strong>Geólogo especialista en Peligros Geológicos</strong>.
+      </p>
+    </main>
 
-          <h2>Chile: El laboratorio natural del DFOS minero</h2>
-          <p>
-            En los últimos congresos internacionales de minería (Canadá, Australia), el uso de DAS, DSS y DTS en minas recién comienza a probarse. Chile, al albergar las operaciones mineras subterráneas y a cielo abierto más grandes del planeta, es el lugar idóneo para validar y desplegar pilotos pioneros.
-          </p>
-          <p style="font-size:15px; color:#fff; font-weight:500;">
-            Buscamos <strong>empresas mineras, consultoras geotécnicas y fondos de innovación (Corfo / Start-Up Chile / Venture Capital)</strong> que quieran colaborar en pruebas de concepto y pilotos en terreno.
-          </p>
-
-          <div class="pilot-cta-buttons">
-            <a href="mailto:contacto@fiberandes.cl?subject=Inter%C3%A9s%20en%20Piloto%20o%20Alianza%20con%20FiberAndes" class="btn btn-primary">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 7L2 7"/></svg>
-              Escríbenos: contacto@fiberandes.cl
-            </a>
-            <a href="https://wa.me/56994290168?text=Hola%20FiberAndes%2C%20me%20gustar%C3%ADa%20conversar%20sobre%20una%20alianza%20o%20piloto%20DFOS." target="_blank" rel="noopener" class="btn btn-secondary">
-              WhatsApp Directo (+56 9 9429 0168)
-            </a>
-          </div>
-
-          <div style="margin-top:32px; font-size:13px; color:var(--fg-2);">
-            Co-fundadores: José Nicolás Estay Herrera (Geología) & Dra. (c) en Geofísica (University of Washington, DAS Specialist).
-          </div>
-        </div>
+    <!-- Bottom Footer -->
+    <footer class="bottom-bar">
+      <div>
+        <span>© 2026 FiberAndes SpA. San Felipe / Santiago, Chile.</span>
       </div>
-    </section>
-
-    <!-- ============================ FOOTER ============================ -->
-    <footer style="border-top: 1px solid var(--line-light); padding: 36px 0; background: var(--bg-alt);">
-      <div class="wrap" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px; font-family:var(--font-mono); font-size:12px; color:var(--fg-2);">
-        <div>
-          <span>© 2026 FiberAndes SpA. San Felipe / Santiago, Chile.</span>
-        </div>
-        <div>
-          <span>Distributed Fiber Optic Sensing · Minería e Infraestructura</span>
-        </div>
+      <div>
+        <span>www.fiberandes.cl · Distributed Fiber Optic Sensing</span>
       </div>
     </footer>
 
   </div>
 
-  <!-- Interactive Hero Canvas Engine -->
+  <!-- Interactive Canvas Background Engine -->
   <script src="js/hero-canvas.js"></script>
+
+  <!-- Word Rotation Engine -->
   <script>
-    // Scroll reveal observer
-    document.addEventListener('DOMContentLoaded', () => {
-      const reveals = document.querySelectorAll('.reveal');
-      if ('IntersectionObserver' in window) {
-        const obs = new IntersectionObserver((entries) => {
-          entries.forEach(e => {
-            if (e.isIntersecting) {
-              e.target.classList.add('in');
-              obs.unobserve(e.target);
-            }
-          });
-        }, { threshold: 0.1 });
-        reveals.forEach(r => obs.observe(r));
-      } else {
-        reveals.forEach(r => r.classList.add('in'));
+    (function() {
+      const words = [
+        'el macizo rocoso',
+        'presas de relave',
+        'puentes y viaductos',
+        'túneles y sondajes',
+        'mineroductos',
+        'infraestructura crítica',
+        'taludes en rajo'
+      ];
+
+      let currentIndex = 0;
+      const el = document.getElementById('rotating-word');
+
+      if (!el) return;
+
+      function rotateWord() {
+        // Step 1: Smooth fade out + slide up
+        el.classList.remove('in');
+        el.classList.add('out');
+
+        setTimeout(() => {
+          // Step 2: Swap word
+          currentIndex = (currentIndex + 1) % words.length;
+          el.textContent = words[currentIndex];
+
+          // Step 3: Fade in + slide down into place
+          el.classList.remove('out');
+          el.classList.add('in');
+        }, 360);
       }
-    });
+
+      // Rotate every 2.8 seconds
+      setInterval(rotateWord, 2800);
+    })();
   </script>
 </body>
 </html>
