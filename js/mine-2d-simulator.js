@@ -177,7 +177,7 @@
   }
 
   function showNotice(text) {
-    noticeToast = { text, alpha: 1.0, timer: 140 };
+    noticeToast = { text, alpha: 1.0, timer: 180 };
   }
 
   // -------------------------------------------------------------
@@ -263,7 +263,8 @@
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
 
-    if (y > 45 && x < width - 150) {
+    const mainWidth = width > 750 ? width - 165 : width;
+    if (y > 45 && x < mainWidth) {
       const mag = -0.5 - Math.random() * 1.5;
       triggerSeismicEvent(x, y, mag, null);
     }
@@ -914,26 +915,8 @@
       ctx.restore();
     }
 
-    // 9. ORGANIC NATURAL SEISMICITY GENERATION
-    // Must occur strictly in the Seismogenic Shell (70%) or Production Pillars (30%)!
-    // NEVER inside the empty void or muckpile.
-    if (Math.random() < 0.022) {
-      if (Math.random() < 0.70) {
-        // Seismogenic Shell above Cave-Back
-        const angle = Math.random() * Math.PI;
-        const rx = caveCenterX + Math.cos(angle) * (caveRight - caveLeft) * 0.45;
-        const ry = yCaveTop - 15 - Math.sin(angle) * 35 + (Math.random() - 0.5) * 20;
-        const mag = -1.2 - Math.random() * 1.2;
-        triggerSeismicEvent(rx, ry, mag, 'cave-back');
-      } else {
-        // Production level extraction pillar (rockburst hazard)
-        const pIdx = Math.floor(Math.random() * (bellCount - 1));
-        const rx = caveLeft + 15 + pIdx * bellSpacing + (bellSpacing * 0.5);
-        const ry = yProduction - 2;
-        const mag = -0.7 - Math.random() * 0.8;
-        triggerSeismicEvent(rx, ry, mag, 'pillar');
-      }
-    }
+    // 9. SISMICIDAD CONTROLADA EXCLUSIVAMENTE POR EL USUARIO
+    // Los eventos sísmicos solo se generan por clics directos en la roca o mediante los botones de escenario.
 
     // 10. NOTIFICATION TOAST ON CANVAS
     if (noticeToast) {
@@ -1046,4 +1029,14 @@
   setupUIControls();
   draw();
 
+  // Disparo único demostrativo al inicio para incentivar la interacción del usuario
+  setTimeout(() => {
+    const mainWidth = width > 750 ? width - 165 : width;
+    const caveCenterX = (mainWidth * 0.32 + mainWidth * 0.72) / 2;
+    const caveBackY = getDepthY(1000) - 20;
+    triggerSeismicEvent(caveCenterX, caveBackY, -1.2, 'cave-back');
+    showNotice('👆 Haz clic en cualquier lugar del macizo rocoso para simular fracturas');
+  }, 900);
+
 })();
+
