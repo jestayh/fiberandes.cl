@@ -33,7 +33,7 @@
   const groupBlindSpots = new THREE.Group();
   const groupLabels = new THREE.Group();
   let seismogenicParticles = null;
-  let laserPulseMeshes = [];
+  let fiberCables = [];
 
   // Dimensions & Scale (1 unit = ~50 meters, total depth ~2.000m)
   // Surface at Y = +10 (0m), Cave back at Y = -2 (-1000m), Production at Y = -12 (-1800m), Bottom at Y = -15 (-2000m)
@@ -510,17 +510,18 @@
   }
 
   // -------------------------------------------------------------
-  // BUILD: Boreholes & Fiber Optic Cable Array (Jedi Lightsaber Style)
+  // BUILD: Boreholes & Fiber Optic Cable Array
   // Continuous optical nervous system in boreholes + galleries
+  // Ultra-clean luminous filaments, harmonic breathing & acoustic wavefield reactivity
   // -------------------------------------------------------------
   function buildBoreholeFiberArray() {
-    laserPulseMeshes = [];
+    fiberCables = [];
 
-    // Helper: Build Jedi Lightsaber Fiber Cable with intense propagating light solitons
-    function addLightsaberLine(points, colorHex, pulseCount = 2, pulseSpeed = 0.012) {
+    // Helper: Build continuous luminous fiber cable (zero traveling spheres/pelotas)
+    function addContinuousFiberCable(points, colorHex, type = 'borehole') {
       const curve = new THREE.CatmullRomCurve3(points);
 
-      // 1. White-hot luminous central core
+      // 1. White-hot luminous central core (high-tensile optical fiber strand)
       const coreGeo = new THREE.BufferGeometry().setFromPoints(points);
       const coreMat = new THREE.LineBasicMaterial({
         color: 0xffffff,
@@ -531,7 +532,7 @@
       const coreLine = new THREE.Line(coreGeo, coreMat);
       groupBoreholes.add(coreLine);
 
-      // 2. Jedi Lightsaber Neon Plasma Aura (Glowing additive tube)
+      // 2. Continuous Neon Plasma Sheath (additive glowing tube)
       const auraGeo = new THREE.TubeGeometry(curve, Math.max(16, points.length * 6), 0.12, 8, false);
       const auraMat = new THREE.MeshBasicMaterial({
         color: colorHex,
@@ -544,51 +545,20 @@
       const auraMesh = new THREE.Mesh(auraGeo, auraMat);
       groupBoreholes.add(auraMesh);
 
-      // 3. Virtual Sensor Channels along cable (1 channel every ~1.2 units)
-      const totalLen = curve.getLength();
-      const nodeCount = Math.floor(totalLen / 1.1);
-      for (let n = 1; n < nodeCount; n++) {
-        const pt = curve.getPointAt(n / nodeCount);
-        const nodeGeo = new THREE.SphereGeometry(0.12, 6, 6);
-        const nodeMat = new THREE.MeshBasicMaterial({ color: 0x00ffa3 });
-        const nodeMesh = new THREE.Mesh(nodeGeo, nodeMat);
-        nodeMesh.position.copy(pt);
-        groupBoreholes.add(nodeMesh);
-      }
-
-      // 4. Intense Propagating Laser Soliton Pulses (Jedi Light Packets)
-      for (let p = 0; p < pulseCount; p++) {
-        const pulseGroup = new THREE.Group();
-
-        // High-intensity white core
-        const pCore = new THREE.Mesh(
-          new THREE.SphereGeometry(0.36, 10, 10),
-          new THREE.MeshBasicMaterial({ color: 0xffffff })
-        );
-        pulseGroup.add(pCore);
-
-        // Radiant neon halo
-        const pHalo = new THREE.Mesh(
-          new THREE.SphereGeometry(0.72, 10, 10),
-          new THREE.MeshBasicMaterial({
-            color: colorHex,
-            transparent: true,
-            opacity: 0.85,
-            blending: THREE.AdditiveBlending,
-            depthWrite: false
-          })
-        );
-        pulseGroup.add(pHalo);
-
-        pulseGroup.userData = {
-          curve,
-          speed: pulseSpeed * (0.85 + Math.random() * 0.3),
-          progress: (p / pulseCount) + Math.random() * 0.15
-        };
-
-        groupBoreholes.add(pulseGroup);
-        laserPulseMeshes.push(pulseGroup);
-      }
+      // Register cable for harmonic breathing & acoustic wavefield reaction
+      fiberCables.push({
+        curve,
+        points,
+        coreLine,
+        coreMat,
+        auraMesh,
+        auraMat,
+        baseColor: new THREE.Color(colorHex),
+        baseOpacity: 0.72,
+        burstIntensity: 0.0,
+        samplePoints: curve.getPoints(16),
+        type
+      });
     }
 
     // A. DEEP BOREHOLES: Drilling through virgin rock mass into seismogenic zone
@@ -616,7 +586,7 @@
       opacity: 0.45
     });
 
-    boreholeConfigs.forEach((bh, idx) => {
+    boreholeConfigs.forEach(bh => {
       const p1 = bh.points[0];
       const p2 = bh.points[1];
       const dir = new THREE.Vector3().subVectors(p2, p1);
@@ -630,8 +600,8 @@
       casingMesh.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), dir.clone().normalize());
       groupBoreholes.add(casingMesh);
 
-      // Jedi lightsaber cable
-      addLightsaberLine(bh.points, bh.color, 2, 0.012 + (idx * 0.002));
+      // Continuous fiber optic cable
+      addContinuousFiberCable(bh.points, bh.color, 'borehole');
     });
 
     // B. FIBER OPTIC IN TUNNELS & GALERÍAS (Production Drifts, Cross-cuts, Ramp Trunk)
@@ -644,7 +614,7 @@
       ];
       // Alternate between cyan (DAS Acústico) and emerald (DSS Deformación)
       const color = i % 2 === 0 ? 0x00f0ff : 0x00ffa3;
-      addLightsaberLine(tunnelFiberPoints, color, 2, 0.010 + (i * 0.002));
+      addContinuousFiberCable(tunnelFiberPoints, color, 'tunnel');
     });
 
     // 2. Cross-cut fiber links connecting the drifts
@@ -654,7 +624,7 @@
         new THREE.Vector3(-8.4, Y_PRODUCTION + 0.35, z),
         new THREE.Vector3(8.4, Y_PRODUCTION + 0.35, z)
       ];
-      addLightsaberLine(crossPoints, 0x00ffa3, 1, 0.008);
+      addContinuousFiberCable(crossPoints, 0x00ffa3, 'crosscut');
     });
 
     // 3. Main Optical Trunk Cable down the spiral access ramp
@@ -669,7 +639,7 @@
       const y = THREE.MathUtils.lerp(Y_SURFACE, Y_PRODUCTION, p) + 0.35;
       rampFiberPoints.push(new THREE.Vector3(x, y, z));
     }
-    addLightsaberLine(rampFiberPoints, 0x00f0ff, 4, 0.006);
+    addContinuousFiberCable(rampFiberPoints, 0x00f0ff, 'ramp');
 
     // 4. Interrogator Rack Unit in transport drift (-2.000m)
     const rackGeo = new THREE.BoxGeometry(1.4, 2.0, 1.0);
@@ -838,6 +808,28 @@
   }
 
   // -------------------------------------------------------------
+  // ACTION: Acoustic Wavefield Response on Optical Fiber Array
+  // (Instantaneous Rayleigh Backscatter disturbance from seismic fractures)
+  // -------------------------------------------------------------
+  function triggerFiberAcousticReaction(hypoPos, magnitude = 1.0) {
+    if (!fiberCables || fiberCables.length === 0) return;
+    const maxRange = 18.0;
+    for (let i = 0; i < fiberCables.length; i++) {
+      const cable = fiberCables[i];
+      let minD = Infinity;
+      const pts = cable.samplePoints;
+      for (let j = 0; j < pts.length; j++) {
+        const d = pts[j].distanceTo(hypoPos);
+        if (d < minD) minD = d;
+      }
+      if (minD < maxRange) {
+        const factor = Math.pow(Math.max(0, 1.0 - (minD / maxRange)), 1.3) * magnitude;
+        cable.burstIntensity = Math.min(2.0, Math.max(cable.burstIntensity, factor * 1.5));
+      }
+    }
+  }
+
+  // -------------------------------------------------------------
   // ACTION: Trigger Microseismic Shockwave Event
   // -------------------------------------------------------------
   function triggerEvent() {
@@ -850,6 +842,8 @@
     const banner = document.getElementById('sim-status-banner');
     if (activeMode === 'dfos') {
       shockwaveMesh.material.color.setHex(0x00f0ff);
+      // Direct acoustic wavefield excitation on all nearby sensing fibers
+      triggerFiberAcousticReaction(shockwaveMesh.position, 1.8);
       if (banner) {
         banner.className = 'sim-status-banner detected';
         banner.innerHTML = `<strong>⚡ EVENTO DETECTADO EN SONDAJE B-02 (-1.020 m)</strong> — Mw -1.4 · Ondas P/S cruzaron 85 canales continuos · Incertidumbre: ±2.1 m · Tasa de deformación activa`;
@@ -957,19 +951,35 @@
 
     if (controls) controls.update();
 
-    // 1. Animate Jedi Lightsaber Laser Pulses along boreholes & tunnels
-    laserPulseMeshes.forEach(p => {
-      if (p.userData && p.userData.curve) {
-        p.userData.progress += p.userData.speed;
-        if (p.userData.progress > 1) p.userData.progress = 0;
-        const pt = p.userData.curve.getPointAt(p.userData.progress);
-        p.position.copy(pt);
+    // 1. Animate Continuous Optical Fiber Cables (Harmonic breathing & Acoustic wave reactivity)
+    const whiteColor = new THREE.Color(0xffffff);
+    for (let i = 0; i < fiberCables.length; i++) {
+      const cable = fiberCables[i];
 
-        // Subtle energy vibration on pulse
-        const s = 1.0 + Math.sin(pulseTime * 12 + p.userData.progress * 20) * 0.12;
-        p.scale.set(s, s, s);
+      // Harmonic breathing glow: subtle sinusoidal modulation
+      const breath = Math.sin(pulseTime * 2.6 + i * 0.5) * 0.08;
+
+      // Exponential acoustic burst relaxation
+      if (cable.burstIntensity > 0.005) {
+        cable.burstIntensity *= 0.91; // decays smoothly in ~0.5s
+      } else {
+        cable.burstIntensity = 0;
       }
-    });
+
+      // Dynamic opacity
+      const finalOpacity = Math.min(1.0, Math.max(0.35, cable.baseOpacity + breath + cable.burstIntensity * 0.35));
+      cable.auraMat.opacity = finalOpacity;
+
+      // Flare color towards brilliant white-cyan when excited by acoustic waves
+      if (cable.burstIntensity > 0) {
+        cable.auraMat.color.copy(cable.baseColor).lerp(whiteColor, Math.min(1.0, cable.burstIntensity * 0.75));
+        const s = 1.0 + cable.burstIntensity * 0.35;
+        cable.auraMesh.scale.set(s, 1.0, s);
+      } else {
+        cable.auraMat.color.copy(cable.baseColor);
+        cable.auraMesh.scale.set(1.0, 1.0, 1.0);
+      }
+    }
 
     // 2. Animate Dynamic Microseismicity (Appearing and Disappearing Fractures)
     if (seismogenicParticles && dynamicEvents.length > 0) {
@@ -985,6 +995,10 @@
           ev.active = true;
           ev.age = 0;
           ev.lifespan = 1.0 + Math.random() * 1.8;
+          // Acoustic wavefield excites nearby fiber channels in real time
+          if (activeMode === 'dfos') {
+            triggerFiberAcousticReaction(ev.homePos, 0.75);
+          }
         }
       }
 
@@ -1037,6 +1051,20 @@
       shockwaveRadius += 0.35;
       shockwaveMesh.scale.set(shockwaveRadius, shockwaveRadius, shockwaveRadius);
       shockwaveMesh.material.opacity = Math.max(0, 0.9 - (shockwaveRadius / 18));
+
+      // As wavefront expands, excite fiber cables intersected by the wave
+      if (activeMode === 'dfos') {
+        for (let i = 0; i < fiberCables.length; i++) {
+          const cable = fiberCables[i];
+          for (let j = 0; j < cable.samplePoints.length; j += 3) {
+            const d = cable.samplePoints[j].distanceTo(shockwaveMesh.position);
+            if (Math.abs(d - shockwaveRadius) < 0.9) {
+              const pulse = 0.7 * (1.0 - shockwaveRadius / 18);
+              cable.burstIntensity = Math.max(cable.burstIntensity, pulse);
+            }
+          }
+        }
+      }
 
       if (shockwaveRadius > 18) {
         shockwaveActive = false;
