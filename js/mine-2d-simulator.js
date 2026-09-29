@@ -37,11 +37,11 @@
   legend.className = 'sim-3d-legend';
   legend.innerHTML = `
     <div class="legend-item"><span class="legend-color cyan"></span><span>Sondajes DAS Fibra Continua (FiberAndes)</span></div>
-    <div class="legend-item"><span class="legend-color" style="background:#ffb020; box-shadow:0 0 6px #ffb020;"></span><span>Geófonos &amp; Sismógrafos Puntuales (En Túneles)</span></div>
+    <div class="legend-item"><span class="legend-color" style="background:#ffb020; box-shadow:0 0 6px #ffb020;"></span><span>Geófonos Triaxiales en Boreholes (15–25m fuera de EDZ)</span></div>
     <div class="legend-item"><span class="legend-color" style="background:#ff281a; box-shadow:0 0 8px rgba(255,40,26,0.7);"></span><span>Zona Sismogénica Activa (Concentración σ₁)</span></div>
     <div class="legend-item"><span class="legend-color" style="background:#ff6600; box-shadow:0 0 6px #ff6600;"></span><span>Pilares de Producción (Riesgo Estallido / Rockburst)</span></div>
     <div class="legend-item"><span class="legend-color" style="background:#00ffa3; box-shadow:0 0 6px #00ffa3;"></span><span>Onda Sísmica Fresca (Alta Energía / SNR &gt; 35 dB)</span></div>
-    <div class="legend-item"><span class="legend-color red"></span><span>Zona Ciega Geófonos (Atenuación a &gt;300 m)</span></div>
+    <div class="legend-item"><span class="legend-color red"></span><span>Vacío Superior (&gt;350 m a Boreholes)</span></div>
   `;
   container.appendChild(legend);
 
@@ -115,20 +115,28 @@
   window.addEventListener('resize', resize);
   resize();
 
-  // Geophone network station locations (strictly in mining tunnels)
+  // Geophone network station locations (cemented in 15–25m boreholes outside the EDZ)
   function getGeophoneStations(mainWidth, yProduction, yUndercut, yHaulage, shaftX, caveLeft, caveRight, caveCenterX) {
     return [
-      { id: 'G-01', x: caveLeft - 50, y: yProduction, name: 'Producción Oeste' },
-      { id: 'G-02', x: caveLeft - 10, y: yProduction, name: 'Producción Central O' },
-      { id: 'G-03', x: caveCenterX, y: yProduction, name: 'Producción Eje' },
-      { id: 'G-04', x: caveRight + 10, y: yProduction, name: 'Producción Central E' },
-      { id: 'G-05', x: caveRight + 50, y: yProduction, name: 'Producción Este' },
-      { id: 'G-06', x: caveLeft - 20, y: yUndercut, name: 'Undercut O' },
-      { id: 'G-07', x: caveCenterX, y: yUndercut, name: 'Undercut Eje' },
-      { id: 'G-08', x: caveRight + 20, y: yUndercut, name: 'Undercut E' },
-      { id: 'G-09', x: caveLeft - 40, y: yHaulage, name: 'Transporte O' },
-      { id: 'G-10', x: caveRight + 40, y: yHaulage, name: 'Transporte E' },
-      { id: 'G-11', x: shaftX, y: (yProduction + 52) / 2, name: 'Pique Ventilación' }
+      // Undercut Level (boreholes drilled upward/lateral into rock arch/shoulders)
+      { id: 'G-01', tunnelX: caveLeft - 25, tunnelY: yUndercut - 5, x: caveLeft - 50, y: yUndercut - 26, depth: '20m', name: 'Undercut O (Borehole 20m +45°)' },
+      { id: 'G-02', tunnelX: caveLeft + 25, tunnelY: yUndercut - 5, x: caveLeft + 18, y: yUndercut - 28, depth: '22m', name: 'Undercut Central O (Borehole 22m +80°)' },
+      { id: 'G-03', tunnelX: caveRight - 25, tunnelY: yUndercut - 5, x: caveRight - 18, y: yUndercut - 28, depth: '22m', name: 'Undercut Central E (Borehole 22m +80°)' },
+      { id: 'G-04', tunnelX: caveRight + 25, tunnelY: yUndercut - 5, x: caveRight + 50, y: yUndercut - 26, depth: '20m', name: 'Undercut E (Borehole 20m +45°)' },
+
+      // Production Level (boreholes in abutments and deep into floor/invert)
+      { id: 'G-05', tunnelX: caveLeft - 58, tunnelY: yProduction, x: caveLeft - 92, y: yProduction - 12, depth: '25m', name: 'Producción Abutment O (Borehole 25m horiz)' },
+      { id: 'G-06', tunnelX: caveLeft - 15, tunnelY: yProduction + 6, x: caveLeft - 22, y: yProduction + 28, depth: '18m', name: 'Producción Piso O (Borehole 18m -60°)' },
+      { id: 'G-07', tunnelX: caveRight + 15, tunnelY: yProduction + 6, x: caveRight + 22, y: yProduction + 28, depth: '18m', name: 'Producción Piso E (Borehole 18m -60°)' },
+      { id: 'G-08', tunnelX: caveRight + 58, tunnelY: yProduction, x: caveRight + 92, y: yProduction - 12, depth: '25m', name: 'Producción Abutment E (Borehole 25m horiz)' },
+
+      // Haulage / Transport Level (deep foundation boreholes)
+      { id: 'G-09', tunnelX: caveLeft - 45, tunnelY: yHaulage + 8, x: caveLeft - 58, y: yHaulage + 30, depth: '22m', name: 'Transporte O (Borehole 22m piso)' },
+      { id: 'G-10', tunnelX: caveRight + 45, tunnelY: yHaulage + 8, x: caveRight + 58, y: yHaulage + 30, depth: '22m', name: 'Transporte E (Borehole 22m piso)' },
+
+      // Ventilation Shaft (competent rock wall boreholes)
+      { id: 'G-11', tunnelX: shaftX - 6, tunnelY: (yProduction + 52) / 2, x: shaftX - 30, y: (yProduction + 52) / 2, depth: '20m', name: 'Pique Ventilación (Borehole 20m)' },
+      { id: 'G-12', tunnelX: shaftX + 6, tunnelY: (yHaulage + yProduction) / 2, x: shaftX + 30, y: (yHaulage + yProduction) / 2, depth: '20m', name: 'Pique Profundo (Borehole 20m)' }
     ];
   }
 
@@ -239,19 +247,19 @@
           updateTelemetry(98, "8.500 Canales Ópticos", "±1.8 metros", "Activo (Doble Banda)");
         }
       } else {
-        // TRADITIONAL GEOPHONE NETWORK IN TUNNELS
+        // TRADITIONAL GEOPHONE NETWORK IN 3D BOREHOLES
         if (zone === 'pillar') {
           banner.className = 'sim-status-banner blindspot';
-          banner.innerHTML = `<strong>💥 ESTALLIDO DE ROCA EN PILAR: GEÓFONO SOLO REGISTRA EL IMPACTO</strong> — El geófono dinámico no mide deformación lenta previa (cero aviso de evacuación) · <strong>Error de red coplanar en túnel: ±28 m de incertidumbre vertical</strong> · 0% datos de slow-strain`;
-          updateTelemetry(18, "11 Geófonos en Túneles", "±28 metros (Coplanar)", "0% (Ciego a pre-alerta)");
+          banner.innerHTML = `<strong>💥 ESTALLIDO EN PILAR: BOREHOLES REGISTRAN ONDA DINÁMICA PERO 0% PRE-ALERTA</strong> — El geófono inercial en borehole captura la llegada de onda, pero no mide deformación lenta previa (0 Hz) · <strong>Sin aviso de evacuación</strong> · Incertidumbre de red: ±22 m`;
+          updateTelemetry(25, "12 Geófonos en Boreholes", "±22 metros", "0% (Ciego a slow-strain)");
         } else if (distToTunnels > ATTENUATION_LIMIT_RADIUS * 0.8) {
           banner.className = 'sim-status-banner blindspot';
-          banner.innerHTML = `<strong>❌ ONDA ATENUADA: EVENTO EN CAVE-BACK INVISIBLE A GEÓFONOS</strong> — A ${Math.round(distToTunnels * 1.6)} m de distancia, la roca fracturada disipó las frecuencias de Mw < 0 bajo el ruido ambiental · Geófonos en túneles: 0% detección`;
-          updateTelemetry(18, "11 Geófonos en Túneles", "No detectado (Atenuado)", "0% (Ciego en macizo)");
+          banner.innerHTML = `<strong>❌ ONDA ATENUADA: CAVE-BACK INVISIBLE A BOREHOLES INFERIORES</strong> — A ${Math.round(distToTunnels * 1.6)} m de distancia, la roca fracturada disipa frecuencias de microsismos (>150 Hz) antes de llegar a los boreholes de Undercut/Producción · <strong>Vacío superior sobre el caving</strong> · Geófonos: 0% detección`;
+          updateTelemetry(20, "12 Geófonos en Boreholes", "No detectado (Atenuado)", "0% (Ciego en macizo)");
         } else {
           banner.className = 'sim-status-banner detected';
-          banner.innerHTML = `<strong>⚠️ EVENTO DETECTADO POR GEÓFONOS DE TÚNEL</strong> — Señal puntual capturada · Alta incertidumbre por geometría plana de galería: ±24 m · Cero datos de deformación continua`;
-          updateTelemetry(18, "11 Geófonos en Túneles", "±24 metros", "0% (Sin slow-strain)");
+          banner.innerHTML = `<strong>⚠️ EVENTO DETECTADO POR BOREHOLES CERCANOS</strong> — Señal puntual capturada fuera de la EDZ del túnel · Malla puntual discreta (12 estaciones) · Cero datos de deformación continua`;
+          updateTelemetry(25, "12 Geófonos en Boreholes", "±18 metros", "0% (Sin slow-strain)");
         }
       }
     }
@@ -284,9 +292,9 @@
     } else {
       if (banner) {
         banner.className = 'sim-status-banner blindspot';
-        banner.innerHTML = '<strong>RED SÍSMICA TRADICIONAL (GEÓFONOS EN TÚNELES)</strong> — 11 geófonos confinados a galerías · Ondas de microsismos se atenúan a &gt;250m · Ciego a deformación lenta previa al estallido de roca';
+        banner.innerHTML = '<strong>RED SÍSMICA TRADICIONAL (GEÓFONOS TRIAXIALES EN BOREHOLES 3D)</strong> — 12 estaciones en perforaciones de 15-25m para salir de la EDZ · Cobertura 3D limitada a niveles de explotación · <strong>Vacío superior sobre Cave-Back</strong> y ciego a slow-strain previo (0 Hz)';
       }
-      updateTelemetry(18, "11 Geófonos en Túneles", "±28 metros", "0% (Ciego a slow-strain)");
+      updateTelemetry(25, "12 Geófonos en Boreholes", "±22 metros", "0% (Ciego a slow-strain)");
     }
   }
 
@@ -644,7 +652,7 @@
       // MODE: TRADITIONAL POINT SEISMOLOGY (GEOPHONES IN TUNNELS)
       // ---------------------------------------------------------
 
-      // A. Massive Red Blind Spot Shading
+      // A. Upper Blind Spot (Vacío Superior & Atenuación Inelástica Q)
       ctx.save();
       ctx.fillStyle = 'rgba(255, 75, 85, 0.16)';
       ctx.beginPath();
@@ -661,25 +669,43 @@
       ctx.stroke();
       ctx.restore();
 
-      // Warning Badge in Blind Spot Center
+      // Warning Badge in Upper Blind Spot Center
       ctx.save();
-      ctx.fillStyle = 'rgba(255, 40, 26, 0.88)';
+      ctx.fillStyle = 'rgba(255, 40, 26, 0.92)';
       ctx.shadowColor = '#ff281a';
       ctx.shadowBlur = 10;
-      ctx.fillRect(caveCenterX - 130, yCaveTop - 78, 260, 40);
+      const bW = 380;
+      ctx.fillRect(caveCenterX - bW / 2, yCaveTop - 84, bW, 48);
       ctx.strokeStyle = '#ffffff';
       ctx.lineWidth = 1.5;
-      ctx.strokeRect(caveCenterX - 130, yCaveTop - 78, 260, 40);
+      ctx.strokeRect(caveCenterX - bW / 2, yCaveTop - 84, bW, 48);
 
       ctx.fillStyle = '#ffffff';
-      ctx.font = 'bold 11px "JetBrains Mono", monospace';
+      ctx.font = 'bold 10.5px "JetBrains Mono", monospace';
       ctx.textAlign = 'center';
-      ctx.fillText('⚠️ ZONA CIEGA POR ATENUACIÓN', caveCenterX, yCaveTop - 62);
-      ctx.font = '9px "JetBrains Mono", monospace';
-      ctx.fillText('>350 m a geófonos de túnel · Frecuencias >150 Hz disipadas', caveCenterX, yCaveTop - 47);
+      ctx.fillText('⚠️ VACÍO SUPERIOR: SIN TÚNELES SOBRE CAVE-BACK', caveCenterX, yCaveTop - 67);
+      ctx.font = '8.5px "JetBrains Mono", monospace';
+      ctx.fillStyle = '#fce4e4';
+      ctx.fillText('Red 3D pierde apertura en cota al ascender el caving · Distancia >400m', caveCenterX, yCaveTop - 53);
+      ctx.fillText('Ondas de alta frecuencia (>150 Hz) disipadas antes de llegar a boreholes inferiores', caveCenterX, yCaveTop - 41);
       ctx.restore();
 
-      // B. Discrete Geophone Stations (Inside Tunnels Only)
+      // B. Excavation Damaged Zone (EDZ, 2-4m) around drifts
+      ctx.save();
+      ctx.strokeStyle = 'rgba(255, 176, 32, 0.28)';
+      ctx.lineWidth = 1;
+      ctx.setLineDash([3, 4]);
+      ctx.strokeRect(caveLeft - 36, yUndercut - 10, (caveRight - caveLeft) + 72, 20);
+      ctx.strokeRect(caveLeft - 66, yProduction - 11, (caveRight - caveLeft) + 132, 22);
+      ctx.strokeRect(caveLeft - 86, yHaulage - 13, (caveRight - caveLeft) + 172, 26);
+
+      ctx.fillStyle = 'rgba(255, 176, 32, 0.55)';
+      ctx.font = '7.5px "JetBrains Mono", monospace';
+      ctx.textAlign = 'right';
+      ctx.fillText('Halo EDZ (2-4m daño tronadura)', caveLeft - 72, yProduction - 14);
+      ctx.restore();
+
+      // C. Discrete Triaxial Geophone Stations in Cemented Boreholes (15–25m into Virgin Rock)
       geophoneStations.forEach((geo, idx) => {
         let hitIntensity = 0;
         activeWaves.forEach(w => {
@@ -690,28 +716,65 @@
           }
         });
 
+        // 1. Drilled Borehole line & Grout Sheath (from tunnel perimeter into solid rock)
         ctx.save();
-        ctx.fillStyle = hitIntensity > 0.08 ? '#ff4b55' : '#ffb020';
+        ctx.strokeStyle = 'rgba(100, 120, 150, 0.45)';
+        ctx.lineWidth = 4; // Cement grout seal
+        ctx.beginPath();
+        ctx.moveTo(geo.tunnelX, geo.tunnelY);
+        ctx.lineTo(geo.x, geo.y);
+        ctx.stroke();
+
+        ctx.strokeStyle = '#7a93b4';
+        ctx.lineWidth = 1.2;
+        ctx.setLineDash([2, 2]);
+        ctx.beginPath();
+        ctx.moveTo(geo.tunnelX, geo.tunnelY);
+        ctx.lineTo(geo.x, geo.y);
+        ctx.stroke();
+        ctx.setLineDash([]);
+
+        // Borehole collar at tunnel wall
+        ctx.fillStyle = '#ffb020';
+        ctx.fillRect(geo.tunnelX - 2, geo.tunnelY - 2, 4, 4);
+
+        // 2. Triaxial Geophone Sensor Capsule in Competent Rock (Beyond EDZ)
+        const capsuleColor = hitIntensity > 0.08 ? '#ff4b55' : '#ffb020';
+        ctx.fillStyle = capsuleColor;
         ctx.strokeStyle = '#ffffff';
         ctx.lineWidth = 1.2;
+        ctx.shadowColor = capsuleColor;
+        ctx.shadowBlur = hitIntensity > 0.08 ? 14 : 5;
+
+        // Triaxial sensor capsule
+        const sSize = 7;
+        ctx.fillRect(geo.x - sSize / 2, geo.y - sSize / 2, sSize, sSize);
+        ctx.strokeRect(geo.x - sSize / 2, geo.y - sSize / 2, sSize, sSize);
+
+        // XYZ triaxial axes cross inside capsule
+        ctx.strokeStyle = '#111c2b';
+        ctx.lineWidth = 1;
         ctx.beginPath();
-        ctx.moveTo(geo.x, geo.y - 14);
-        ctx.lineTo(geo.x + 6, geo.y - 3);
-        ctx.lineTo(geo.x - 6, geo.y - 3);
-        ctx.closePath();
-        ctx.fill();
+        ctx.moveTo(geo.x - 2, geo.y); ctx.lineTo(geo.x + 2, geo.y);
+        ctx.moveTo(geo.x, geo.y - 2); ctx.lineTo(geo.x, geo.y + 2);
         ctx.stroke();
 
-        const ringR = 7 + Math.sin(time * 3 + idx) * 2.5;
-        ctx.strokeStyle = hitIntensity > 0.08 ? 'rgba(255, 75, 85, 0.8)' : 'rgba(255, 176, 32, 0.35)';
+        // Wave detection pulse ring
+        const ringR = 8 + Math.sin(time * 3 + idx) * 2.5;
+        ctx.strokeStyle = hitIntensity > 0.08 ? 'rgba(255, 75, 85, 0.85)' : 'rgba(255, 176, 32, 0.35)';
+        ctx.lineWidth = 1;
         ctx.beginPath();
-        ctx.arc(geo.x, geo.y - 8, ringR, 0, Math.PI * 2);
+        ctx.arc(geo.x, geo.y, ringR, 0, Math.PI * 2);
         ctx.stroke();
 
+        // Station label & borehole depth info
         ctx.fillStyle = '#ffc83b';
-        ctx.font = '8px "JetBrains Mono", monospace';
+        ctx.font = 'bold 8px "JetBrains Mono", monospace';
         ctx.textAlign = 'center';
-        ctx.fillText(geo.id, geo.x, geo.y + 10);
+        ctx.fillText(geo.id, geo.x, geo.y - 6);
+        ctx.font = '7px "JetBrains Mono", monospace';
+        ctx.fillStyle = '#8f9fb6';
+        ctx.fillText(geo.depth, geo.x, geo.y + 13);
         ctx.restore();
       });
 
