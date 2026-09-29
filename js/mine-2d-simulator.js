@@ -473,12 +473,12 @@
       const isMuckpile = (hoverX >= caveLeft + 15 && hoverX <= caveRight - 15 && hoverY > yAirGap + 15 && hoverY <= yUndercut);
 
       // Check proximity to fiber boreholes in DFOS mode
-      const nearFiberBorehole = activeMode === 'dfos' && [
-        { p1: { x: caveLeft - 35, y: ySurface }, p2: { x: caveLeft - 35, y: yHaulage + 20 } },
-        { p1: { x: mainWidth * 0.16, y: ySurface }, p2: { x: caveCenterX, y: yProduction + 10 } },
-        { p1: { x: caveRight + 25, y: ySurface }, p2: { x: caveRight + 25, y: yHaulage + 20 } },
-        { p1: { x: caveRight + 95, y: ySurface }, p2: { x: caveCenterX + 40, y: yAirGap - 30 } }
-      ].some(bh => distToSegment({ x: hoverX, y: hoverY }, bh.p1, bh.p2) < 14);
+      const fiberBoreholeMatches = activeMode === 'dfos' ? [
+        { id: 'B-01', p1: { x: caveLeft - 35, y: ySurface }, p2: { x: caveLeft - 35, y: yHaulage + 20 }, role: 'permanent' },
+        { id: 'B-02', p1: { x: mainWidth * 0.16, y: ySurface }, p2: { x: caveCenterX, y: yProduction + 10 }, role: 'sacrificial' },
+        { id: 'B-03', p1: { x: caveRight + 25, y: ySurface }, p2: { x: caveRight + 25, y: yHaulage + 20 }, role: 'permanent' },
+        { id: 'B-04', p1: { x: caveRight + 95, y: ySurface }, p2: { x: caveCenterX + 40, y: yAirGap - 30 }, role: 'sacrificial' }
+      ].find(bh => distToSegment({ x: hoverX, y: hoverY }, bh.p1, bh.p2) < 14) : null;
 
       // Check proximity to geophones in traditional mode
       const nearGeophone = activeMode === 'geophones' && geophoneStations.find(g => Math.hypot(g.x - hoverX, g.y - hoverY) < 16);
@@ -489,16 +489,20 @@
         } else {
           hudText.innerHTML = '🔗 <strong>Red Troncal en Daisy-Chain (Superficie):</strong> 1 cable blindado continuo conecta en serie todos los sondajes y el pique mediante empalmes ODF';
         }
-      } else if (nearFiberBorehole) {
-        hudText.innerHTML = '💡 <strong>Sondaje con Loop en U (Double-Ended):</strong> La fibra baja y retorna en bucle continuo cerrado · Medición bidireccional tolerante a cortes por estallido';
+      } else if (fiberBoreholeMatches) {
+        if (fiberBoreholeMatches.role === 'sacrificial') {
+          hudText.innerHTML = `⚡ <strong>Cable Consumible de Sacrificio (${fiberBoreholeMatches.id}):</strong> Cable simple cementado en el orebody. Mide microfisuración del cave-back y se corta con el colapso, mapeando el avance del techo y previniendo el Air Blast.`;
+        } else {
+          hudText.innerHTML = `🔗 <strong>Cable Permanente en Loop (${fiberBoreholeMatches.id}):</strong> Instalado en roca elástica perimetral. Vida útil permanente, inmune al caving, con retorno en U para tolerancia a fallas.`;
+        }
       } else if (nearGeophone) {
         hudText.innerHTML = `📡 <strong>Estación Sísmica ${nearGeophone.id}:</strong> Geófono triaxial en pozo cimentado de ${nearGeophone.depth} (Alcance radial: 300 m)`;
       } else if (Math.abs(hoverX - shaftX) < 18) {
-        hudText.innerHTML = '🌬️ <strong>Pique de Ventilación:</strong> Pozo vertical con troncal de fibra óptica que alimenta las galerías de undercut y producción en bucle';
+        hudText.innerHTML = '🌬️ <strong>Pique de Ventilación:</strong> Pozo vertical con troncal de fibra óptica permanente que alimenta las galerías de undercut y producción en bucle';
       } else if (distCave < 42) {
-        hudText.innerHTML = '⚡ <strong>Bóveda Cave-Back (-1.000 m):</strong> Arco activo de quiebre sismogénico (foco de microsismos)';
+        hudText.innerHTML = '⚡ <strong>Bóveda Cave-Back (-1.000 m):</strong> Límite activo de quiebre sismogénico. La fibra de sacrificio registra el estiramiento y corte para calcular la velocidad de propagación vertical del caving.';
       } else if (isVoid) {
-        hudText.innerHTML = '🕳️ <strong>Air Gap (-1.400 m):</strong> Cavidad subterránea abierta (el aire no propaga ondas sísmicas hacia la base)';
+        hudText.innerHTML = '🕳️ <strong>Air Gap (-1.400 m):</strong> Cavidad de aire crítica que se intenta MINIMIZAR. Si el techo colapsa de golpe actúa como pistón provocando un violento "Air Blast" hacia túneles. La fibra de sacrificio regula la extracción para mantener el muckpile en contacto.';
       } else if (isMuckpile) {
         hudText.innerHTML = '🪨 <strong>Muckpile:</strong> Columna de mineral quebrado que desciende hacia las bateas de extracción';
       } else if (Math.abs(hoverY - yProduction) < 16) {
@@ -716,20 +720,10 @@
     ctx.fill();
 
     // Subtle void hatching
-    ctx.save();
-    ctx.strokeStyle = 'rgba(255, 140, 40, 0.12)';
-    ctx.lineWidth = 1;
-    ctx.setLineDash([3, 6]);
-    ctx.beginPath();
-    ctx.moveTo(caveLeft + 35, yAirGap);
-    ctx.lineTo(caveRight - 35, yAirGap);
-    ctx.stroke();
-    ctx.restore();
-
-    ctx.fillStyle = 'rgba(255, 140, 40, 0.75)';
+    ctx.save();    ctx.fillStyle = 'rgba(255, 140, 40, 0.85)';
     ctx.font = 'bold 9px "JetBrains Mono", monospace';
     ctx.textAlign = 'center';
-    ctx.fillText('AIR GAP (CAVIDAD ABIERTA · VACÍO)', caveCenterX, yAirGap - 2);
+    ctx.fillText('AIR GAP (CONDICIÓN CRÍTICA A CONTROLAR · RIESGO DE AIR BLAST)', caveCenterX, yAirGap - 2);
 
     // C. ACTIVE SEISMOGENIC SHELL (ZONA SISMOGÉNICA ACTIVA - CONCENTRACIÓN σ₁)
     // This is the solid rock envelope surrounding and above the cave-back arch where all caving earthquakes occur
@@ -1037,7 +1031,7 @@
         ctx.stroke();
 
         // Wave detection pulse ring
-        const ringR = 8 + Math.sin(time * 3 + idx) * 2.5;
+        const ringR = 8 + Math.sin(time * 3 + idx * 2.5);
         ctx.strokeStyle = hitIntensity > 0.08 ? 'rgba(255, 75, 85, 0.85)' : 'rgba(255, 176, 32, 0.35)';
         ctx.lineWidth = 1;
         ctx.beginPath();
@@ -1095,14 +1089,14 @@
       });
       ctx.restore();
 
-      // 2. BOREHOLES WITH U-TURN LOOPBACKS & SENSING FIBERS
+      // 2. BOREHOLES WITH U-TURN LOOPBACKS & SENSING FIBERS (Permanentes vs Sacrificio)
       const fiberBoreholes = [
-        { id: 'B-01', p1: { x: b01X, y: ySurface }, p2: { x: b01X, y: yHaulage + 20 }, color: '#00f0ff', label: 'B-01 (DAS Loop)', isLoop: true },
-        { id: 'B-02', p1: { x: b02X, y: ySurface }, p2: { x: caveCenterX, y: yProduction + 10 }, color: '#00f0ff', label: 'B-02 (DAS Doble)', isLoop: false },
-        { id: 'B-03', p1: { x: b03X, y: ySurface }, p2: { x: b03X, y: yHaulage + 20 }, color: '#00ffa3', label: 'B-03 (DSS Strain Loop)', isLoop: true },
-        { id: 'B-04', p1: { x: b04X, y: ySurface }, p2: { x: caveCenterX + 40, y: yAirGap - 30 }, color: '#00f0ff', label: 'B-04 (DAS)', isLoop: false },
-        { id: 'S-Abut-W', p1: { x: caveLeft - 60, y: yProduction }, p2: { x: caveLeft - 110, y: yCaveTop + 20 }, color: '#00ffa3', label: 'Sondaje Abutment', isLoop: false },
-        { id: 'S-Abut-E', p1: { x: caveRight + 60, y: yProduction }, p2: { x: caveRight + 110, y: yCaveTop + 20 }, color: '#00ffa3', label: 'Sondaje Abutment', isLoop: false }
+        { id: 'B-01', p1: { x: b01X, y: ySurface }, p2: { x: b01X, y: yHaulage + 20 }, color: '#00f0ff', label: 'B-01 (Loop Perm)', isLoop: true, isSacrificial: false },
+        { id: 'B-02', p1: { x: b02X, y: ySurface }, p2: { x: caveCenterX, y: yProduction + 10 }, color: '#ffaa00', label: 'B-02 (DAS Sacrificio)', isLoop: false, isSacrificial: true },
+        { id: 'B-03', p1: { x: b03X, y: ySurface }, p2: { x: b03X, y: yHaulage + 20 }, color: '#00ffa3', label: 'B-03 (DSS Loop Perm)', isLoop: true, isSacrificial: false },
+        { id: 'B-04', p1: { x: b04X, y: ySurface }, p2: { x: caveCenterX + 40, y: yAirGap - 30 }, color: '#ffaa00', label: 'B-04 (DAS Sacrificio)', isLoop: false, isSacrificial: true },
+        { id: 'S-Abut-W', p1: { x: caveLeft - 60, y: yProduction }, p2: { x: caveLeft - 110, y: yCaveTop + 20 }, color: '#00ffa3', label: 'Sondaje Abutment (Perm)', isLoop: false, isSacrificial: false },
+        { id: 'S-Abut-E', p1: { x: caveRight + 60, y: yProduction }, p2: { x: caveRight + 110, y: yCaveTop + 20 }, color: '#00ffa3', label: 'Sondaje Abutment (Perm)', isLoop: false, isSacrificial: false }
       ];
 
       fiberBoreholes.forEach((bh, idx) => {
@@ -1163,6 +1157,24 @@
           ctx.lineTo(bh.p2.x, bh.p2.y);
         }
         ctx.stroke();
+
+        if (bh.isSacrificial) {
+          // Indicador de extremo de sacrificio en el cave-back (estiramiento y quiebre)
+          ctx.save();
+          ctx.fillStyle = '#ffaa00';
+          ctx.shadowColor = '#ffaa00';
+          ctx.shadowBlur = 8;
+          ctx.beginPath();
+          ctx.arc(bh.p2.x, bh.p2.y, 3, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.strokeStyle = '#ffffff';
+          ctx.lineWidth = 1;
+          ctx.beginPath();
+          ctx.moveTo(bh.p2.x - 3, bh.p2.y - 2);
+          ctx.lineTo(bh.p2.x + 3, bh.p2.y + 2);
+          ctx.stroke();
+          ctx.restore();
+        }
 
         if (bh.p1.y === ySurface) {
           ctx.fillStyle = bh.color;
@@ -1260,13 +1272,21 @@
       ];
       drawFiberLaserRay(b03LoopPath, 78, 2, '#00ffa3', 24);
 
-      // Path D: Central Infill Borehole B-02 (Seismogenic Arch & Abutment)
+      // Path D: Borehole Sacrificio B-02 (Consumible en Cave-Back / Orebody)
       const b02Path = [
         { x: shackX, y: yTrunkSurface },
         { x: b02X, y: yTrunkSurface },
         { x: caveCenterX, y: yProduction + 10 }
       ];
-      drawFiberLaserRay(b02Path, 90, 2, '#00f0ff', 26);
+      drawFiberLaserRay(b02Path, 90, 2, '#ffaa00', 26);
+
+      // Path E: Borehole Sacrificio B-04 (Monitoreo Techo Air Gap)
+      const b04Path = [
+        { x: shackX, y: yTrunkSurface },
+        { x: b04X, y: yTrunkSurface },
+        { x: caveCenterX + 40, y: yAirGap - 30 }
+      ];
+      drawFiberLaserRay(b04Path, 82, 2, '#ffaa00', 24);
     }
 
     // 7. SEISMIC WAVE PROPAGATION WITH PHYSICAL INELASTIC ATTENUATION
