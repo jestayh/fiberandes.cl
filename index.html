@@ -65,41 +65,95 @@
       display: block !important;
       outline: none !important;
     }
-    .sim-3d-legend {
-      position: absolute !important;
-      top: 16px !important;
-      left: 16px !important;
-      display: flex !important;
-      flex-direction: column !important;
-      gap: 6px !important;
-      background: rgba(6, 11, 20, 0.88) !important;
-      border: 1px solid rgba(255, 255, 255, 0.12) !important;
-      border-radius: var(--r-sm) !important;
-      padding: 10px 14px !important;
-      backdrop-filter: blur(12px) !important;
-      -webkit-backdrop-filter: blur(12px) !important;
-      z-index: 10 !important;
-      pointer-events: none !important;
+    .sim-geotech-legend-bar {
+      margin-top: 14px;
+      padding: 14px 16px;
+      background: rgba(6, 12, 22, 0.95);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: var(--r-md);
+      backdrop-filter: blur(10px);
     }
-    .legend-item {
-      display: flex !important;
-      align-items: center !important;
-      gap: 8px !important;
-      font-family: var(--font-mono) !important;
-      font-size: 11px !important;
-      color: var(--fg-1) !important;
+    .legend-bar-title {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--cyan);
+      letter-spacing: 0.05em;
+      margin-bottom: 12px;
+      text-transform: uppercase;
     }
-    .legend-color {
-      width: 10px !important;
-      height: 10px !important;
-      border-radius: 50% !important;
-      flex-shrink: 0 !important;
+    .legend-bar-items {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 10px;
     }
-    .legend-color.cyan { background: var(--cyan) !important; box-shadow: 0 0 6px var(--cyan) !important; }
-    .legend-color.blue { background: #3b82f6 !important; box-shadow: 0 0 6px #3b82f6 !important; }
-    .legend-color.green { background: var(--emerald) !important; box-shadow: 0 0 6px var(--emerald) !important; }
-    .legend-color.dark { background: #1b434d !important; border: 1px solid #00f0ff !important; }
-    .legend-color.red { background: var(--danger) !important; box-shadow: 0 0 6px var(--danger) !important; }
+    .legend-card {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 9px 12px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.07);
+      border-radius: var(--r-sm);
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .legend-card:hover {
+      background: rgba(255, 255, 255, 0.06);
+      border-color: rgba(0, 240, 255, 0.35);
+    }
+    .legend-card svg {
+      flex-shrink: 0;
+    }
+    .legend-card-text {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      min-width: 0;
+    }
+    .legend-card-text strong {
+      font-size: 11px;
+      color: #fff;
+      font-family: var(--font-sans);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .legend-card-text span {
+      font-size: 10px;
+      color: var(--fg-2);
+      font-family: var(--font-mono);
+      line-height: 1.3;
+    }
+    .sim-hud-inspector {
+      position: absolute;
+      top: 14px;
+      left: 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(6, 15, 28, 0.92);
+      border: 1px solid rgba(0, 240, 255, 0.4);
+      border-radius: var(--r-sm);
+      padding: 6px 12px;
+      backdrop-filter: blur(10px);
+      z-index: 10;
+      pointer-events: none;
+      font-family: var(--font-mono);
+      font-size: 10.5px;
+      color: #fff;
+      max-width: 520px;
+    }
+    .sim-hud-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--cyan);
+      box-shadow: 0 0 6px var(--cyan);
+      flex-shrink: 0;
+    }
 
     .sim-status-banner {
       position: absolute !important;
@@ -175,7 +229,7 @@
     @media (max-width: 900px) {
       .sim-3d-visual { height: 460px !important; }
       .sim-3d-telemetry { grid-template-columns: repeat(2, 1fr) !important; gap: 8px !important; }
-      .sim-3d-legend { display: none !important; }
+      .legend-bar-items { grid-template-columns: 1fr !important; }
       .sim-overlay-hint { display: none !important; }
     }
   </style>
@@ -391,16 +445,6 @@
               <strong>FIBERANDES DAS: SONDAJES + GALERÍAS</strong> — 8.500 canales ópticos continuos cada 1m · Captura la onda a corta distancia antes de que la roca la atenúe · Incertidumbre: ±1.8 m
             </div>
 
-            <!-- 2D Geotechnical Legend -->
-            <div class="sim-3d-legend">
-              <div class="legend-item"><span class="legend-color cyan"></span><span>Sondajes DAS Fibra Continua (FiberAndes)</span></div>
-              <div class="legend-item"><span class="legend-color" style="background:#ffb020; box-shadow:0 0 6px #ffb020;"></span><span>Geófonos Triaxiales en Boreholes (15–25m fuera de EDZ)</span></div>
-              <div class="legend-item"><span class="legend-color" style="background:#ff281a; box-shadow:0 0 8px rgba(255,40,26,0.7);"></span><span>Bóveda Cave-Back &amp; Air Gap (Hundimiento)</span></div>
-              <div class="legend-item"><span class="legend-color dark" style="background:#22262d;"></span><span>Muckpile &amp; Drawbells (Mineral Quebrado)</span></div>
-              <div class="legend-item"><span class="legend-color" style="background:#00ffa3; box-shadow:0 0 6px #00ffa3;"></span><span>Onda Sísmica Fresca (Alta Energía / SNR &gt; 35 dB)</span></div>
-              <div class="legend-item"><span class="legend-color red"></span><span>Vacío Superior (&gt;350 m a Boreholes)</span></div>
-            </div>
-
             <!-- Real-time 3D Telemetry Strip -->
             <div class="sim-3d-telemetry">
               <div class="sim-tel-cell">
@@ -418,6 +462,63 @@
               <div class="sim-tel-cell">
                 <span class="l">SLOW-STRAIN EN ROCA</span>
                 <span class="v" id="tel-val-strain" style="color:var(--emerald);">Activo (Doble Banda)</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Geotechnical Symbology & Sensor Reference Guide (Horizontal, Outside Canvas) -->
+          <div class="sim-geotech-legend-bar">
+            <div class="legend-bar-title">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+              <span>CONVENCIONES DEL MODELO GEOMECÁNICO (MINIATURAS REALES):</span>
+            </div>
+            <div class="legend-bar-items">
+              <div class="legend-card">
+                <svg width="34" height="18" viewBox="0 0 34 18"><line x1="2" y1="9" x2="32" y2="9" stroke="#00f0ff" stroke-width="3" stroke-linecap="round"/><circle cx="17" cy="9" r="4" fill="#ffffff" stroke="#00f0ff" stroke-width="1.5"/></svg>
+                <div class="legend-card-text">
+                  <strong>Sondajes Fibra Continua DAS/DSS (FiberAndes)</strong>
+                  <span>Líneas cian continuas · 1 canal sensor cada 1 metro en roca</span>
+                </div>
+              </div>
+
+              <div class="legend-card">
+                <svg width="34" height="18" viewBox="0 0 34 18"><line x1="2" y1="15" x2="22" y2="4" stroke="#7a93b4" stroke-width="2.5" stroke-dasharray="3 2"/><rect x="21" y="2" width="9" height="9" fill="#ffb020" stroke="#ffffff" stroke-width="1.2"/><line x1="23" y1="6.5" x2="28" y2="6.5" stroke="#111c2b"/><line x1="25.5" y1="4" x2="25.5" y2="9" stroke="#111c2b"/></svg>
+                <div class="legend-card-text">
+                  <strong>Cápsulas Híbridas Borehole (IMS / Tradicional)</strong>
+                  <span>Perforaciones 15–25m fuera de EDZ · Geófono (vel) + Acelerómetro (acel)</span>
+                </div>
+              </div>
+
+              <div class="legend-card">
+                <svg width="34" height="18" viewBox="0 0 34 18"><path d="M 2,15 Q 17,2 32,15" stroke="#ff281a" stroke-width="3" fill="none"/></svg>
+                <div class="legend-card-text">
+                  <strong>Bóveda Cave-Back (-1.000 m)</strong>
+                  <span>Arco sismogénico activo · Foco de fracturación por hundimiento</span>
+                </div>
+              </div>
+
+              <div class="legend-card">
+                <svg width="34" height="18" viewBox="0 0 34 18"><rect x="1" y="4" width="32" height="10" fill="#111c2b" stroke="#00e1ff" stroke-width="1.2"/><rect x="10" y="4" width="14" height="10" fill="rgba(255,102,0,0.4)" stroke="#ff7700" stroke-width="1.2"/></svg>
+                <div class="legend-card-text">
+                  <strong>Galerías y Pilares en Carga</strong>
+                  <span>Túneles de producción y pilares de roca con riesgo de estallido</span>
+                </div>
+              </div>
+
+              <div class="legend-card">
+                <svg width="34" height="18" viewBox="0 0 34 18"><line x1="2" y1="16" x2="32" y2="2" stroke="#ff6432" stroke-width="2.5" stroke-dasharray="5 3"/></svg>
+                <div class="legend-card-text">
+                  <strong>Falla Geológica Abutment</strong>
+                  <span>Plano de debilidad estructural susceptible a cizalle asísmico</span>
+                </div>
+              </div>
+
+              <div class="legend-card">
+                <svg width="34" height="18" viewBox="0 0 34 18"><circle cx="4" cy="9" r="3" fill="#ff4b55"/><path d="M 11,4 A 7 7 0 0 1 11,14" stroke="#00f0ff" stroke-width="2" fill="none"/><path d="M 19,1 A 12 12 0 0 1 19,17" stroke="#ffc83b" stroke-width="2" stroke-dasharray="3 2" fill="none"/></svg>
+                <div class="legend-card-text">
+                  <strong>Ondas Sísmicas P (Cian) y S (Ámbar)</strong>
+                  <span>Frentes elásticos que se atenúan con la distancia según el factor Q</span>
+                </div>
               </div>
             </div>
           </div>
@@ -678,49 +779,54 @@
 
         <!-- Comparative Matrix Table -->
         <div class="science-table-wrap reveal">
-          <table class="science-table" aria-label="Matriz comparativa Geófono vs FiberAndes DFOS">
+          <table class="science-table" aria-label="Matriz comparativa Red Híbrida Borehole vs FiberAndes DFOS">
             <thead>
               <tr>
                 <th scope="col">Parámetro Técnico</th>
-                <th scope="col">Red Convencional de Geófonos / ESI</th>
+                <th scope="col">Red Híbrida Borehole (Geófono + Acelerómetro IMS)</th>
                 <th scope="col">FiberAndes DFOS (DAS + DSS + DTS)</th>
               </tr>
             </thead>
             <tbody>
               <tr>
-                <td>Densidad de Muestreo</td>
-                <td>10 a 30 puntos discretos en toda la mina</td>
-                <td><strong>10.000 sensores virtuales</strong> por cada 10 km (cada 1 m continuo)</td>
+                <td>Parámetro Físico Fundamental</td>
+                <td><strong>Velocidad (u̇, mm/s)</strong> con geófono pasivo + <strong>Aceleración (ü, g)</strong> con acelerómetro piezoeléctrico</td>
+                <td><strong>Tasa de Deformación Dinámica (ε̇, nε/s)</strong> con DAS + <strong>Deformación Estática (ε, µε)</strong> con DSS continua</td>
               </tr>
               <tr>
-                <td>Banda de Frecuencia</td>
-                <td>Alta frecuencia (&gt;10 Hz a 2 kHz) únicamente</td>
-                <td><strong>Doble Banda:</strong> Ondas dinámicas (&gt;10 Hz) + Slow-strain (&lt;0.1 Hz)</td>
+                <td>Densidad Espacial de Canales</td>
+                <td>30 a 80 cápsulas discretas cementadas en toda la mina</td>
+                <td><strong>10.000 sensores virtuales continuos</strong> cada 10 km (1 canal cada 1 metro ininterrumpido)</td>
               </tr>
               <tr>
-                <td>Sensibilidad a Microeventos</td>
-                <td>Típicamente limitada a Mw &gt; -0.5 en redes amplias</td>
-                <td><strong>Hasta Mw &lt; -2.0</strong> en proximidad del cable cementado</td>
+                <td>Banda de Frecuencia y Deformación Lenta</td>
+                <td>Paso-alto dinámico (&gt;4.5 Hz a kHz) · <strong>0% respuesta a deformación estática (0 Hz / DC)</strong></td>
+                <td><strong>Doble Banda Nativa:</strong> Dinámica de alta frecuencia (&gt;5 kHz con DAS) + <strong>Slow-strain estático (0 Hz a &lt;0.1 Hz con DSS)</strong></td>
               </tr>
               <tr>
-                <td>Deformación Previa al Colapso</td>
-                <td>Ciego a la deformación asísmica lenta</td>
-                <td><strong>Monitoreo continuo</strong> de acumulación de esfuerzo y cizallamiento</td>
+                <td>Pre-alerta a Estallidos de Roca (Rockburst)</td>
+                <td>Ciego a la microdeformación previa · Registra solo el impacto una vez ocurrida la fractura dinámica</td>
+                <td><strong>Detección de sobrecarga previa:</strong> mide la aceleración de creep cuasi-estático horas y días antes del colapso</td>
+              </tr>
+              <tr>
+                <td>Sensibilidad a Microeventos (Mw)</td>
+                <td>Geófono hasta Mw ~ -1.5 (lejos) · Acelerómetro hasta Mw ~ -2.5 (únicamente a &lt;50 m por atenuación Q)</td>
+                <td><strong>Hasta Mw &lt; -2.5 continuo:</strong> fibra cementada en sondaje cruza el frente de quiebre a metros de distancia</td>
+              </tr>
+              <tr>
+                <td>Apertura 3D en Cota (Cave-Back)</td>
+                <td><strong>Vacío Superior:</strong> restringido a niveles inferiores transitables · Sin acceso sobre la corona</td>
+                <td><strong>Sondajes profundos desde superficie:</strong> atraviesa la corona y cierra el volumen 3D superior sin requerir túneles</td>
               </tr>
               <tr>
                 <td>Incertidumbre de Localización</td>
-                <td>Desviación estándar típica: ~5 metros</td>
-                <td><strong>Reducción comprobada a 3 metros</strong> (-40% incertidumbre en sondajes)</td>
+                <td>Desviación estándar típica: ±15 a ±25 m en geometría planar de galerías</td>
+                <td><strong>Desviación reducida a ±1.8 metros</strong> (densidad nanométrica de trayectorias de rayos en pozo)</td>
               </tr>
               <tr>
-                <td>Supervivencia en Tronaduras</td>
-                <td>Geófonos expuestos en galerías y frentes</td>
-                <td><strong>Cable blindado</strong> cementado en sondajes y bajo shotcrete</td>
-              </tr>
-              <tr>
-                <td>Parámetro Físico Fundamental</td>
-                <td>Velocidad / Aceleración puntual de partícula (v)</td>
-                <td><strong>Tasa de Deformación Dinámica Continua (ε̇)</strong></td>
+                <td>Supervivencia ante Cizalle de Falla</td>
+                <td>Si la roca corta el cable de cobre, la estación híbrida se pierde irreversiblemente</td>
+                <td><strong>Lectura continua hasta el punto de corte:</strong> detecta la cota métrica exacta del plano de cizalle</td>
               </tr>
             </tbody>
           </table>
@@ -1247,7 +1353,7 @@
   <script src="js/hero-canvas.js"></script>
 
   <!-- 2D Mine Geomechanics & Caving Simulator (3D simulator preserved in js/mine-3d-simulator.js) -->
-  <script src="js/mine-2d-simulator.js?v=20260928_05"></script>
+  <script src="js/mine-2d-simulator.js?v=20260928_06"></script>
 
   <script src="js/configurator.js"></script>
   <script src="js/app.js"></script>

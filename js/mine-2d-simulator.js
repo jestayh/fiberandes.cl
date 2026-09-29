@@ -32,18 +32,12 @@
   statusBanner.innerHTML = '<strong>FIBERANDES DAS: SONDAJES + GALERÍAS</strong> — 8.500 canales ópticos continuos cada 1m · Captura frentes P/S en macizo y slow-strain previo a estallidos de roca · Incertidumbre: ±1.8 m';
   container.appendChild(statusBanner);
 
-  // Technical Legend
-  const legend = document.createElement('div');
-  legend.className = 'sim-3d-legend';
-  legend.innerHTML = `
-    <div class="legend-item"><span class="legend-color cyan"></span><span>Sondajes DAS Fibra Continua (FiberAndes)</span></div>
-    <div class="legend-item"><span class="legend-color" style="background:#ffb020; box-shadow:0 0 6px #ffb020;"></span><span>Geófonos Triaxiales en Boreholes (15–25m fuera de EDZ)</span></div>
-    <div class="legend-item"><span class="legend-color" style="background:#ff281a; box-shadow:0 0 8px rgba(255,40,26,0.7);"></span><span>Zona Sismogénica Activa (Concentración σ₁)</span></div>
-    <div class="legend-item"><span class="legend-color" style="background:#ff6600; box-shadow:0 0 6px #ff6600;"></span><span>Pilares de Producción (Riesgo Estallido / Rockburst)</span></div>
-    <div class="legend-item"><span class="legend-color" style="background:#00ffa3; box-shadow:0 0 6px #00ffa3;"></span><span>Onda Sísmica Fresca (Alta Energía / SNR &gt; 35 dB)</span></div>
-    <div class="legend-item"><span class="legend-color red"></span><span>Vacío Superior (&gt;350 m a Boreholes)</span></div>
-  `;
-  container.appendChild(legend);
+  // Geomechanical Hover Inspector HUD (Slim 1-line top badge that doesn't obstruct the model)
+  const hudInspector = document.createElement('div');
+  hudInspector.id = 'sim-hud-inspector';
+  hudInspector.className = 'sim-hud-inspector';
+  hudInspector.innerHTML = '<span class="sim-hud-dot"></span><span id="sim-hud-text">💡 Pasa el cursor por el modelo para inspeccionar cada elemento</span>';
+  container.appendChild(hudInspector);
 
   // Telemetry strip
   const telemetry = document.createElement('div');
@@ -278,6 +272,24 @@
     }
   });
 
+  let hoverX = -1;
+  let hoverY = -1;
+
+  canvas.addEventListener('mousemove', (e) => {
+    const rect = canvas.getBoundingClientRect();
+    hoverX = e.clientX - rect.left;
+    hoverY = e.clientY - rect.top;
+  });
+
+  canvas.addEventListener('mouseleave', () => {
+    hoverX = -1;
+    hoverY = -1;
+    const hudText = document.getElementById('sim-hud-text');
+    if (hudText) {
+      hudText.innerHTML = '💡 Pasa el cursor por el modelo para inspeccionar cada elemento';
+    }
+  });
+
   // Mode Switch
   function setMode(mode) {
     activeMode = mode;
@@ -393,7 +405,38 @@
     const caveCenterX = (caveLeft + caveRight) / 2;
     const shaftX = caveLeft - 70;
 
-    // 1. Rock Mass Background
+    // 0. UPDATE GEOMECHANICAL HOVER INSPECTOR HUD
+    const hudText = document.getElementById('sim-hud-text');
+    if (hudText && hoverX > 0 && hoverY > 0 && hoverX < mainWidth) {
+      const depthEst = Math.round(((hoverY - ySurface) / (yBottom - ySurface)) * 2200);
+      const distCave = Math.hypot(hoverX - caveCenterX, hoverY - yCaveTop);
+      const isVoid = (hoverX >= caveLeft + 20 && hoverX <= caveRight - 20 && hoverY >= yCaveTop && hoverY <= yAirGap + 15);
+      const isMuckpile = (hoverX >= caveLeft + 15 && hoverX <= caveRight - 15 && hoverY > yAirGap + 15 && hoverY <= yUndercut);
+
+      if (hoverY < ySurface) {
+        hudText.innerHTML = '🏔️ <strong>Superficie (Cota 0 m):</strong> Caseta con Interrogador DAS · Salida de cables troncales a sondajes';
+      } else if (Math.abs(hoverX - shaftX) < 18) {
+        hudText.innerHTML = '🌬️ <strong>Pique de Ventilación:</strong> Pozo vertical de infraestructura y paso de fibra troncal a galerías';
+      } else if (distCave < 42) {
+        hudText.innerHTML = '⚡ <strong>Bóveda Cave-Back (-1.000 m):</strong> Arco activo de quiebre sismogénico (foco de microsismos)';
+      } else if (isVoid) {
+        hudText.innerHTML = '🕳️ <strong>Air Gap (-1.400 m):</strong> Cavidad subterránea abierta (el aire no propaga ondas sísmicas)';
+      } else if (isMuckpile) {
+        hudText.innerHTML = '🪨 <strong>Muckpile:</strong> Columna de mineral quebrado que desciende hacia las bateas de extracción';
+      } else if (Math.abs(hoverY - yProduction) < 16) {
+        hudText.innerHTML = '⚠️ <strong>Nivel Producción (-1.820 m):</strong> Pilares entre bateas con riesgo de estallido de roca (rockburst)';
+      } else if (Math.abs(hoverY - yUndercut) < 14) {
+        hudText.innerHTML = '⛏️ <strong>Nivel Undercut (-1.650 m):</strong> Base de socavación y quebramiento inicial del macizo';
+      } else if (Math.abs(hoverY - yHaulage) < 16) {
+        hudText.innerHTML = '🚂 <strong>Nivel Transporte (-2.040 m):</strong> Infraestructura de vaciado y acarreo profundo';
+      } else if (Math.abs(hoverX - (mainWidth * 0.23)) < 24 && hoverY > yCaveTop && hoverY < yProduction) {
+        hudText.innerHTML = '📐 <strong>Falla Geológica Abutment:</strong> Plano estructural de cizalle bajo alta concentración de esfuerzo';
+      } else {
+        hudText.innerHTML = `⛏️ <strong>Macizo Rocoso Andino (-${depthEst} m):</strong> Haz clic en cualquier punto para detonar un sismo`;
+      }
+    }
+
+    // 1. Rock Mass Background with Geological Joint Sets (Diaclasas Andinas J1 & J2)
     const rockGrad = ctx.createLinearGradient(0, ySurface, 0, yBottom);
     rockGrad.addColorStop(0, '#0a101f');
     rockGrad.addColorStop(0.35, '#070b16');
@@ -402,17 +445,36 @@
     ctx.fillStyle = rockGrad;
     ctx.fillRect(0, ySurface, mainWidth, yBottom - ySurface);
 
+    // Natural structural joints (familias de diaclasas andinas en macizo virgen)
+    ctx.save();
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.022)';
+    ctx.lineWidth = 1;
+    for (let j = 0; j < mainWidth; j += 42) {
+      // Joint set J1 (+40 deg)
+      ctx.beginPath();
+      ctx.moveTo(j, ySurface);
+      ctx.lineTo(j + (yBottom - ySurface) * 0.45, yBottom);
+      ctx.stroke();
+
+      // Joint set J2 (-60 deg)
+      ctx.beginPath();
+      ctx.moveTo(j, yBottom);
+      ctx.lineTo(j + (yBottom - ySurface) * 0.35, ySurface);
+      ctx.stroke();
+    }
+    ctx.restore();
+
     // Geological Fault Plane (Falla Geológica en Abutment Oeste)
     ctx.save();
-    ctx.strokeStyle = 'rgba(255, 100, 50, 0.28)';
-    ctx.lineWidth = 1.8;
+    ctx.strokeStyle = 'rgba(255, 100, 50, 0.32)';
+    ctx.lineWidth = 2;
     ctx.setLineDash([8, 6]);
     ctx.beginPath();
     ctx.moveTo(mainWidth * 0.16, ySurface + 30);
     ctx.lineTo(mainWidth * 0.30, yHaulage + 20);
     ctx.stroke();
 
-    ctx.fillStyle = 'rgba(255, 120, 70, 0.6)';
+    ctx.fillStyle = 'rgba(255, 120, 70, 0.7)';
     ctx.font = '8px "JetBrains Mono", monospace';
     ctx.textAlign = 'right';
     ctx.fillText('Falla Geológica Abutment', mainWidth * 0.24, getDepthY(1100));
@@ -445,37 +507,95 @@
       ctx.stroke();
     });
 
-    // 3. Topographic Surface Profile
-    ctx.fillStyle = '#060a12';
+    // 3. Realistic Andean Topography Profile (Cordillera de los Andes con nieve y caseta DAS)
+    ctx.save();
+    // Sky gradient above ground
+    const skyGrad = ctx.createLinearGradient(0, 0, 0, ySurface);
+    skyGrad.addColorStop(0, '#03060c');
+    skyGrad.addColorStop(1, '#081224');
+    ctx.fillStyle = skyGrad;
+    ctx.fillRect(0, 0, mainWidth, ySurface);
+
+    // Mountain silhouettes in background
+    ctx.fillStyle = '#0a1424';
     ctx.beginPath();
-    ctx.moveTo(0, 0);
-    ctx.lineTo(mainWidth, 0);
+    ctx.moveTo(0, ySurface);
+    ctx.lineTo(0, ySurface - 16);
+    ctx.lineTo(mainWidth * 0.14, ySurface - 38);
+    ctx.lineTo(mainWidth * 0.26, ySurface - 18);
+    ctx.lineTo(mainWidth * 0.44, ySurface - 46);
+    ctx.lineTo(mainWidth * 0.60, ySurface - 24);
+    ctx.lineTo(mainWidth * 0.76, ySurface - 48);
+    ctx.lineTo(mainWidth * 0.88, ySurface - 26);
+    ctx.lineTo(mainWidth, ySurface - 15);
     ctx.lineTo(mainWidth, ySurface);
-    ctx.bezierCurveTo(mainWidth * 0.7, ySurface - 12, mainWidth * 0.3, ySurface + 8, 0, ySurface - 5);
     ctx.closePath();
     ctx.fill();
 
-    ctx.strokeStyle = '#2b3f5c';
+    // Snow caps on highest Andean ridges
+    ctx.fillStyle = 'rgba(215, 235, 255, 0.32)';
+    ctx.beginPath();
+    ctx.moveTo(mainWidth * 0.44, ySurface - 46);
+    ctx.lineTo(mainWidth * 0.40, ySurface - 32);
+    ctx.lineTo(mainWidth * 0.48, ySurface - 32);
+    ctx.closePath();
+    ctx.fill();
+
+    ctx.beginPath();
+    ctx.moveTo(mainWidth * 0.76, ySurface - 48);
+    ctx.lineTo(mainWidth * 0.71, ySurface - 34);
+    ctx.lineTo(mainWidth * 0.81, ySurface - 34);
+    ctx.closePath();
+    ctx.fill();
+
+    // Foreground mountain ground surface
+    ctx.fillStyle = '#060a12';
+    ctx.beginPath();
+    ctx.moveTo(0, ySurface - 6);
+    ctx.bezierCurveTo(mainWidth * 0.3, ySurface + 8, mainWidth * 0.7, ySurface - 12, mainWidth, ySurface);
+    ctx.lineTo(mainWidth, ySurface + 4);
+    ctx.lineTo(0, ySurface + 4);
+    ctx.closePath();
+    ctx.fill();
+
+    ctx.strokeStyle = '#2b446a';
     ctx.lineWidth = 2;
     ctx.beginPath();
-    ctx.moveTo(0, ySurface - 5);
+    ctx.moveTo(0, ySurface - 6);
     ctx.bezierCurveTo(mainWidth * 0.3, ySurface + 8, mainWidth * 0.7, ySurface - 12, mainWidth, ySurface);
     ctx.stroke();
 
-    // Surface facilities (DAS Interrogator shack)
-    ctx.fillStyle = '#00f0ff';
-    ctx.fillRect(mainWidth * 0.22 - 8, ySurface - 22, 16, 18);
-    ctx.strokeStyle = '#ffffff';
+    // Surface facilities: DAS Interrogator Shack + Communication mast
+    const shackX = mainWidth * 0.22;
+    ctx.fillStyle = '#0b1c2e';
+    ctx.fillRect(shackX - 12, ySurface - 24, 24, 20);
+    ctx.strokeStyle = '#00f0ff';
+    ctx.lineWidth = 1.2;
+    ctx.strokeRect(shackX - 12, ySurface - 24, 24, 20);
+
+    // Antenna mast
+    ctx.strokeStyle = '#8f9fb6';
     ctx.lineWidth = 1;
-    ctx.strokeRect(mainWidth * 0.22 - 8, ySurface - 22, 16, 18);
-    ctx.fillStyle = '#ffffff';
-    ctx.font = 'bold 9px "JetBrains Mono", monospace';
+    ctx.beginPath();
+    ctx.moveTo(shackX + 6, ySurface - 24);
+    ctx.lineTo(shackX + 6, ySurface - 38);
+    ctx.stroke();
+
+    // Blinking telemetry LED on shack
+    ctx.fillStyle = (Math.floor(time * 5) % 2 === 0) ? '#00ffa3' : '#00f0ff';
+    ctx.beginPath();
+    ctx.arc(shackX - 6, ySurface - 14, 2.5, 0, Math.PI * 2);
+    ctx.fill();
+
+    ctx.fillStyle = '#00f0ff';
+    ctx.font = 'bold 8.5px "JetBrains Mono", monospace';
     ctx.textAlign = 'center';
-    ctx.fillText('DAS INTERROGATOR', mainWidth * 0.22, ySurface - 26);
+    ctx.fillText('CASETA DAS (0 m)', shackX, ySurface - 28);
+    ctx.restore();
 
     // 4. BLOCK CAVING GEOMETRY & SEISMOGENIC ZONES
-    // A. Muckpile (Broken Rock Column - INERT TO ELASTIC SEISMICITY)
-    ctx.fillStyle = '#171e2b';
+    // A. Muckpile (Broken Rock Column with Realistic Ore Clasts)
+    ctx.fillStyle = '#141b26';
     ctx.beginPath();
     ctx.moveTo(caveLeft + 15, yUndercut);
     ctx.lineTo(caveRight - 15, yUndercut);
@@ -484,16 +604,24 @@
     ctx.closePath();
     ctx.fill();
 
-    ctx.strokeStyle = 'rgba(255,255,255,0.06)';
-    ctx.lineWidth = 1;
-    for (let r = 0; r < 24; r++) {
-      const rx = caveLeft + 30 + ((r * 37) % (caveRight - caveLeft - 60));
-      const ry = yAirGap + 25 + ((r * 29) % (yUndercut - yAirGap - 35));
-      ctx.strokeRect(rx, ry, 6 + (r % 5), 4 + (r % 4));
+    // Realistic fractured ore clasts (pebbles and blocks of copper mineral)
+    ctx.save();
+    for (let r = 0; r < 40; r++) {
+      const rx = caveLeft + 24 + ((r * 41) % (caveRight - caveLeft - 50));
+      const ry = yAirGap + 24 + ((r * 33) % (yUndercut - yAirGap - 34));
+      const clastSize = 5 + (r % 6);
+      ctx.fillStyle = (r % 3 === 0) ? 'rgba(55, 68, 88, 0.45)' : 'rgba(38, 48, 64, 0.55)';
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.08)';
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.rect(rx, ry, clastSize, clastSize * 0.7);
+      ctx.fill();
+      ctx.stroke();
     }
+    ctx.restore();
 
-    ctx.fillStyle = 'rgba(113, 130, 158, 0.45)';
-    ctx.font = '9px "JetBrains Mono", monospace';
+    ctx.fillStyle = 'rgba(143, 159, 182, 0.55)';
+    ctx.font = 'bold 9px "JetBrains Mono", monospace';
     ctx.textAlign = 'center';
     ctx.fillText('MUCKPILE (MINERAL QUEBRADO · INERTE A CORTE ELÁSTICO)', caveCenterX, (yAirGap + yUndercut) / 2 + 10);
 
