@@ -283,9 +283,9 @@
     if (mode === 'dfos') {
       if (banner) {
         banner.className = 'sim-status-banner detected';
-        banner.innerHTML = '<strong>FIBERANDES DAS: SONDAJES + GALERÍAS</strong> — 8.500 canales ópticos continuos cada 1m · Captura frentes P/S en macizo y slow-strain previo a estallidos de roca · Incertidumbre: ±1.8 m';
+        banner.innerHTML = '<strong>FIBERANDES DFOS: ARREGLO EFICIENTE EN DAISY-CHAIN</strong> — 8.500 canales con 1 solo interrogador DAS + Switch DSS · Lazos en U en pozos cementados y túneles · Sincronización PTP';
       }
-      updateTelemetry(98, "8.500 Canales Ópticos", "±1.8 metros", "Activo (Doble Banda)");
+      updateTelemetry(98, "8.500 Canales (1 DAS + Switch DSS)", "±1.8 metros", "Activo (Doble Banda)");
     } else {
       if (banner) {
         banner.className = 'sim-status-banner blindspot';
