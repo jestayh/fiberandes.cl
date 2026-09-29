@@ -9,6 +9,7 @@
   const container = document.getElementById('mine-3d-canvas-container');
   if (!container) return;
 
+  // Clean canvas container: contains ONLY the canvas (zero overlay boxes covering the model)
   container.innerHTML = '';
 
   const canvas = document.createElement('canvas');
@@ -19,48 +20,10 @@
   canvas.style.cursor = 'crosshair';
   container.appendChild(canvas);
 
-  // Overlay hint
-  const overlayHint = document.createElement('div');
-  overlayHint.className = 'sim-overlay-hint';
-  overlayHint.innerHTML = '<span>🖱️ Haz clic en la roca para detonar sismos · Prueba los 3 escenarios geomecánicos arriba</span>';
-  container.appendChild(overlayHint);
-
-  // Status banner
-  const statusBanner = document.createElement('div');
-  statusBanner.id = 'sim-status-banner';
-  statusBanner.className = 'sim-status-banner detected';
-  statusBanner.innerHTML = '<strong>FIBERANDES DAS: SONDAJES + GALERÍAS</strong> — 8.500 canales ópticos continuos cada 1m · Captura frentes P/S en macizo y slow-strain previo a estallidos de roca · Incertidumbre: ±1.8 m';
-  container.appendChild(statusBanner);
-
-  // Geomechanical Hover Inspector HUD (Slim 1-line top badge that doesn't obstruct the model)
-  const hudInspector = document.createElement('div');
-  hudInspector.id = 'sim-hud-inspector';
-  hudInspector.className = 'sim-hud-inspector';
-  hudInspector.innerHTML = '<span class="sim-hud-dot"></span><span id="sim-hud-text">💡 Pasa el cursor por el modelo para inspeccionar cada elemento</span>';
-  container.appendChild(hudInspector);
-
-  // Telemetry strip
-  const telemetry = document.createElement('div');
-  telemetry.className = 'sim-3d-telemetry';
-  telemetry.innerHTML = `
-    <div class="sim-tel-cell">
-      <span class="l">COBERTURA VOLUMÉTRICA</span>
-      <span class="v" id="tel-val-cov" style="color:var(--emerald);">98%</span>
-    </div>
-    <div class="sim-tel-cell">
-      <span class="l">SENSORES ACTIVOS</span>
-      <span class="v" id="tel-val-sens" style="color:#fff;">8.500 Canales Ópticos</span>
-    </div>
-    <div class="sim-tel-cell">
-      <span class="l">INCERTIDUMBRE HIPOCENTRO</span>
-      <span class="v" id="tel-val-uncert" style="color:var(--cyan);">±1.8 metros</span>
-    </div>
-    <div class="sim-tel-cell">
-      <span class="l">SLOW-STRAIN EN ROCA</span>
-      <span class="v" id="tel-val-strain" style="color:var(--emerald);">Activo (Doble Banda)</span>
-    </div>
-  `;
-  container.appendChild(telemetry);
+  // References to external console elements (outside the canvas)
+  const statusBanner = document.getElementById('sim-status-banner');
+  const hudInspector = document.getElementById('sim-hud-inspector');
+  const hudText = document.getElementById('sim-hud-text');
 
   const ctx = canvas.getContext('2d');
   let width = 0;
@@ -183,7 +146,8 @@
   }
 
   function showNotice(text) {
-    noticeToast = { text, alpha: 1.0, timer: 180 };
+    const el = document.getElementById('sim-hud-text');
+    if (el) el.innerHTML = text;
   }
 
   // -------------------------------------------------------------
@@ -510,10 +474,10 @@
 
       // Check proximity to fiber boreholes in DFOS mode
       const nearFiberBorehole = activeMode === 'dfos' && [
-        { p1: { x: caveLeft - 30, y: ySurface }, p2: { x: caveLeft - 30, y: yHaulage + 20 } },
-        { p1: { x: mainWidth * 0.22, y: ySurface }, p2: { x: caveCenterX, y: yProduction + 10 } },
-        { p1: { x: caveRight + 30, y: ySurface }, p2: { x: caveRight + 30, y: yHaulage + 20 } },
-        { p1: { x: caveRight + 65, y: ySurface }, p2: { x: caveCenterX + 40, y: yAirGap - 30 } }
+        { p1: { x: caveLeft - 35, y: ySurface }, p2: { x: caveLeft - 35, y: yHaulage + 20 } },
+        { p1: { x: mainWidth * 0.16, y: ySurface }, p2: { x: caveCenterX, y: yProduction + 10 } },
+        { p1: { x: caveRight + 25, y: ySurface }, p2: { x: caveRight + 25, y: yHaulage + 20 } },
+        { p1: { x: caveRight + 95, y: ySurface }, p2: { x: caveCenterX + 40, y: yAirGap - 30 } }
       ].some(bh => distToSegment({ x: hoverX, y: hoverY }, bh.p1, bh.p2) < 14);
 
       // Check proximity to geophones in traditional mode
@@ -945,25 +909,15 @@
       }
       ctx.restore();
 
-      // Sleek Warning Callout in Upper Out-of-Range Zone (centered above cave-back)
+      // Subtle geological label (NO opaque box covering the rock mass or wave propagation)
       ctx.save();
-      ctx.fillStyle = 'rgba(16, 6, 8, 0.90)';
-      ctx.shadowColor = '#ff281a';
-      ctx.shadowBlur = 8;
-      const bW = 360;
-      ctx.fillRect(caveCenterX - bW / 2, yCaveTop - 74, bW, 42);
-      ctx.strokeStyle = 'rgba(255, 75, 85, 0.75)';
-      ctx.lineWidth = 1.2;
-      ctx.strokeRect(caveCenterX - bW / 2, yCaveTop - 74, bW, 42);
-
-      ctx.fillStyle = '#ff6b6b';
-      ctx.font = 'bold 9.5px "JetBrains Mono", monospace';
+      ctx.fillStyle = 'rgba(255, 107, 107, 0.75)';
+      ctx.font = 'bold 9px "JetBrains Mono", monospace';
       ctx.textAlign = 'center';
-      ctx.fillText('⚠️ ZONA FUERA DE ALCANCE (>300 m DE BOREHOLES EN TÚNELES)', caveCenterX, yCaveTop - 57);
-      ctx.font = '8px "JetBrains Mono", monospace';
-      ctx.fillStyle = '#fca5a5';
-      ctx.fillText('Límite físico de atenuación: ondas de alta frecuencia (>150 Hz) disipadas por fricción', caveCenterX, yCaveTop - 45);
-      ctx.fillText('Bóveda y roca superior sin estaciones en cota · 0% apertura tridimensional', caveCenterX, yCaveTop - 34);
+      ctx.fillText('ZONA FUERA DE ALCANCE (>300 m DE BOREHOLES)', caveCenterX, yCaveTop - 56);
+      ctx.font = '7.5px "JetBrains Mono", monospace';
+      ctx.fillStyle = 'rgba(255, 160, 160, 0.55)';
+      ctx.fillText('Frecuencias >150 Hz atenuadas por absorción inelástica', caveCenterX, yCaveTop - 43);
       ctx.restore();
 
       // Sombra Acústica del Air Gap (Acoustic Void Shadow Cone)
@@ -1103,10 +1057,10 @@
       // ---------------------------------------------------------
 
       const fiberBoreholes = [
-        { p1: { x: caveLeft - 30, y: ySurface }, p2: { x: caveLeft - 30, y: yHaulage + 20 }, color: '#00f0ff', label: 'B-01 (DAS)' },
-        { p1: { x: mainWidth * 0.22, y: ySurface }, p2: { x: caveCenterX, y: yProduction + 10 }, color: '#00f0ff', label: 'B-02 (DAS Doble Banda)' },
-        { p1: { x: caveRight + 30, y: ySurface }, p2: { x: caveRight + 30, y: yHaulage + 20 }, color: '#00ffa3', label: 'B-03 (DSS Strain)' },
-        { p1: { x: caveRight + 65, y: ySurface }, p2: { x: caveCenterX + 40, y: yAirGap - 30 }, color: '#00f0ff', label: 'B-04 (DAS)' },
+        { p1: { x: caveLeft - 35, y: ySurface }, p2: { x: caveLeft - 35, y: yHaulage + 20 }, color: '#00f0ff', label: 'B-01 (DAS)' },
+        { p1: { x: mainWidth * 0.16, y: ySurface }, p2: { x: caveCenterX, y: yProduction + 10 }, color: '#00f0ff', label: 'B-02 (DAS Doble)' },
+        { p1: { x: caveRight + 25, y: ySurface }, p2: { x: caveRight + 25, y: yHaulage + 20 }, color: '#00ffa3', label: 'B-03 (DSS Strain)' },
+        { p1: { x: caveRight + 95, y: ySurface }, p2: { x: caveCenterX + 40, y: yAirGap - 30 }, color: '#00f0ff', label: 'B-04 (DAS)' },
         { p1: { x: caveLeft - 60, y: yProduction }, p2: { x: caveLeft - 110, y: yCaveTop + 20 }, color: '#00ffa3', label: 'Sondaje Abutment' },
         { p1: { x: caveRight + 60, y: yProduction }, p2: { x: caveRight + 110, y: yCaveTop + 20 }, color: '#00ffa3', label: 'Sondaje Abutment' }
       ];
@@ -1152,9 +1106,10 @@
 
         if (bh.p1.y === ySurface) {
           ctx.fillStyle = bh.color;
-          ctx.font = '8px "JetBrains Mono", monospace';
+          ctx.font = 'bold 8px "JetBrains Mono", monospace';
           ctx.textAlign = 'center';
-          ctx.fillText(bh.label, bh.p1.x, bh.p1.y - 6);
+          const labelY = (idx % 2 === 0) ? bh.p1.y - 7 : bh.p1.y - 17;
+          ctx.fillText(bh.label, bh.p1.x, labelY);
         }
       });
 
@@ -1323,31 +1278,7 @@
     // 9. SISMICIDAD CONTROLADA EXCLUSIVAMENTE POR EL USUARIO
     // Los eventos sísmicos solo se generan por clics directos en la roca o mediante los botones de escenario.
 
-    // 10. NOTIFICATION TOAST ON CANVAS
-    if (noticeToast) {
-      noticeToast.timer--;
-      if (noticeToast.timer < 30) noticeToast.alpha = noticeToast.timer / 30;
-      if (noticeToast.timer <= 0) noticeToast = null;
 
-      if (noticeToast) {
-        ctx.save();
-        ctx.fillStyle = 'rgba(6, 15, 28, 0.92)';
-        ctx.strokeStyle = '#00f0ff';
-        ctx.lineWidth = 1;
-        ctx.globalAlpha = noticeToast.alpha;
-        const tw = 440;
-        const tx = (mainWidth - tw) / 2;
-        const ty = height - 55;
-        ctx.fillRect(tx, ty, tw, 26);
-        ctx.strokeRect(tx, ty, tw, 26);
-
-        ctx.fillStyle = '#ffffff';
-        ctx.font = '10px "JetBrains Mono", monospace';
-        ctx.textAlign = 'center';
-        ctx.fillText(noticeToast.text, mainWidth / 2, ty + 17);
-        ctx.restore();
-      }
-    }
 
     // 11. LIVE SYNTHETIC DAS WATERFALL DISPLAY (Right side dock)
     if (showWaterfall) {

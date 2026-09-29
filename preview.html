@@ -127,73 +127,95 @@
       font-family: var(--font-mono);
       line-height: 1.3;
     }
-    .sim-hud-inspector {
-      position: absolute;
-      top: 14px;
-      left: 14px;
+    /* Clean cockpit layout: Console Header & Telemetry Dock OUTSIDE the canvas (Zero obstruction) */
+    .sim-dashboard-header {
       display: flex;
-      align-items: center;
-      gap: 8px;
-      background: rgba(6, 15, 28, 0.92);
-      border: 1px solid rgba(0, 240, 255, 0.4);
-      border-radius: var(--r-sm);
-      padding: 6px 12px;
-      backdrop-filter: blur(10px);
-      z-index: 10;
-      pointer-events: none;
-      font-family: var(--font-mono);
-      font-size: 10.5px;
-      color: #fff;
-      max-width: 520px;
+      justify-content: space-between;
+      align-items: stretch;
+      gap: 12px;
+      margin-bottom: 12px;
+      width: 100%;
+      box-sizing: border-box;
+    }
+    @media (max-width: 992px) {
+      .sim-dashboard-header {
+        flex-direction: column;
+      }
+    }
+
+    .sim-hud-inspector {
+      display: flex !important;
+      align-items: center !important;
+      gap: 10px !important;
+      background: rgba(6, 15, 28, 0.95) !important;
+      border: 1px solid rgba(0, 240, 255, 0.35) !important;
+      border-radius: var(--r-sm) !important;
+      padding: 10px 16px !important;
+      font-family: var(--font-mono) !important;
+      font-size: 11px !important;
+      color: #fff !important;
+      flex: 1 1 380px !important;
+      min-height: 44px !important;
+      box-sizing: border-box !important;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4) !important;
+      position: static !important;
+      max-width: none !important;
     }
     .sim-hud-dot {
-      width: 7px;
-      height: 7px;
+      width: 8px;
+      height: 8px;
       border-radius: 50%;
       background: var(--cyan);
-      box-shadow: 0 0 6px var(--cyan);
+      box-shadow: 0 0 8px var(--cyan);
       flex-shrink: 0;
     }
 
     .sim-status-banner {
-      position: absolute !important;
-      top: 16px !important;
-      right: 16px !important;
+      display: block !important;
       font-family: var(--font-mono) !important;
-      font-size: 11.5px !important;
-      padding: 8px 16px !important;
+      font-size: 11px !important;
+      padding: 10px 16px !important;
       border-radius: var(--r-sm) !important;
-      font-weight: 600 !important;
-      z-index: 10 !important;
-      backdrop-filter: blur(12px) !important;
-      -webkit-backdrop-filter: blur(12px) !important;
-      max-width: min(540px, calc(100% - 32px)) !important;
+      font-weight: 500 !important;
+      line-height: 1.5 !important;
+      flex: 1.3 1 480px !important;
+      min-height: 44px !important;
+      box-sizing: border-box !important;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4) !important;
+      position: static !important;
+      max-width: none !important;
+      transition: all 0.25s ease !important;
     }
     .sim-status-banner.detected {
-      background: rgba(0, 255, 163, 0.15) !important;
-      color: var(--emerald) !important;
-      border: 1px solid var(--emerald) !important;
+      background: rgba(0, 255, 163, 0.12) !important;
+      color: #00ffa3 !important;
+      border: 1px solid rgba(0, 255, 163, 0.45) !important;
     }
     .sim-status-banner.blindspot {
-      background: rgba(255, 75, 85, 0.22) !important;
-      color: var(--danger) !important;
-      border: 1px solid var(--danger) !important;
+      background: rgba(255, 75, 85, 0.16) !important;
+      color: #ff6b6b !important;
+      border: 1px solid rgba(255, 75, 85, 0.55) !important;
     }
 
     .sim-3d-telemetry {
-      position: absolute !important;
-      bottom: 16px !important;
-      right: 16px !important;
       display: grid !important;
       grid-template-columns: repeat(4, 1fr) !important;
       gap: 16px !important;
-      background: rgba(6, 11, 20, 0.90) !important;
+      background: rgba(6, 11, 20, 0.95) !important;
       border: 1px solid rgba(255, 255, 255, 0.12) !important;
       border-radius: var(--r-sm) !important;
-      padding: 10px 18px !important;
-      backdrop-filter: blur(12px) !important;
-      -webkit-backdrop-filter: blur(12px) !important;
-      z-index: 10 !important;
+      padding: 12px 20px !important;
+      margin-top: 10px !important;
+      margin-bottom: 12px !important;
+      width: 100% !important;
+      box-sizing: border-box !important;
+      position: static !important;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4) !important;
+    }
+    @media (max-width: 768px) {
+      .sim-3d-telemetry {
+        grid-template-columns: repeat(2, 1fr) !important;
+      }
     }
     .sim-tel-cell { display: flex !important; flex-direction: column !important; }
     .sim-tel-cell .l {
@@ -205,25 +227,9 @@
     }
     .sim-tel-cell .v {
       font-family: var(--font-display) !important;
-      font-size: 14px !important;
+      font-size: 15px !important;
       font-weight: 700 !important;
       margin-top: 2px !important;
-    }
-
-    .sim-overlay-hint {
-      position: absolute !important;
-      bottom: 16px !important;
-      left: 16px !important;
-      font-family: var(--font-mono) !important;
-      font-size: 11px !important;
-      color: var(--fg-2) !important;
-      background: rgba(6, 11, 20, 0.75) !important;
-      padding: 6px 12px !important;
-      border-radius: 4px !important;
-      border: 1px solid rgba(255, 255, 255, 0.08) !important;
-      backdrop-filter: blur(8px) !important;
-      z-index: 10 !important;
-      pointer-events: none !important;
     }
 
     @media (max-width: 900px) {
@@ -433,36 +439,38 @@
             </div>
           </div>
 
-          <!-- 2D Geomechanical Canvas Container -->
-          <div class="sim-3d-visual" id="mine-3d-canvas-container" title="Haz clic en cualquier punto del macizo rocoso para generar sismicidad">
-            <!-- Dedicated WebGL Mounting Element -->
-            <div id="mine-3d-viewport" class="sim-3d-viewport"></div>
-
-            <div class="sim-overlay-hint">
-              <span>🖱️ Haz clic en cualquier lugar del macizo rocoso para detonar una microsismicidad y observar su atenuación</span>
+          <!-- Dedicated Top Console (Outside Canvas): Dynamic Hover HUD & Seismic Status Banner -->
+          <div class="sim-dashboard-header">
+            <div class="sim-hud-inspector" id="sim-hud-inspector">
+              <span class="sim-hud-dot"></span>
+              <span id="sim-hud-text">💡 Pasa el cursor por el modelo para inspeccionar cada elemento</span>
             </div>
             <div class="sim-status-banner detected" id="sim-status-banner">
-              <strong>FIBERANDES DAS: SONDAJES + GALERÍAS</strong> — 8.500 canales ópticos continuos cada 1m · Captura la onda a corta distancia antes de que la roca la atenúe · Incertidumbre: ±1.8 m
+              <strong>FIBERANDES DAS: SONDAJES + GALERÍAS</strong> — 8.500 canales ópticos continuos cada 1m · Incertidumbre: ±1.8 m
             </div>
+          </div>
 
-            <!-- Real-time 3D Telemetry Strip -->
-            <div class="sim-3d-telemetry">
-              <div class="sim-tel-cell">
-                <span class="l">COBERTURA VOLUMÉTRICA</span>
-                <span class="v" id="tel-val-cov" style="color:var(--emerald);">98%</span>
-              </div>
-              <div class="sim-tel-cell">
-                <span class="l">SENSORES ACTIVOS</span>
-                <span class="v" id="tel-val-sens" style="color:#fff;">8.500 Canales Ópticos</span>
-              </div>
-              <div class="sim-tel-cell">
-                <span class="l">INCERTIDUMBRE HIPOCENTRO</span>
-                <span class="v" id="tel-val-uncert" style="color:var(--cyan);">±1.8 metros</span>
-              </div>
-              <div class="sim-tel-cell">
-                <span class="l">SLOW-STRAIN EN ROCA</span>
-                <span class="v" id="tel-val-strain" style="color:var(--emerald);">Activo (Doble Banda)</span>
-              </div>
+          <!-- 2D Geomechanical Canvas Container (100% DESPEJADO, SIN RECUADROS ENCIMA) -->
+          <div class="sim-3d-visual" id="mine-3d-canvas-container" title="Haz clic en cualquier punto del macizo rocoso para generar sismicidad">
+          </div>
+
+          <!-- Real-time 3D Telemetry Strip (Outside Canvas, Below) -->
+          <div class="sim-3d-telemetry" id="sim-telemetry-strip">
+            <div class="sim-tel-cell">
+              <span class="l">COBERTURA VOLUMÉTRICA</span>
+              <span class="v" id="tel-val-cov" style="color:var(--emerald);">98%</span>
+            </div>
+            <div class="sim-tel-cell">
+              <span class="l">SENSORES ACTIVOS</span>
+              <span class="v" id="tel-val-sens" style="color:#fff;">8.500 Canales Ópticos</span>
+            </div>
+            <div class="sim-tel-cell">
+              <span class="l">INCERTIDUMBRE HIPOCENTRO</span>
+              <span class="v" id="tel-val-uncert" style="color:var(--cyan);">±1.8 metros</span>
+            </div>
+            <div class="sim-tel-cell">
+              <span class="l">SLOW-STRAIN EN ROCA</span>
+              <span class="v" id="tel-val-strain" style="color:var(--emerald);">Activo (Doble Banda)</span>
             </div>
           </div>
 
@@ -1353,7 +1361,7 @@
   <script src="js/hero-canvas.js"></script>
 
   <!-- 2D Mine Geomechanics & Caving Simulator (3D simulator preserved in js/mine-3d-simulator.js) -->
-  <script src="js/mine-2d-simulator.js?v=20260929_01"></script>
+  <script src="js/mine-2d-simulator.js?v=20260929_03"></script>
 
   <script src="js/configurator.js"></script>
   <script src="js/app.js"></script>
