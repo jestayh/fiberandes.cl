@@ -78,7 +78,11 @@
   let noticeToast = null; // Toast alert on canvas
 
   // Attenuation physics: High-frequency microseisms (>150 Hz) attenuate severely in jointed rock
-  const ATTENUATION_LIMIT_RADIUS = 210; // ~320m in rock mass
+  // In canvas depth scale (0 to 2200m), 300m corresponds to ~70-85px
+  function getAttenRadius() {
+    const ppm = (height - 94) / 2200;
+    return Math.max(68, Math.round(320 * ppm)); // ~320m in rock mass
+  }
 
   // Synthetic DAS Waterfall history buffer (time rolling)
   const WATERFALL_WIDTH = 130;
@@ -204,8 +208,8 @@
       zone,
       radiusP: 0,
       radiusS: 0,
-      speedP: 4.2,   // P-wave compressional speed (~5.5 km/s)
-      speedS: 2.4,   // S-wave shear speed (~3.2 km/s)
+      speedP: 2.6,   // P-wave compressional speed
+      speedS: 1.5,   // S-wave shear speed
       maxRadius: Math.max(width, height),
       alpha: 1.0
     };
@@ -219,9 +223,9 @@
       color: zone === 'pillar' ? '#ffaa00' : (mag > -0.5 ? '#ff4b55' : (mag > -1.2 ? '#ffc83b' : '#00f0ff'))
     });
 
-    const yProduction = getDepthY(1820);
-    const distToTunnels = Math.abs(y - yProduction);
     const depthEst = Math.round(((y - 52) / (height - 94)) * 2200);
+    const ppm = (height - 94) / 2200;
+    const r300 = getAttenRadius();
 
     const banner = document.getElementById('sim-status-banner');
     if (banner) {
@@ -242,18 +246,35 @@
         }
       } else {
         // TRADITIONAL GEOPHONE NETWORK IN 3D BOREHOLES
+        const geophones = getGeophoneStations(mainWidth, getDepthY(1820), getDepthY(1650), getDepthY(2040), (mainWidth * 0.32) - 70, mainWidth * 0.32, mainWidth * 0.72, (mainWidth * 0.32 + mainWidth * 0.72) / 2);
+
+        let minDistPx = Infinity;
+        let inRangeCount = 0;
+
+        geophones.forEach(g => {
+          const d = Math.hypot(g.x - x, g.y - y);
+          if (d < minDistPx) minDistPx = d;
+          if (d <= r300) inRangeCount++;
+        });
+
+        const distMeters = Math.round(minDistPx / ppm);
+
         if (zone === 'pillar') {
           banner.className = 'sim-status-banner blindspot';
-          banner.innerHTML = `<strong>💥 ESTALLIDO EN PILAR: BOREHOLES REGISTRAN ONDA DINÁMICA PERO 0% PRE-ALERTA</strong> — El geófono inercial en borehole captura la llegada de onda, pero no mide deformación lenta previa (0 Hz) · <strong>Sin aviso de evacuación</strong> · Incertidumbre de red: ±22 m`;
+          banner.innerHTML = `<strong>💥 ESTALLIDO EN PILAR: BOREHOLES CAPTURAN ONDA (${inRangeCount} est. a ${distMeters} m) PERO 0% PRE-ALERTA</strong> — Los sensores capturan la llegada destructiva pero no registran la lenta acumulación de esfuerzo previa (0 Hz) · <strong>Sin tiempo de evacuación</strong> · Incertidumbre: ±22 m`;
           updateTelemetry(25, "12 Geófonos en Boreholes", "±22 metros", "0% (Ciego a slow-strain)");
-        } else if (distToTunnels > ATTENUATION_LIMIT_RADIUS * 0.8) {
+        } else if (inRangeCount === 0) {
           banner.className = 'sim-status-banner blindspot';
-          banner.innerHTML = `<strong>❌ ONDA ATENUADA: CAVE-BACK INVISIBLE A BOREHOLES INFERIORES</strong> — A ${Math.round(distToTunnels * 1.6)} m de distancia, la roca fracturada disipa frecuencias de microsismos (>150 Hz) antes de llegar a los boreholes de Undercut/Producción · <strong>Vacío superior sobre el caving</strong> · Geófonos: 0% detección`;
-          updateTelemetry(20, "12 Geófonos en Boreholes", "No detectado (Atenuado)", "0% (Ciego en macizo)");
-        } else {
+          banner.innerHTML = `<strong>❌ ONDA ATENUADA: INVISIBLE A BOREHOLES INFERIORES</strong> — El evento ocurrió a <strong>${distMeters} m</strong> de la estación más cercana (límite físico: 300 m) · Frecuencias >150 Hz absorbidas por fricción inelástica antes de llegar a los túneles · Geófonos: 0% detección`;
+          updateTelemetry(10, "12 Geófonos en Boreholes", "No detectado (Atenuado)", "0% (Ciego en macizo)");
+        } else if (inRangeCount >= 4) {
           banner.className = 'sim-status-banner detected';
-          banner.innerHTML = `<strong>⚠️ EVENTO DETECTADO POR BOREHOLES CERCANOS</strong> — Señal puntual capturada fuera de la EDZ del túnel · Malla puntual discreta (12 estaciones) · Cero datos de deformación continua`;
-          updateTelemetry(25, "12 Geófonos en Boreholes", "±18 metros", "0% (Sin slow-strain)");
+          banner.innerHTML = `<strong>⚠️ DETECCIÓN MULTIESTACIÓN (${inRangeCount} estaciones a ${distMeters} m ≤ 300 m)</strong> — Señal capturada localmente fuera de la EDZ · Permite triangulación puntual · Cero datos continuos de deformación del macizo · Incertidumbre: ±18 m`;
+          updateTelemetry(30, "12 Geófonos en Boreholes", "±18 metros", "0% (Sin slow-strain)");
+        } else {
+          banner.className = 'sim-status-banner blindspot';
+          banner.innerHTML = `<strong>⚠️ COBERTURA INSUFICIENTE PARA LOCALIZACIÓN (${inRangeCount} estación a ${distMeters} m)</strong> — Se requieren ≥4 estaciones triaxiales para resolver hipocentro en 3D · Error de posición severo · Incertidumbre: ±38 m`;
+          updateTelemetry(15, "12 Geófonos en Boreholes", "±38 metros (No localizable)", "0% (Sin slow-strain)");
         }
       }
     }
@@ -381,6 +402,77 @@
     }
   }
 
+  // Helper to render high-speed laser interrogation pulses traveling inside optical fiber cables
+  function drawFiberLaserRay(points, speed, pulseCount, color, tailLen = 28) {
+    if (!points || points.length < 2) return;
+    const segLens = [];
+    let totalLen = 0;
+    for (let i = 0; i < points.length - 1; i++) {
+      const d = Math.hypot(points[i + 1].x - points[i].x, points[i + 1].y - points[i].y);
+      segLens.push(d);
+      totalLen += d;
+    }
+    if (totalLen <= 0) return;
+
+    function getPosAt(s) {
+      s = ((s % totalLen) + totalLen) % totalLen;
+      let acc = 0;
+      for (let i = 0; i < segLens.length; i++) {
+        if (acc + segLens[i] >= s) {
+          const tSeg = (s - acc) / segLens[i];
+          return {
+            x: points[i].x + tSeg * (points[i + 1].x - points[i].x),
+            y: points[i].y + tSeg * (points[i + 1].y - points[i].y)
+          };
+        }
+        acc += segLens[i];
+      }
+      return points[points.length - 1];
+    }
+
+    for (let p = 0; p < pulseCount; p++) {
+      const distHead = (time * speed + p * (totalLen / pulseCount)) % totalLen;
+      const head = getPosAt(distHead);
+
+      // Trailing laser tail along the fiber path
+      const steps = 6;
+      ctx.save();
+      for (let s = 1; s <= steps; s++) {
+        const d1 = distHead - (s / steps) * tailLen;
+        const d2 = distHead - ((s - 1) / steps) * tailLen;
+        const pA = getPosAt(d1);
+        const pB = getPosAt(d2);
+        const fade = 1 - (s / steps);
+
+        ctx.strokeStyle = color;
+        ctx.globalAlpha = fade * 0.95;
+        ctx.lineWidth = 1.0 + fade * 2.5;
+        ctx.beginPath();
+        ctx.moveTo(pA.x, pA.y);
+        ctx.lineTo(pB.x, pB.y);
+        ctx.stroke();
+      }
+      ctx.restore();
+
+      // Glowing laser photon core
+      ctx.save();
+      ctx.shadowColor = color;
+      ctx.shadowBlur = 12;
+      ctx.fillStyle = '#ffffff';
+      ctx.beginPath();
+      ctx.arc(head.x, head.y, 2.3, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Outer light corona
+      ctx.fillStyle = color;
+      ctx.globalAlpha = 0.55;
+      ctx.beginPath();
+      ctx.arc(head.x, head.y, 4.2, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+    }
+  }
+
   // -------------------------------------------------------------
   // MAIN RENDER LOOP
   // -------------------------------------------------------------
@@ -405,6 +497,9 @@
     const caveCenterX = (caveLeft + caveRight) / 2;
     const shaftX = caveLeft - 70;
 
+    const geophoneStations = getGeophoneStations(mainWidth, yProduction, yUndercut, yHaulage, shaftX, caveLeft, caveRight, caveCenterX);
+    const r300 = getAttenRadius();
+
     // 0. UPDATE GEOMECHANICAL HOVER INSPECTOR HUD
     const hudText = document.getElementById('sim-hud-text');
     if (hudText && hoverX > 0 && hoverY > 0 && hoverX < mainWidth) {
@@ -413,14 +508,29 @@
       const isVoid = (hoverX >= caveLeft + 20 && hoverX <= caveRight - 20 && hoverY >= yCaveTop && hoverY <= yAirGap + 15);
       const isMuckpile = (hoverX >= caveLeft + 15 && hoverX <= caveRight - 15 && hoverY > yAirGap + 15 && hoverY <= yUndercut);
 
+      // Check proximity to fiber boreholes in DFOS mode
+      const nearFiberBorehole = activeMode === 'dfos' && [
+        { p1: { x: caveLeft - 30, y: ySurface }, p2: { x: caveLeft - 30, y: yHaulage + 20 } },
+        { p1: { x: mainWidth * 0.22, y: ySurface }, p2: { x: caveCenterX, y: yProduction + 10 } },
+        { p1: { x: caveRight + 30, y: ySurface }, p2: { x: caveRight + 30, y: yHaulage + 20 } },
+        { p1: { x: caveRight + 65, y: ySurface }, p2: { x: caveCenterX + 40, y: yAirGap - 30 } }
+      ].some(bh => distToSegment({ x: hoverX, y: hoverY }, bh.p1, bh.p2) < 14);
+
+      // Check proximity to geophones in traditional mode
+      const nearGeophone = activeMode === 'geophones' && geophoneStations.find(g => Math.hypot(g.x - hoverX, g.y - hoverY) < 16);
+
       if (hoverY < ySurface) {
-        hudText.innerHTML = '🏔️ <strong>Superficie (Cota 0 m):</strong> Caseta con Interrogador DAS · Salida de cables troncales a sondajes';
+        hudText.innerHTML = '🏔️ <strong>Superficie (Cota 0 m):</strong> Caseta con Interrogador DAS · Transmisión continua de pulsos láser a 10 kHz';
+      } else if (nearFiberBorehole) {
+        hudText.innerHTML = '💡 <strong>Sondaje con Fibra Óptica (DAS/DSS):</strong> Rayos láser continuos interrogando la roca cada 1 metro en tiempo real';
+      } else if (nearGeophone) {
+        hudText.innerHTML = `📡 <strong>Estación Sísmica ${nearGeophone.id}:</strong> Geófono triaxial en pozo cimentado de ${nearGeophone.depth} (Alcance radial: 300 m)`;
       } else if (Math.abs(hoverX - shaftX) < 18) {
         hudText.innerHTML = '🌬️ <strong>Pique de Ventilación:</strong> Pozo vertical de infraestructura y paso de fibra troncal a galerías';
       } else if (distCave < 42) {
         hudText.innerHTML = '⚡ <strong>Bóveda Cave-Back (-1.000 m):</strong> Arco activo de quiebre sismogénico (foco de microsismos)';
       } else if (isVoid) {
-        hudText.innerHTML = '🕳️ <strong>Air Gap (-1.400 m):</strong> Cavidad subterránea abierta (el aire no propaga ondas sísmicas)';
+        hudText.innerHTML = '🕳️ <strong>Air Gap (-1.400 m):</strong> Cavidad subterránea abierta (el aire no propaga ondas sísmicas hacia la base)';
       } else if (isMuckpile) {
         hudText.innerHTML = '🪨 <strong>Muckpile:</strong> Columna de mineral quebrado que desciende hacia las bateas de extracción';
       } else if (Math.abs(hoverY - yProduction) < 16) {
@@ -431,6 +541,8 @@
         hudText.innerHTML = '🚂 <strong>Nivel Transporte (-2.040 m):</strong> Infraestructura de vaciado y acarreo profundo';
       } else if (Math.abs(hoverX - (mainWidth * 0.23)) < 24 && hoverY > yCaveTop && hoverY < yProduction) {
         hudText.innerHTML = '📐 <strong>Falla Geológica Abutment:</strong> Plano estructural de cizalle bajo alta concentración de esfuerzo';
+      } else if (activeMode === 'geophones' && hoverY > ySurface && hoverY < (yCaveTop - 10)) {
+        hudText.innerHTML = '⚠️ <strong>Zona Fuera de Alcance (>300 m de túneles):</strong> Ondas de alta frecuencia disipadas por atenuación inelástica';
       } else {
         hudText.innerHTML = `⛏️ <strong>Macizo Rocoso Andino (-${depthEst} m):</strong> Haz clic en cualquier punto para detonar un sismo`;
       }
@@ -773,52 +885,131 @@
     ctx.strokeRect(shaftX - 6, ySurface, 12, yHaulage - ySurface);
 
     // 6. INSTRUMENTATION LAYERS (Mode Dependent)
-    const geophoneStations = getGeophoneStations(mainWidth, yProduction, yUndercut, yHaulage, shaftX, caveLeft, caveRight, caveCenterX);
-
     if (activeMode === 'geophones') {
       // ---------------------------------------------------------
       // MODE: TRADITIONAL POINT SEISMOLOGY (GEOPHONES IN TUNNELS)
       // ---------------------------------------------------------
 
-      // A. Upper Blind Spot (Vacío Superior & Atenuación Inelástica Q)
+      // Helper to compute the uppermost reach of 300m geophone coverage across the cross section
+      function getUpperCoverageY(xVal) {
+        let topY = yBottom;
+        geophoneStations.forEach(g => {
+          const dx = Math.abs(xVal - g.x);
+          if (dx <= r300) {
+            const dy = Math.sqrt(r300 * r300 - dx * dx);
+            const candidateY = g.y - dy;
+            if (candidateY < topY) {
+              topY = candidateY;
+            }
+          }
+        });
+        return topY;
+      }
+
+      // A. Real Curved Out-of-Range Area (Zona Fuera de Alcance >300 m)
+      // Follows the exact mathematical envelope of 300m detection circles from borehole geophones
       ctx.save();
-      ctx.fillStyle = 'rgba(255, 75, 85, 0.16)';
       ctx.beginPath();
-      ctx.moveTo(caveLeft - 60, yUndercut - 10);
-      ctx.lineTo(caveRight + 60, yUndercut - 10);
-      ctx.lineTo(caveRight + 60, ySurface + 30);
-      ctx.lineTo(caveLeft - 60, ySurface + 30);
+      ctx.moveTo(0, ySurface);
+      ctx.lineTo(mainWidth, ySurface);
+      ctx.lineTo(mainWidth, Math.min(yBottom, getUpperCoverageY(mainWidth)));
+      for (let px = mainWidth; px >= 0; px -= 4) {
+        const py = Math.min(yBottom, getUpperCoverageY(px));
+        ctx.lineTo(px, py);
+      }
+      ctx.closePath();
+
+      // Subtle warning gradient across true out-of-range rock mass
+      const blindGrad = ctx.createLinearGradient(0, ySurface, 0, yCaveTop + 40);
+      blindGrad.addColorStop(0, 'rgba(255, 40, 26, 0.16)');
+      blindGrad.addColorStop(0.7, 'rgba(255, 40, 26, 0.10)');
+      blindGrad.addColorStop(1, 'rgba(255, 40, 26, 0.02)');
+      ctx.fillStyle = blindGrad;
+      ctx.fill();
+
+      // Curved boundary dashed stroke (strictly >300 m from all geophones)
+      ctx.strokeStyle = 'rgba(255, 75, 85, 0.65)';
+      ctx.lineWidth = 1.6;
+      ctx.setLineDash([6, 6]);
+      ctx.stroke();
+      ctx.setLineDash([]);
+
+      // Diagonal attenuation hatching in out-of-range zone
+      ctx.strokeStyle = 'rgba(255, 75, 85, 0.04)';
+      ctx.lineWidth = 1;
+      for (let hx = -height; hx < mainWidth + height; hx += 32) {
+        ctx.beginPath();
+        ctx.moveTo(hx, ySurface);
+        ctx.lineTo(hx + 180, ySurface + 180);
+        ctx.stroke();
+      }
+      ctx.restore();
+
+      // Sleek Warning Callout in Upper Out-of-Range Zone (centered above cave-back)
+      ctx.save();
+      ctx.fillStyle = 'rgba(16, 6, 8, 0.90)';
+      ctx.shadowColor = '#ff281a';
+      ctx.shadowBlur = 8;
+      const bW = 360;
+      ctx.fillRect(caveCenterX - bW / 2, yCaveTop - 74, bW, 42);
+      ctx.strokeStyle = 'rgba(255, 75, 85, 0.75)';
+      ctx.lineWidth = 1.2;
+      ctx.strokeRect(caveCenterX - bW / 2, yCaveTop - 74, bW, 42);
+
+      ctx.fillStyle = '#ff6b6b';
+      ctx.font = 'bold 9.5px "JetBrains Mono", monospace';
+      ctx.textAlign = 'center';
+      ctx.fillText('⚠️ ZONA FUERA DE ALCANCE (>300 m DE BOREHOLES EN TÚNELES)', caveCenterX, yCaveTop - 57);
+      ctx.font = '8px "JetBrains Mono", monospace';
+      ctx.fillStyle = '#fca5a5';
+      ctx.fillText('Límite físico de atenuación: ondas de alta frecuencia (>150 Hz) disipadas por fricción', caveCenterX, yCaveTop - 45);
+      ctx.fillText('Bóveda y roca superior sin estaciones en cota · 0% apertura tridimensional', caveCenterX, yCaveTop - 34);
+      ctx.restore();
+
+      // Sombra Acústica del Air Gap (Acoustic Void Shadow Cone)
+      ctx.save();
+      ctx.fillStyle = 'rgba(10, 15, 25, 0.55)';
+      ctx.beginPath();
+      ctx.moveTo(caveLeft - 5, yAirGap);
+      ctx.lineTo(caveRight + 5, yAirGap);
+      ctx.lineTo(caveRight + 18, yUndercut);
+      ctx.lineTo(caveLeft - 18, yUndercut);
       ctx.closePath();
       ctx.fill();
 
-      ctx.strokeStyle = 'rgba(255, 75, 85, 0.5)';
-      ctx.lineWidth = 2;
-      ctx.setLineDash([8, 8]);
+      ctx.strokeStyle = 'rgba(255, 120, 0, 0.4)';
+      ctx.lineWidth = 1;
+      ctx.setLineDash([3, 4]);
       ctx.stroke();
-      ctx.restore();
+      ctx.setLineDash([]);
 
-      // Warning Badge in Upper Blind Spot Center
-      ctx.save();
-      ctx.fillStyle = 'rgba(255, 40, 26, 0.92)';
-      ctx.shadowColor = '#ff281a';
-      ctx.shadowBlur = 10;
-      const bW = 380;
-      ctx.fillRect(caveCenterX - bW / 2, yCaveTop - 84, bW, 48);
-      ctx.strokeStyle = '#ffffff';
-      ctx.lineWidth = 1.5;
-      ctx.strokeRect(caveCenterX - bW / 2, yCaveTop - 84, bW, 48);
-
-      ctx.fillStyle = '#ffffff';
-      ctx.font = 'bold 10.5px "JetBrains Mono", monospace';
+      ctx.fillStyle = 'rgba(255, 170, 0, 0.75)';
+      ctx.font = '7.5px "JetBrains Mono", monospace';
       ctx.textAlign = 'center';
-      ctx.fillText('⚠️ VACÍO SUPERIOR: SIN TÚNELES SOBRE CAVE-BACK', caveCenterX, yCaveTop - 67);
-      ctx.font = '8.5px "JetBrains Mono", monospace';
-      ctx.fillStyle = '#fce4e4';
-      ctx.fillText('Red 3D pierde apertura en cota al ascender el caving · Distancia >400m', caveCenterX, yCaveTop - 53);
-      ctx.fillText('Ondas de alta frecuencia (>150 Hz) disipadas antes de llegar a boreholes inferiores', caveCenterX, yCaveTop - 41);
+      ctx.fillText('SOMBRA ACÚSTICA: El vacío bloquea la transmisión directa de ondas hacia túneles', caveCenterX, (yAirGap + yUndercut) / 2);
       ctx.restore();
 
-      // B. Excavation Damaged Zone (EDZ, 2-4m) around drifts
+      // B. Individual 300m Sensitivity Lobes around each borehole station
+      geophoneStations.forEach((geo) => {
+        ctx.save();
+        ctx.strokeStyle = 'rgba(0, 225, 255, 0.22)';
+        ctx.lineWidth = 1;
+        ctx.setLineDash([3, 4]);
+        ctx.beginPath();
+        ctx.arc(geo.x, geo.y, r300, 0, Math.PI * 2);
+        ctx.stroke();
+        ctx.setLineDash([]);
+
+        const radGrad = ctx.createRadialGradient(geo.x, geo.y, 0, geo.x, geo.y, r300);
+        radGrad.addColorStop(0, 'rgba(0, 225, 255, 0.04)');
+        radGrad.addColorStop(0.8, 'rgba(0, 225, 255, 0.012)');
+        radGrad.addColorStop(1, 'rgba(0, 225, 255, 0)');
+        ctx.fillStyle = radGrad;
+        ctx.fill();
+        ctx.restore();
+      });
+
+      // C. Excavation Damaged Zone (EDZ, 2-4m) around drifts
       ctx.save();
       ctx.strokeStyle = 'rgba(255, 176, 32, 0.28)';
       ctx.lineWidth = 1;
@@ -833,13 +1024,13 @@
       ctx.fillText('Halo EDZ (2-4m daño tronadura)', caveLeft - 72, yProduction - 14);
       ctx.restore();
 
-      // C. Discrete Triaxial Geophone Stations in Cemented Boreholes (15–25m into Virgin Rock)
+      // D. Discrete Triaxial Geophone Stations in Cemented Boreholes (15–25m into Virgin Rock)
       geophoneStations.forEach((geo, idx) => {
         let hitIntensity = 0;
         activeWaves.forEach(w => {
           const d = Math.hypot(geo.x - w.x, geo.y - w.y);
           if (Math.abs(d - w.radiusP) < 18) {
-            const atten = Math.pow(Math.max(0, 1.0 - (d / ATTENUATION_LIMIT_RADIUS)), 2.0);
+            const atten = Math.pow(Math.max(0, 1.0 - (d / r300)), 2.0);
             hitIntensity = Math.max(hitIntensity, atten);
           }
         });
@@ -932,7 +1123,7 @@
         activeWaves.forEach(w => {
           const d = distToSegment({ x: w.x, y: w.y }, bh.p1, bh.p2);
           if (Math.abs(d - w.radiusP) < 14) {
-            const unattenuatedFactor = Math.pow(Math.max(0, 1.0 - (d / ATTENUATION_LIMIT_RADIUS)), 1.4);
+            const unattenuatedFactor = Math.pow(Math.max(0, 1.0 - (d / r300)), 1.4);
             cableBurst = Math.max(cableBurst, unattenuatedFactor);
           }
         });
@@ -968,7 +1159,6 @@
       });
 
       // Continuous Fiber in Production & Undercut Drifts (Crucial for Rockburst & Slow-Strain!)
-      // Check if a pillar rockburst wave intersects the drift fiber
       let driftBurst = 0;
       activeWaves.forEach(w => {
         if (Math.abs(w.y - yProduction) < 40 && w.radiusP < 120) {
@@ -996,6 +1186,30 @@
       ctx.lineTo(mainWidth * 0.22, ySurface);
       ctx.stroke();
       ctx.restore();
+
+      // CONTINUOUS LASER INTERROGATION PULSES (Rayo viajando dentro de la fibra)
+      fiberBoreholes.forEach((bh, bIdx) => {
+        const speed = 75 + (bIdx % 3) * 12;
+        const pColor = bh.color === '#00ffa3' ? '#00ffa3' : '#00f0ff';
+        drawFiberLaserRay([bh.p1, bh.p2], speed, 2, pColor, 26);
+      });
+
+      // Shaft trunk + Production drift continuous pulse stream
+      const shaftAndDriftPath = [
+        { x: mainWidth * 0.22, y: ySurface },
+        { x: shaftX, y: ySurface },
+        { x: shaftX, y: yProduction - 5 },
+        { x: caveLeft - 60, y: yProduction - 5 },
+        { x: caveRight + 60, y: yProduction - 5 }
+      ];
+      drawFiberLaserRay(shaftAndDriftPath, 95, 3, '#00f0ff', 30);
+
+      // Undercut drift continuous laser pulse
+      const undercutPath = [
+        { x: caveLeft - 30, y: yUndercut - 4 },
+        { x: caveRight + 30, y: yUndercut - 4 }
+      ];
+      drawFiberLaserRay(undercutPath, 85, 2, '#00f0ff', 24);
     }
 
     // 7. SEISMIC WAVE PROPAGATION WITH PHYSICAL INELASTIC ATTENUATION
@@ -1004,10 +1218,10 @@
       w.radiusP += w.speedP;
       w.radiusS += w.speedS;
 
-      const distNormP = w.radiusP / ATTENUATION_LIMIT_RADIUS;
+      const distNormP = w.radiusP / r300;
       const attenP = Math.pow(Math.max(0, 1.0 - distNormP), 1.9) * Math.exp(-distNormP * 1.3);
 
-      const distNormS = w.radiusS / ATTENUATION_LIMIT_RADIUS;
+      const distNormS = w.radiusS / r300;
       const attenS = Math.pow(Math.max(0, 1.0 - distNormS), 2.2) * Math.exp(-distNormS * 1.5);
 
       if (attenP <= 0.005) {
@@ -1017,19 +1231,19 @@
 
       // Attenuation Boundary Radius Circle around source
       ctx.save();
-      ctx.strokeStyle = 'rgba(77, 92, 117, 0.22)';
+      ctx.strokeStyle = 'rgba(77, 92, 117, 0.25)';
       ctx.lineWidth = 1;
       ctx.setLineDash([4, 6]);
       ctx.beginPath();
-      ctx.arc(w.x, w.y, ATTENUATION_LIMIT_RADIUS, 0, Math.PI * 2);
+      ctx.arc(w.x, w.y, r300, 0, Math.PI * 2);
       ctx.stroke();
       ctx.setLineDash([]);
 
-      if (w.radiusP > 35 && w.radiusP < 140) {
-        ctx.fillStyle = 'rgba(143, 159, 182, 0.65)';
+      if (w.radiusP > 20 && w.radiusP < 95) {
+        ctx.fillStyle = 'rgba(143, 159, 182, 0.75)';
         ctx.font = '8px "JetBrains Mono", monospace';
         ctx.textAlign = 'center';
-        ctx.fillText('Límite de Detección de Microsismos (~300 m) · Frecuencias >150 Hz disipadas', w.x, w.y + ATTENUATION_LIMIT_RADIUS + 12);
+        ctx.fillText('Límite físico de microsismos (300 m) · f > 150 Hz disipadas', w.x, w.y + r300 + 11);
       }
       ctx.restore();
 
