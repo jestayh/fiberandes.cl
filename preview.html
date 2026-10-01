@@ -423,10 +423,10 @@
     <section class="section-pad" id="simulador">
       <div class="wrap">
         <div class="section-head reveal">
-          <span class="eyebrow"><span class="idx">02</span> <span>02 · Física del Macizo Rocoso &amp; Demostración Interactiva</span></span>
-          <h2 class="h-section">Simulador Geomecánico 2D: Red Tradicional vs. FiberAndes DAS</h2>
+          <span class="eyebrow"><span class="idx">02</span> <span>02 · Física del Macizo Rocoso &amp; Modelo 3D Interactivo</span></span>
+          <h2 class="h-section">Simulador 3D: Geófonos en Niveles de Explotación vs. Cables DAS de Arriba a Abajo</h2>
           <p class="lead">
-            Siguiendo los modelos de Furlong & Anderson (2022, 2026), rodeamos el yacimiento con fibras ópticas verticales de uso permanente en Daisy-Chain en ambos flancos en roca sana, complementadas con fibras de sacrificio en el macizo mineralizado que registran la microfracturación previa hasta cortarse al caer el mineral (trozos en muckpile), y una red en cascada entre los niveles de hundimiento, producción y transporte con un único interrogador DAS en superficie.
+            Inspirado en el esquema de Caving Andino: los geófonos tradicionales se encuentran confinados exclusivamente en las plataformas horizontales de explotación (abajo), dejando la columna superior de roca en una zona ciega fuera de alcance (>300 m). Con FiberAndes DAS, los cables de fibra óptica descienden de arriba a abajo desde la superficie de la cordillera, conectando toda la columna vertical con monitoreo continuo en tiempo real.
           </p>
         </div>
 
@@ -435,22 +435,19 @@
           <div class="sim-controls">
             <div class="sim-title">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>
-              <span>CORTE TRANSVERSAL GEOMECÁNICO INTERACTIVO · BLOCK CAVING &amp; DFOS</span>
+              <span>MODELO 3D INTERACTIVO · CAVING ANDINO &amp; MONITOREO DE COLUMNA</span>
             </div>
             <div class="sim-modes">
-              <button class="sim-mode-btn active" data-sim="esi" id="btn-mode-esi">📡 Red Tradicional (Geófonos · Ver Área Roja)</button>
-              <button class="sim-mode-btn" data-sim="dfos" id="btn-mode-dfos">⚡ Encender Cobertura FiberAndes DAS (Reducir Área Roja)</button>
+              <button class="sim-mode-btn active" data-sim="esi" id="btn-mode-esi">📡 Red Tradicional (Geófonos abajo · Vacío arriba)</button>
+              <button class="sim-mode-btn" data-sim="dfos" id="btn-mode-dfos">⚡ Cables DAS (De Arriba a Abajo · Cobertura Total)</button>
             </div>
             <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
-              <span style="font-family:var(--font-mono); font-size:11px; color:var(--fg-2); margin-right:4px;">PROBAR ESCENARIOS:</span>
+              <span style="font-family:var(--font-mono); font-size:11px; color:var(--fg-2); margin-right:4px;">ACCIONES:</span>
               <button class="sim-mode-btn" id="btn-sim-caveback" style="background:rgba(0,240,255,0.12); color:var(--cyan); border:1px solid var(--cyan); display:flex; align-items:center; gap:5px; font-size:11px; padding:6px 12px;">
-                💥 1. Sismo en Cave-Back (-1.000 m)
+                💥 Simular Fractura en la Columna
               </button>
-              <button class="sim-mode-btn" id="btn-sim-rockburst" style="background:rgba(255,102,0,0.12); color:#ffaa33; border:1px solid #ff7700; display:flex; align-items:center; gap:5px; font-size:11px; padding:6px 12px;">
-                ⚠️ 2. Estallido en Pilar Túnel (-1.820 m)
-              </button>
-              <button class="sim-mode-btn" id="btn-sim-fault" style="background:rgba(0,255,163,0.12); color:var(--emerald); border:1px solid var(--emerald); display:flex; align-items:center; gap:5px; font-size:11px; padding:6px 12px;">
-                📐 3. Cizalle Falla Abutment
+              <button class="sim-mode-btn" id="btn-cam-general" style="background:rgba(0,255,163,0.12); color:var(--emerald); border:1px solid var(--emerald); display:flex; align-items:center; gap:5px; font-size:11px; padding:6px 12px;">
+                ⏸ Pausar Giro 360°
               </button>
             </div>
           </div>
@@ -459,34 +456,34 @@
           <div class="sim-dashboard-header">
             <div class="sim-hud-inspector" id="sim-hud-inspector">
               <span class="sim-hud-dot"></span>
-              <span id="sim-hud-text">💡 Pasa el cursor por el modelo para inspeccionar cada elemento</span>
+              <span id="sim-hud-text">💡 Pasa el cursor por el modelo 3D para inspeccionar la montaña, la columna y los niveles</span>
             </div>
             <div class="sim-status-banner blindspot" id="sim-status-banner">
-              <strong>📡 RED SÍSMICA TRADICIONAL (GEÓFONOS EN TÚNELES)</strong> — Límite físico de 300 m genera un <strong>área roja ciega masiva sobre el Cave-Back</strong> · Haz clic en <em>"Encender Cobertura FiberAndes DAS"</em> para ver cómo se reduce
+              <strong>📡 RED TRADICIONAL (GEÓFONOS EN NIVELES DE EXPLOTACIÓN)</strong> — Sensores confinados abajo dejan un <strong>área roja ciega masiva en la parte superior</strong> · Haz clic en <em>"Cables DAS (De Arriba a Abajo)"</em>
             </div>
           </div>
 
-          <!-- 2D Geomechanical Canvas Container (100% DESPEJADO, SIN RECUADROS ENCIMA) -->
-          <div class="sim-3d-visual" id="mine-3d-canvas-container" title="Haz clic en cualquier punto del macizo rocoso para generar sismicidad">
+          <!-- 3D Caving Canvas Container -->
+          <div class="sim-3d-visual" id="mine-3d-canvas-container" title="Haz clic y arrastra para rotar la cámara 3D · Clic en la roca para detonar sismos">
           </div>
 
           <!-- Real-time 3D Telemetry Strip (Outside Canvas, Below) -->
           <div class="sim-3d-telemetry" id="sim-telemetry-strip">
             <div class="sim-tel-cell">
               <span class="l">COBERTURA VOLUMÉTRICA</span>
-              <span class="v" id="tel-val-cov" style="color:var(--emerald);">98%</span>
+              <span class="v" id="tel-val-cov" style="color:var(--emerald);">35%</span>
             </div>
             <div class="sim-tel-cell">
               <span class="l">SENSORES ACTIVOS</span>
-              <span class="v" id="tel-val-sens" style="color:#fff;">8.500 Canales (1 Interrogador DAS)</span>
+              <span class="v" id="tel-val-sens" style="color:#fff;">12 Geófonos en Niveles de Explotación</span>
             </div>
             <div class="sim-tel-cell">
               <span class="l">INCERTIDUMBRE HIPOCENTRO</span>
-              <span class="v" id="tel-val-uncert" style="color:var(--cyan);">±1.8 metros</span>
+              <span class="v" id="tel-val-uncert" style="color:var(--cyan);">±26.0 metros</span>
             </div>
             <div class="sim-tel-cell">
-              <span class="l">SLOW-STRAIN EN ROCA</span>
-              <span class="v" id="tel-val-strain" style="color:var(--emerald);">Activo (Doble Banda)</span>
+              <span class="l">ESTADO MONITOREO</span>
+              <span class="v" id="tel-val-strain" style="color:var(--amber);">Zona Roja Ciega Superior (>300 m)</span>
             </div>
           </div>
 
@@ -494,78 +491,70 @@
           <div class="sim-geotech-legend-bar">
             <div class="legend-bar-title">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
-              <span>CONVENCIONES DEL MODELO GEOMECÁNICO (MINIATURAS REALES):</span>
+              <span>ELEMENTOS DEL MODELO 3D (CAVING ANDINO &amp; MONITOREO):</span>
             </div>
             <div class="legend-bar-items">
               <div class="legend-card">
                 <svg width="34" height="18" viewBox="0 0 34 18">
-                  <path d="M 6,16 L 6,4 A 4 4 0 0 1 14,4 L 14,16" stroke="#00f0ff" stroke-width="2.5" fill="none" stroke-linecap="round"/>
-                  <circle cx="6" cy="16" r="2" fill="#00f0ff"/>
-                  <circle cx="14" cy="16" r="2" fill="#00f0ff"/>
-                  <line x1="20" y1="9" x2="32" y2="9" stroke="#00f0ff" stroke-width="2.5" stroke-linecap="round"/>
+                  <polygon points="2,16 10,4 18,10 26,2 32,16" fill="rgba(74,126,158,0.5)" stroke="#00f0ff" stroke-width="1.5"/>
                 </svg>
                 <div class="legend-card-text">
-                  <strong>Fibras DAS Laterales de Contorno (Cian)</strong>
-                  <span>Rodean el yacimiento en roca competente (Daisy-Chain permanente)</span>
+                  <strong>Superficie Cordillera (Azul Glaciar)</strong>
+                  <span>Relieve montañoso andino superior y origen de los cables de fibra</span>
                 </div>
               </div>
 
               <div class="legend-card">
                 <svg width="34" height="18" viewBox="0 0 34 18">
-                  <line x1="4" y1="3" x2="20" y2="12" stroke="#ffaa00" stroke-width="2.8" stroke-linecap="round"/>
-                  <circle cx="20" cy="12" r="2.8" fill="#ff4444"/>
-                  <line x1="23" y1="13" x2="31" y2="17" stroke="#ff8800" stroke-width="2" stroke-dasharray="2 2"/>
+                  <polygon points="4,2 30,2 24,16 10,16" fill="rgba(104,182,216,0.5)" stroke="#00d4ff" stroke-width="1.5"/>
                 </svg>
                 <div class="legend-card-text">
-                  <strong>Fibras DAS de Sacrificio &amp; Trozos Cortados (Ámbar)</strong>
-                  <span>En mineral a explotar · Se cortan al caer la roca (trozos en muckpile)</span>
+                  <strong>Columna de Caving (Central)</strong>
+                  <span>Chimenea vertical de mineral que desciende por la montaña</span>
                 </div>
               </div>
 
               <div class="legend-card">
                 <svg width="34" height="18" viewBox="0 0 34 18">
-                  <line x1="2" y1="5" x2="32" y2="5" stroke="#00ffa3" stroke-width="2.5" stroke-linecap="round"/>
-                  <line x1="32" y1="5" x2="32" y2="13" stroke="#00ffa3" stroke-width="2.5"/>
-                  <line x1="32" y1="13" x2="2" y2="13" stroke="#00ffa3" stroke-width="2.5" stroke-linecap="round"/>
+                  <rect x="2" y="4" width="30" height="4" fill="#d9ceb8" stroke="#5a5242" stroke-width="1"/>
+                  <rect x="2" y="11" width="30" height="4" fill="#8a929d" stroke="#3d434d" stroke-width="1"/>
                 </svg>
                 <div class="legend-card-text">
-                  <strong>Fibra DAS en Galerías entre Niveles (Verde)</strong>
-                  <span>Monitoreo en cascada de hundimiento, producción y transporte</span>
+                  <strong>Niveles de Explotación (Abajo)</strong>
+                  <span>Plataformas de producción donde se confinan los geófonos tradicionales</span>
                 </div>
               </div>
 
               <div class="legend-card">
                 <svg width="34" height="18" viewBox="0 0 34 18">
-                  <path d="M 2,5 Q 17,0 32,5" stroke="#ff281a" stroke-width="2.5" fill="none"/>
-                  <rect x="5" y="7" width="24" height="7" fill="rgba(255,140,40,0.25)" stroke="#ff8c28" stroke-width="1" stroke-dasharray="2 2"/>
+                  <line x1="8" y1="2" x2="8" y2="16" stroke="#00f0ff" stroke-width="2.5" stroke-linecap="round"/>
+                  <line x1="17" y1="2" x2="17" y2="16" stroke="#00ffa3" stroke-width="2.5" stroke-linecap="round"/>
+                  <line x1="26" y1="2" x2="26" y2="16" stroke="#00f0ff" stroke-width="2.5" stroke-linecap="round"/>
                 </svg>
                 <div class="legend-card-text">
-                  <strong>Cave-Back y Air Gap (Crítico)</strong>
-                  <span>Cavidad controlada para evitar "Air Blast" · Fibra calibra la extracción</span>
+                  <strong>Cables DAS de Arriba a Abajo (Cian/Verde)</strong>
+                  <span>Fibras verticales continuas que atraviesan toda la columna de roca</span>
                 </div>
               </div>
 
               <div class="legend-card">
-                <svg width="34" height="18" viewBox="0 0 34 18"><line x1="2" y1="15" x2="22" y2="4" stroke="#7a93b4" stroke-width="2.5" stroke-dasharray="3 2"/><rect x="21" y="2" width="9" height="9" fill="#ffb020" stroke="#ffffff" stroke-width="1.2"/><line x1="23" y1="6.5" x2="28" y2="6.5" stroke="#111c2b"/><line x1="25.5" y1="4" x2="25.5" y2="9" stroke="#111c2b"/></svg>
+                <svg width="34" height="18" viewBox="0 0 34 18">
+                  <rect x="4" y="5" width="8" height="8" fill="#ffb020" stroke="#ffffff" stroke-width="1"/>
+                  <circle cx="8" cy="9" r="6" fill="none" stroke="#ffb020" stroke-width="1" stroke-dasharray="2 2"/>
+                </svg>
                 <div class="legend-card-text">
-                  <strong>Cápsulas Híbridas Borehole (Tradicional)</strong>
-                  <span>Pozos 15–25m fuera de EDZ · Geófono triaxial + Acelerómetro</span>
+                  <strong>Geófonos Tradicionales (Puntos Ámbar)</strong>
+                  <span>Estaciones puntuales en túneles con alcance limitado a 300 m</span>
                 </div>
               </div>
 
               <div class="legend-card">
-                <svg width="34" height="18" viewBox="0 0 34 18"><rect x="1" y="4" width="32" height="10" fill="#111c2b" stroke="#00e1ff" stroke-width="1.2"/><rect x="10" y="4" width="14" height="10" fill="rgba(255,102,0,0.4)" stroke="#ff7700" stroke-width="1.2"/></svg>
+                <svg width="34" height="18" viewBox="0 0 34 18">
+                  <rect x="3" y="3" width="28" height="12" fill="rgba(255,32,32,0.3)" stroke="#ff4b55" stroke-width="1.2" stroke-dasharray="2 2"/>
+                </svg>
                 <div class="legend-card-text">
-                  <strong>Galerías y Pilares en Carga</strong>
-                  <span>Túneles de producción y pilares de roca con riesgo de estallido</span>
-                </div>
-              </div>
-
-              <div class="legend-card">
-                <svg width="34" height="18" viewBox="0 0 34 18"><circle cx="4" cy="9" r="3" fill="#ff4b55"/><path d="M 11,4 A 7 7 0 0 1 11,14" stroke="#00f0ff" stroke-width="2" fill="none"/><path d="M 19,1 A 12 12 0 0 1 19,17" stroke="#ffc83b" stroke-width="2" stroke-dasharray="3 2" fill="none"/></svg>
-                <div class="legend-card-text">
-                  <strong>Ondas Sísmicas P (Cian) y S (Ámbar)</strong>
-                  <span>Disipación por atenuación inelástica (Q) al superar 300 m</span>
+                  <strong>Área Roja Ciega Superior</strong>
+                  <span>Volumen de roca desconectado de los sensores inferiores</span>
                 </div>
               </div>
             </div>
@@ -876,8 +865,12 @@
   <script src="js/i18n.js"></script>
   <script src="js/hero-canvas.js"></script>
 
-  <!-- 2D Mine Geomechanics & Caving Simulator (3D simulator preserved in js/mine-3d-simulator.js) -->
-  <script src="js/mine-2d-simulator.js?v=20261001_05"></script>
+  <!-- Three.js Engine & OrbitControls for 3D Chuquicamata Geomechanical Simulator -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+
+  <!-- 3D Chuquicamata Geomechanics & DFOS Simulator (Flores & Catalán, 2019) -->
+  <script src="js/mine-3d-chuqui.js?v=20261001_06"></script>
 
   <script src="js/configurator.js"></script>
   <script src="js/app.js"></script>
