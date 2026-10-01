@@ -112,7 +112,7 @@
     const caveRight = mainWidth * 0.72;
     const caveCenterX = (caveLeft + caveRight) / 2;
     const yCaveTop = getDepthY(1000);
-    const yAirGap = getDepthY(1400);
+    const yAirGap = getDepthY(1080); // Minimal, controlled air gap in V2
     const yUndercut = getDepthY(1650);
     const yProduction = getDepthY(1820);
 
@@ -120,19 +120,19 @@
     if (x >= caveLeft && x <= caveRight) {
       // Cave-back arch height at x
       const normX = (x - caveCenterX) / ((caveRight - caveLeft) / 2);
-      const archY = yCaveTop + (normX * normX) * (yAirGap - yCaveTop);
+      const archY = yCaveTop + (normX * normX) * 22;
 
       // Check if inside Air Gap void or Muckpile column
       if (y >= archY && y <= yUndercut) {
         // It's in the void or broken muckpile!
         // If clicked in upper half, snap up into the solid active seismogenic arch
         if (y < (archY + yUndercut) / 2) {
-          showNotice('ℹ️ Cavidad vacía (Air Gap): sismo reubicado en la bóveda sismogénica de roca');
-          return { x, y: archY - 18, zone: 'cave-back' };
+          showNotice('ℹ️ Air Gap / Bóveda: sismo reubicado en la roca activa del Cave Back');
+          return { x, y: archY - 14, zone: 'cave-back' };
         } else {
-          // If clicked in lower half, snap down into solid pillars of production
-          showNotice('ℹ️ Muckpile quebrado: sismo reubicado en pilares en carga de producción');
-          return { x, y: yProduction - 2, zone: 'pillar' };
+          // If clicked in lower half, snap down into solid extraction pillars between drawpoints
+          showNotice('ℹ️ Muckpile quebrado: sismo reubicado en pilares en carga entre bateas');
+          return { x, y: yProduction - 4, zone: 'pillar' };
         }
       }
     }
@@ -455,7 +455,7 @@
 
     const ySurface = 52;
     const yCaveTop = getDepthY(1000);
-    const yAirGap = getDepthY(1400);
+    const yAirGap = getDepthY(1080);
     const yUndercut = getDepthY(1650);
     const yProduction = getDepthY(1820);
     const yHaulage = getDepthY(2040);
@@ -481,9 +481,9 @@
       // Check proximity to fiber boreholes in DFOS mode
       const fiberBoreholeMatches = activeMode === 'dfos' ? [
         { id: 'B-01', p1: { x: caveLeft - 35, y: ySurface }, p2: { x: caveLeft - 35, y: yHaulage + 20 }, role: 'permanent' },
-        { id: 'B-02', p1: { x: mainWidth * 0.16, y: ySurface }, p2: { x: caveCenterX, y: yProduction + 10 }, role: 'sacrificial' },
+        { id: 'B-02', p1: { x: b02X, y: ySurface }, p2: { x: caveCenterX - 20, y: yCaveTop + 18 }, role: 'sacrificial' },
         { id: 'B-03', p1: { x: caveRight + 25, y: ySurface }, p2: { x: caveRight + 25, y: yHaulage + 20 }, role: 'permanent' },
-        { id: 'B-04', p1: { x: caveRight + 95, y: ySurface }, p2: { x: caveCenterX + 40, y: yAirGap - 30 }, role: 'sacrificial' },
+        { id: 'B-04', p1: { x: b04X, y: ySurface }, p2: { x: caveCenterX + 25, y: yCaveTop + 18 }, role: 'sacrificial' },
         { id: 'S-Abut-W', p1: { x: caveLeft - 60, y: yProduction - 5 }, p2: { x: caveLeft - 110, y: yCaveTop + 20 }, role: 'abutment_loop' },
         { id: 'S-Abut-E', p1: { x: caveRight + 60, y: yProduction - 5 }, p2: { x: caveRight + 110, y: yCaveTop + 20 }, role: 'abutment_loop' }
       ].find(bh => distToSegment({ x: hoverX, y: hoverY }, bh.p1, bh.p2) < 14) : null;
@@ -686,154 +686,367 @@
     ctx.fillText('CASETA DFOS (DAS + DSS)', shackX, ySurface - 28);
     ctx.restore();
 
-    // 4. BLOCK CAVING GEOMETRY & SEISMOGENIC ZONES
-    // A. Muckpile (Broken Rock Column with Realistic Ore Clasts)
-    ctx.fillStyle = '#141b26';
+    // -------------------------------------------------------------
+    // 4. BLOCK CAVING GEOMETRY V2 (FACETED OREBODY · CONTROLLED MINIMAL AIR GAP · DRAWPOINTS)
+    // -------------------------------------------------------------
+    const yWasteTop = ySurface + 6;
+    const yWasteBot = ySurface + 44;
+    const yAirGapBot = yCaveTop + 22; // Minimal, controlled air gap (avoiding air blast hazard)
+
+    // Silhouette coordinates of the block cave column
+    const colLeftBase = caveLeft - 18;
+    const colRightBase = caveRight + 18;
+    const colLeftMid = caveLeft - 28;
+    const colRightMid = caveRight + 28;
+    const colLeftTop = caveLeft + 26;
+    const colRightTop = caveRight - 26;
+    const colLeftWaste = caveLeft + 38;
+    const colRightWaste = caveRight - 38;
+
+    // A. SOLID OREBODY (FACETED CHISELED GEOLOGY IN GRAPHITE/SLATE)
+    // Facet 1: Upper-left ore facet
+    ctx.save();
+    ctx.fillStyle = '#0f1828';
     ctx.beginPath();
-    ctx.moveTo(caveLeft + 15, yUndercut);
+    ctx.moveTo(colLeftTop, yWasteBot);
+    ctx.lineTo(caveCenterX - 25, yWasteBot + 4);
+    ctx.lineTo(caveCenterX - 55, yCaveTop - 25);
+    ctx.lineTo(colLeftMid, yCaveTop - 12);
+    ctx.closePath();
+    ctx.fill();
+    ctx.strokeStyle = 'rgba(0, 240, 255, 0.12)';
+    ctx.lineWidth = 1;
+    ctx.stroke();
+
+    // Facet 2: Upper-right ore facet
+    ctx.fillStyle = '#142136';
+    ctx.beginPath();
+    ctx.moveTo(caveCenterX - 25, yWasteBot + 4);
+    ctx.lineTo(colRightTop, yWasteBot);
+    ctx.lineTo(colRightMid, yCaveTop - 16);
+    ctx.lineTo(caveCenterX + 35, yCaveTop - 32);
+    ctx.closePath();
+    ctx.fill();
+    ctx.stroke();
+
+    // Facet 3: Central ore column facet
+    ctx.fillStyle = '#192b45';
+    ctx.beginPath();
+    ctx.moveTo(caveCenterX - 25, yWasteBot + 4);
+    ctx.lineTo(caveCenterX + 35, yCaveTop - 32);
+    ctx.lineTo(caveCenterX + 12, yCaveTop - 8);
+    ctx.lineTo(caveCenterX - 55, yCaveTop - 25);
+    ctx.closePath();
+    ctx.fill();
+    ctx.stroke();
+
+    // Facet 4: West lower flank facet
+    ctx.fillStyle = '#0a121f';
+    ctx.beginPath();
+    ctx.moveTo(colLeftMid, yCaveTop - 12);
+    ctx.lineTo(colLeftBase, yUndercut);
+    ctx.lineTo(caveLeft + 15, yUndercut);
+    ctx.lineTo(caveLeft - 5, yAirGapBot);
+    ctx.lineTo(caveLeft + 8, yCaveTop);
+    ctx.closePath();
+    ctx.fill();
+    ctx.stroke();
+
+    // Facet 5: East lower flank facet
+    ctx.fillStyle = '#0d1726';
+    ctx.beginPath();
+    ctx.moveTo(colRightMid, yCaveTop - 16);
+    ctx.lineTo(colRightBase, yUndercut);
     ctx.lineTo(caveRight - 15, yUndercut);
-    ctx.lineTo(caveRight - 25, yAirGap + 20);
-    ctx.quadraticCurveTo(caveCenterX, yAirGap + 5, caveLeft + 25, yAirGap + 20);
+    ctx.lineTo(caveRight + 5, yAirGapBot);
+    ctx.lineTo(caveRight - 8, yCaveTop);
+    ctx.closePath();
+    ctx.fill();
+    ctx.stroke();
+    ctx.restore();
+
+    // B. TOP WASTE CAP (SOBRECARGA / ESTÉRIL TRAPEZOIDAL EN ÁMBAR / TERRACOTA)
+    ctx.save();
+    const wasteGrad = ctx.createLinearGradient(0, yWasteTop, 0, yWasteBot);
+    wasteGrad.addColorStop(0, '#ff701e');
+    wasteGrad.addColorStop(1, '#c04408');
+    ctx.fillStyle = wasteGrad;
+    ctx.beginPath();
+    ctx.moveTo(colLeftWaste, yWasteTop + 8);
+    ctx.lineTo(caveCenterX, yWasteTop);
+    ctx.lineTo(colRightWaste, yWasteTop + 8);
+    ctx.lineTo(colRightTop, yWasteBot);
+    ctx.lineTo(colLeftTop, yWasteBot);
     ctx.closePath();
     ctx.fill();
 
-    // Realistic fractured ore clasts (pebbles and blocks of copper mineral)
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.45)';
+    ctx.lineWidth = 1.2;
+    ctx.stroke();
+
+    // Waste label
+    ctx.fillStyle = '#ffffff';
+    ctx.font = 'bold 11px "Space Grotesk", sans-serif';
+    ctx.textAlign = 'center';
+    ctx.shadowColor = 'rgba(0,0,0,0.8)';
+    ctx.shadowBlur = 4;
+    ctx.fillText('Waste', caveCenterX, (yWasteTop + yWasteBot) / 2 + 1);
+    ctx.font = '8px "JetBrains Mono", monospace';
+    ctx.fillStyle = 'rgba(255, 235, 220, 0.9)';
+    ctx.fillText('Sobrecarga Estéril', caveCenterX, (yWasteTop + yWasteBot) / 2 + 12);
+    ctx.restore();
+
+    // C. ORE LABEL (MACIZO MINERALIZADO)
     ctx.save();
-    for (let r = 0; r < 40; r++) {
-      const rx = caveLeft + 24 + ((r * 41) % (caveRight - caveLeft - 50));
-      const ry = yAirGap + 24 + ((r * 33) % (yUndercut - yAirGap - 34));
-      const clastSize = 5 + (r % 6);
-      ctx.fillStyle = (r % 3 === 0) ? 'rgba(55, 68, 88, 0.45)' : 'rgba(38, 48, 64, 0.55)';
-      ctx.strokeStyle = 'rgba(255, 255, 255, 0.08)';
-      ctx.lineWidth = 1;
+    ctx.fillStyle = '#ffffff';
+    ctx.font = 'bold 12px "Space Grotesk", sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('Ore', caveCenterX, yWasteBot + 24);
+    ctx.font = '8px "JetBrains Mono", monospace';
+    ctx.fillStyle = 'rgba(0, 240, 255, 0.85)';
+    ctx.fillText('Macizo Mineralizado', caveCenterX, yWasteBot + 35);
+    ctx.restore();
+
+    // D. CAVE PROPAGATION VECTOR (ARROW & TYPOGRAPHY)
+    ctx.save();
+    const arrowX = caveCenterX - 24;
+    const arrowBaseY = yCaveTop - 18;
+    const arrowTipY = yCaveTop - 68;
+    const arrowPulse = Math.sin(time * 4) * 3;
+
+    ctx.strokeStyle = '#ffffff';
+    ctx.lineWidth = 2.2;
+    ctx.shadowColor = '#00f0ff';
+    ctx.shadowBlur = 8;
+    ctx.beginPath();
+    ctx.moveTo(arrowX, arrowBaseY);
+    ctx.lineTo(arrowX, arrowTipY + arrowPulse);
+    // Arrowhead
+    ctx.lineTo(arrowX - 5, arrowTipY + 9 + arrowPulse);
+    ctx.moveTo(arrowX, arrowTipY + arrowPulse);
+    ctx.lineTo(arrowX + 5, arrowTipY + 9 + arrowPulse);
+    ctx.stroke();
+
+    ctx.fillStyle = '#ffffff';
+    ctx.font = '600 10.5px "Space Grotesk", sans-serif';
+    ctx.textAlign = 'left';
+    ctx.fillText('Cave Propagation', arrowX + 12, (arrowBaseY + arrowTipY) / 2 - 2);
+    ctx.font = '7.5px "JetBrains Mono", monospace';
+    ctx.fillStyle = 'rgba(180, 205, 230, 0.85)';
+    ctx.fillText('Propagación de Socavación', arrowX + 12, (arrowBaseY + arrowTipY) / 2 + 9);
+    ctx.restore();
+
+    // E. CAVE BACK ARCH & MICROCRACK SWARM (BÓVEDA DE QUIEBRE Y MICROFISURACIÓN)
+    ctx.save();
+    // 1. Vault Arch
+    ctx.strokeStyle = '#ff3322';
+    ctx.lineWidth = 3;
+    ctx.shadowColor = '#ff281a';
+    ctx.shadowBlur = 12;
+    ctx.beginPath();
+    ctx.moveTo(caveLeft - 6, yAirGapBot - 4);
+    ctx.quadraticCurveTo(caveCenterX, yCaveTop, caveRight + 6, yAirGapBot - 4);
+    ctx.stroke();
+
+    // 2. Microcracks swarm (En echelon white fracture lines) ahead of cave back
+    const microcracks = [
+      { x: caveLeft + 18, y: yCaveTop + 36, len: 12, ang: -0.42 },
+      { x: caveLeft + 35, y: yCaveTop + 24, len: 14, ang: 0.58 },
+      { x: caveLeft + 54, y: yCaveTop + 14, len: 13, ang: -0.32 },
+      { x: caveLeft + 78, y: yCaveTop + 8, len: 15, ang: 0.48 },
+      { x: caveCenterX - 52, y: yCaveTop + 2, len: 14, ang: -0.62 },
+      { x: caveCenterX - 26, y: yCaveTop - 4, len: 15, ang: 0.38 },
+      { x: caveCenterX, y: yCaveTop - 8, len: 17, ang: 0.12 },
+      { x: caveCenterX + 25, y: yCaveTop - 5, len: 15, ang: -0.40 },
+      { x: caveCenterX + 52, y: yCaveTop + 3, len: 14, ang: 0.55 },
+      { x: caveRight - 76, y: yCaveTop + 10, len: 15, ang: -0.35 },
+      { x: caveRight - 52, y: yCaveTop + 18, len: 14, ang: 0.60 },
+      { x: caveRight - 32, y: yCaveTop + 28, len: 15, ang: -0.48 },
+      { x: caveRight - 16, y: yCaveTop + 38, len: 12, ang: 0.42 },
+      // Upper echelon ring
+      { x: caveLeft + 42, y: yCaveTop + 10, len: 11, ang: -0.52 },
+      { x: caveCenterX - 38, y: yCaveTop - 14, len: 13, ang: 0.46 },
+      { x: caveCenterX + 12, y: yCaveTop - 18, len: 14, ang: -0.28 },
+      { x: caveRight - 42, y: yCaveTop + 6, len: 12, ang: 0.62 }
+    ];
+
+    ctx.strokeStyle = '#ffffff';
+    ctx.lineWidth = 1.4;
+    ctx.shadowColor = '#00f0ff';
+    ctx.shadowBlur = 6;
+    microcracks.forEach(c => {
+      const hx = Math.cos(c.ang) * (c.len / 2);
+      const hy = Math.sin(c.ang) * (c.len / 2);
       ctx.beginPath();
-      ctx.rect(rx, ry, clastSize, clastSize * 0.7);
-      ctx.fill();
+      ctx.moveTo(c.x - hx, c.y - hy);
+      ctx.lineTo(c.x + hx, c.y + hy);
+      ctx.stroke();
+    });
+
+    ctx.fillStyle = '#ffffff';
+    ctx.font = 'bold 11px "Space Grotesk", sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('Cave Back', caveCenterX, yCaveTop + 12);
+    ctx.font = '7.5px "JetBrains Mono", monospace';
+    ctx.fillStyle = '#ff9988';
+    ctx.fillText('Bóveda de Quiebre & Microfisuras (-1.000 m)', caveCenterX, yCaveTop + 22);
+    ctx.restore();
+
+    // F. AIR GAP (MINIMAL & CONTROLLED ZONE · SE EVITA EN MINERÍA PARA PREVENIR AIR BLAST)
+    ctx.save();
+    ctx.fillStyle = 'rgba(2, 5, 12, 0.94)';
+    ctx.beginPath();
+    ctx.moveTo(caveLeft - 6, yAirGapBot - 4);
+    ctx.quadraticCurveTo(caveCenterX, yCaveTop, caveRight + 6, yAirGapBot - 4);
+    ctx.lineTo(caveRight - 8, yAirGapBot + 14);
+    ctx.quadraticCurveTo(caveCenterX, yAirGapBot + 2, caveLeft + 8, yAirGapBot + 14);
+    ctx.closePath();
+    ctx.fill();
+
+    ctx.strokeStyle = 'rgba(255, 140, 40, 0.65)';
+    ctx.lineWidth = 1;
+    ctx.setLineDash([3, 3]);
+    ctx.stroke();
+    ctx.setLineDash([]);
+
+    ctx.fillStyle = '#ffaa33';
+    ctx.font = 'bold 10px "Space Grotesk", sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('Air Gap', caveCenterX, yAirGapBot + 7);
+    ctx.font = '7px "JetBrains Mono", monospace';
+    ctx.fillStyle = 'rgba(255, 180, 80, 0.85)';
+    ctx.fillText('Mínimo / Crítico · Se evita para prevenir Air Blast', caveCenterX, yAirGapBot + 15);
+    ctx.restore();
+
+    // G. MUCKPILE (BROKEN ORE GRAVEL COLUMN WITH DOWNWARD GRAVITY FLOW ARROWS)
+    ctx.save();
+    ctx.fillStyle = '#111722';
+    ctx.beginPath();
+    ctx.moveTo(caveLeft + 8, yAirGapBot + 14);
+    ctx.quadraticCurveTo(caveCenterX, yAirGapBot + 2, caveRight - 8, yAirGapBot + 14);
+    ctx.lineTo(caveRight - 10, yUndercut);
+    ctx.lineTo(caveLeft + 10, yUndercut);
+    ctx.closePath();
+    ctx.fill();
+
+    // Rich clasts and rock fragments (Muckpile gravel texture)
+    for (let r = 0; r < 48; r++) {
+      const rx = caveLeft + 22 + ((r * 37) % (caveRight - caveLeft - 44));
+      const ry = yAirGapBot + 20 + ((r * 29) % (yUndercut - yAirGapBot - 28));
+      const clastSize = 4 + (r % 5);
+      ctx.fillStyle = (r % 3 === 0) ? 'rgba(58, 72, 92, 0.6)' : 'rgba(35, 45, 60, 0.7)';
+      ctx.fillRect(rx, ry, clastSize, clastSize * 0.75);
+    }
+
+    ctx.fillStyle = '#ffffff';
+    ctx.font = 'bold 11px "Space Grotesk", sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('Muckpile', caveCenterX, (yAirGapBot + yUndercut) / 2 - 4);
+    ctx.font = '7.5px "JetBrains Mono", monospace';
+    ctx.fillStyle = 'rgba(160, 180, 205, 0.85)';
+    ctx.fillText('Mineral Quebrado en Descenso', caveCenterX, (yAirGapBot + yUndercut) / 2 + 6);
+
+    // 5 Downward Flow Arrows (aligned with each drawbell below!)
+    const bellCount = 5;
+    const bellSpacing = (caveRight - caveLeft - 30) / (bellCount - 1);
+    ctx.strokeStyle = '#ffffff';
+    ctx.fillStyle = '#ffffff';
+    ctx.lineWidth = 1.8;
+    for (let b = 0; b < bellCount; b++) {
+      const bx = caveLeft + 15 + b * bellSpacing;
+      const arrowY = (yAirGapBot + yUndercut) / 2 + 20;
+      ctx.beginPath();
+      ctx.moveTo(bx, arrowY - 7);
+      ctx.lineTo(bx, arrowY + 5);
+      ctx.lineTo(bx - 3.5, arrowY + 1);
+      ctx.moveTo(bx, arrowY + 5);
+      ctx.lineTo(bx + 3.5, arrowY + 1);
       ctx.stroke();
     }
     ctx.restore();
 
-    ctx.fillStyle = 'rgba(143, 159, 182, 0.55)';
-    ctx.font = 'bold 9px "JetBrains Mono", monospace';
-    ctx.textAlign = 'center';
-    ctx.fillText('MUCKPILE (MINERAL QUEBRADO · INERTE A CORTE ELÁSTICO)', caveCenterX, (yAirGap + yUndercut) / 2 + 10);
-
-    // B. Air Gap (Open Void Space - CANNOT ACCUMULATE STRESS)
-    ctx.fillStyle = 'rgba(3, 6, 12, 0.96)';
-    ctx.beginPath();
-    ctx.moveTo(caveLeft + 25, yAirGap + 20);
-    ctx.quadraticCurveTo(caveCenterX, yAirGap + 5, caveRight - 25, yAirGap + 20);
-    ctx.lineTo(caveRight - 10, yAirGap - 15);
-    ctx.quadraticCurveTo(caveCenterX, yCaveTop + 25, caveLeft + 10, yAirGap - 15);
-    ctx.closePath();
-    ctx.fill();
-
-    // Subtle void hatching
-    ctx.save();    ctx.fillStyle = 'rgba(255, 140, 40, 0.85)';
-    ctx.font = 'bold 9px "JetBrains Mono", monospace';
-    ctx.textAlign = 'center';
-    ctx.fillText('AIR GAP (CONDICIÓN CRÍTICA A CONTROLAR · RIESGO DE AIR BLAST)', caveCenterX, yAirGap - 2);
-
-    // C. ACTIVE SEISMOGENIC SHELL (ZONA SISMOGÉNICA ACTIVA - CONCENTRACIÓN σ₁)
-    // This is the solid rock envelope surrounding and above the cave-back arch where all caving earthquakes occur
+    // H. DRAWPOINTS & BATEAS (INVERTED-V HOPPERS & PENTAGONAL TUNNELS)
     ctx.save();
-    ctx.fillStyle = 'rgba(255, 40, 26, 0.08)';
-    ctx.beginPath();
-    ctx.moveTo(caveLeft - 25, yAirGap);
-    ctx.quadraticCurveTo(caveCenterX, yCaveTop - 55, caveRight + 25, yAirGap);
-    ctx.lineTo(caveRight + 10, yAirGap);
-    ctx.quadraticCurveTo(caveCenterX, yCaveTop, caveLeft - 10, yAirGap);
-    ctx.closePath();
-    ctx.fill();
-
-    // Isostress contour rings (concentración de esfuerzos)
-    ctx.strokeStyle = 'rgba(255, 75, 85, 0.4)';
-    ctx.lineWidth = 1.2;
-    ctx.setLineDash([4, 4]);
-    ctx.beginPath();
-    ctx.moveTo(caveLeft - 22, yAirGap);
-    ctx.quadraticCurveTo(caveCenterX, yCaveTop - 45, caveRight + 22, yAirGap);
-    ctx.moveTo(caveLeft - 15, yAirGap);
-    ctx.quadraticCurveTo(caveCenterX, yCaveTop - 25, caveRight + 15, yAirGap);
-    ctx.stroke();
-    ctx.setLineDash([]);
-    ctx.restore();
-
-    // Cave-Back boundary
-    ctx.save();
-    ctx.strokeStyle = '#ff281a';
-    ctx.lineWidth = 2.5;
-    ctx.shadowColor = '#ff281a';
-    ctx.shadowBlur = 10;
-    ctx.beginPath();
-    ctx.moveTo(caveLeft - 10, yAirGap);
-    ctx.quadraticCurveTo(caveCenterX, yCaveTop, caveRight + 10, yAirGap);
-    ctx.stroke();
-    ctx.restore();
-
-    ctx.fillStyle = '#ff6644';
-    ctx.font = 'bold 11px "JetBrains Mono", monospace';
-    ctx.textAlign = 'center';
-    ctx.fillText('BÓVEDA CAVE-BACK & ZONA SISMOGÉNICA (-1.000 m)', caveCenterX, yCaveTop - 12);
-    ctx.font = '9px "JetBrains Mono", monospace';
-    ctx.fillStyle = '#8f9fb6';
-    ctx.fillText('Concentración de esfuerzos σ₁ y microfisuración activa', caveCenterX, yCaveTop + 1);
-
-    // D. Drawbells (Zanjas y Bateas de Extracción)
-    const bellCount = 5;
-    const bellSpacing = (caveRight - caveLeft - 30) / (bellCount - 1);
     for (let b = 0; b < bellCount; b++) {
       const bx = caveLeft + 15 + b * bellSpacing;
+
+      // Drawbell funnel (trough / batea de extracción)
       ctx.beginPath();
-      ctx.moveTo(bx - 12, yUndercut);
-      ctx.lineTo(bx + 12, yUndercut);
-      ctx.lineTo(bx + 5, yProduction - 8);
-      ctx.lineTo(bx - 5, yProduction - 8);
+      ctx.moveTo(bx - 14, yUndercut);
+      ctx.lineTo(bx + 14, yUndercut);
+      ctx.lineTo(bx + 6, yProduction - 10);
+      ctx.lineTo(bx - 6, yProduction - 10);
       ctx.closePath();
-      ctx.fillStyle = '#1c2536';
+      ctx.fillStyle = '#182232';
       ctx.fill();
       ctx.strokeStyle = '#ff7700';
+      ctx.lineWidth = 1.4;
+      ctx.stroke();
+
+      // Pentagonal drift tunnel portal (gabled roof / bóveda de galería minera)
+      ctx.beginPath();
+      ctx.moveTo(bx - 10, yProduction + 6);
+      ctx.lineTo(bx - 10, yProduction - 4);
+      ctx.lineTo(bx, yProduction - 10); // Gable peak
+      ctx.lineTo(bx + 10, yProduction - 4);
+      ctx.lineTo(bx + 10, yProduction + 6);
+      ctx.closePath();
+      ctx.fillStyle = '#0a101a';
+      ctx.fill();
+      ctx.strokeStyle = '#00f0ff';
       ctx.lineWidth = 1.2;
       ctx.stroke();
 
+      // Batea opening / LHD ore chute
       ctx.fillStyle = '#ffaa00';
-      ctx.fillRect(bx - 4, yProduction - 10, 8, 4);
+      ctx.fillRect(bx - 3, yProduction - 9, 6, 4);
     }
 
-    // 5. UNDERGROUND MINING TUNNELS & EXTRACTION PILLARS (ROCKBURST HAZARD)
-    // Undercut Level
+    // Inverted-V Apex Pillars between drawpoints (high stress / rockburst hazard)
+    for (let b = 0; b < bellCount - 1; b++) {
+      const pLeft = caveLeft + 15 + b * bellSpacing + 14;
+      const pRight = caveLeft + 15 + (b + 1) * bellSpacing - 14;
+      const pMid = (pLeft + pRight) / 2;
+
+      ctx.beginPath();
+      ctx.moveTo(pLeft, yUndercut);
+      ctx.lineTo(pRight, yUndercut);
+      ctx.lineTo(pMid, yProduction - 10);
+      ctx.closePath();
+      ctx.fillStyle = 'rgba(255, 102, 0, 0.22)';
+      ctx.fill();
+      ctx.strokeStyle = 'rgba(255, 130, 20, 0.55)';
+      ctx.lineWidth = 1.2;
+      ctx.stroke();
+    }
+
+    // Production floor line
+    ctx.strokeStyle = '#2b3f5c';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(caveLeft - 50, yProduction + 6);
+    ctx.lineTo(caveRight + 50, yProduction + 6);
+    ctx.stroke();
+
+    // Educational footnote below drawpoints
+    ctx.fillStyle = 'rgba(160, 185, 215, 0.75)';
+    ctx.font = '8px "JetBrains Mono", monospace';
+    ctx.textAlign = 'center';
+    ctx.fillText('El mineral quebrado fluye simultáneamente por múltiples bateas hacia el nivel de producción', caveCenterX, yProduction + 22);
+    ctx.restore();
+
+    // 5. UNDERGROUND MINING DRIFTS & VENTILATION SHAFT
+    // Undercut Drift run
     ctx.fillStyle = '#111c2b';
     ctx.strokeStyle = '#00e1ff';
     ctx.lineWidth = 1;
     ctx.fillRect(caveLeft - 30, yUndercut - 5, (caveRight - caveLeft) + 60, 10);
     ctx.strokeRect(caveLeft - 30, yUndercut - 5, (caveRight - caveLeft) + 60, 10);
 
-    // Production Level
+    // Production Drift run
     ctx.fillStyle = '#111c2b';
     ctx.fillRect(caveLeft - 60, yProduction - 6, (caveRight - caveLeft) + 120, 12);
     ctx.strokeRect(caveLeft - 60, yProduction - 6, (caveRight - caveLeft) + 120, 12);
-
-    // Extraction Pillars (Pilares entre bateas) - Highlighted Rockburst Hazard
-    ctx.save();
-    for (let b = 0; b < bellCount - 1; b++) {
-      const pLeft = caveLeft + 15 + b * bellSpacing + 12;
-      const pRight = caveLeft + 15 + (b + 1) * bellSpacing - 12;
-      const pWidth = pRight - pLeft;
-
-      // Pillar rock block
-      ctx.fillStyle = 'rgba(255, 102, 0, 0.15)';
-      ctx.fillRect(pLeft, yUndercut, pWidth, yProduction - yUndercut - 6);
-      ctx.strokeStyle = 'rgba(255, 130, 20, 0.45)';
-      ctx.lineWidth = 1;
-      ctx.strokeRect(pLeft, yUndercut, pWidth, yProduction - yUndercut - 6);
-    }
-
-    // Rockburst Danger Callout Label on Pillars
-    ctx.fillStyle = '#ffaa33';
-    ctx.font = 'bold 9px "JetBrains Mono", monospace';
-    ctx.textAlign = 'center';
-    ctx.fillText('⚠️ PILARES EN CARGA: RIESGO DE ESTALLIDO DE ROCA (ROCKBURST)', caveCenterX, yProduction + 22);
-    ctx.restore();
 
     // Amber lamps in production drift
     for (let lx = caveLeft - 50; lx <= caveRight + 50; lx += 45) {
@@ -1064,9 +1277,9 @@
       // ---------------------------------------------------------
 
       const b01X = caveLeft - 35;
-      const b02X = mainWidth * 0.16;
+      const b02X = caveCenterX - 45;
       const b03X = caveRight + 25;
-      const b04X = caveRight + 95;
+      const b04X = caveCenterX + 45;
       const yTrunkSurface = ySurface - 2;
 
       // 1. SURFACE MULTI-FIBER TRUNK CABLE (Connecting Caseta to all Boreholes and Shaft in Daisy Chain)
@@ -1101,9 +1314,9 @@
       // 2. BOREHOLES WITH U-TURN LOOPBACKS & SENSING FIBERS (Permanentes vs Sacrificio)
       const fiberBoreholes = [
         { id: 'B-01', p1: { x: b01X, y: ySurface }, p2: { x: b01X, y: yHaulage + 20 }, color: '#00f0ff', label: 'B-01 (Loop Perm)', isLoop: true, isSacrificial: false },
-        { id: 'B-02', p1: { x: b02X, y: ySurface }, p2: { x: caveCenterX, y: yProduction + 10 }, color: '#ffaa00', label: 'B-02 (DAS Sacrificio)', isLoop: false, isSacrificial: true },
+        { id: 'B-02', p1: { x: b02X, y: ySurface }, p2: { x: caveCenterX - 20, y: yCaveTop + 18 }, color: '#ffaa00', label: 'B-02 (DAS Sacrificio)', isLoop: false, isSacrificial: true },
         { id: 'B-03', p1: { x: b03X, y: ySurface }, p2: { x: b03X, y: yHaulage + 20 }, color: '#00ffa3', label: 'B-03 (DSS Loop Perm)', isLoop: true, isSacrificial: false },
-        { id: 'B-04', p1: { x: b04X, y: ySurface }, p2: { x: caveCenterX + 40, y: yAirGap - 30 }, color: '#ffaa00', label: 'B-04 (DAS Sacrificio)', isLoop: false, isSacrificial: true },
+        { id: 'B-04', p1: { x: b04X, y: ySurface }, p2: { x: caveCenterX + 25, y: yCaveTop + 18 }, color: '#ffaa00', label: 'B-04 (DAS Sacrificio)', isLoop: false, isSacrificial: true },
         { id: 'S-Abut-W', p1: { x: caveLeft - 60, y: yProduction - 5 }, p2: { x: caveLeft - 110, y: yCaveTop + 20 }, color: '#00ffa3', label: 'S-Abut-W (Loop Perm)', isLoop: true, isSacrificial: false },
         { id: 'S-Abut-E', p1: { x: caveRight + 60, y: yProduction - 5 }, p2: { x: caveRight + 110, y: yCaveTop + 20 }, color: '#00ffa3', label: 'S-Abut-E (Loop Perm)', isLoop: true, isSacrificial: false }
       ];
@@ -1319,7 +1532,7 @@
       const b02Path = [
         { x: shackX, y: yTrunkSurface },
         { x: b02X, y: yTrunkSurface },
-        { x: caveCenterX, y: yProduction + 10 },
+        { x: caveCenterX - 20, y: yCaveTop + 18 },
         { x: b02X, y: yTrunkSurface },
         { x: shackX, y: yTrunkSurface }
       ];
@@ -1329,7 +1542,7 @@
       const b04Path = [
         { x: shackX, y: yTrunkSurface },
         { x: b04X, y: yTrunkSurface },
-        { x: caveCenterX + 40, y: yAirGap - 30 },
+        { x: caveCenterX + 25, y: yCaveTop + 18 },
         { x: b04X, y: yTrunkSurface },
         { x: shackX, y: yTrunkSurface }
       ];
