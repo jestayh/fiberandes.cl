@@ -31,7 +31,9 @@
   let dpr = 1;
 
   // State
-  let activeMode = 'dfos'; // 'dfos' or 'geophones'
+  let activeMode = 'geophones'; // 'dfos' or 'geophones'
+  let dasCoverageAmount = 0.0; // 0.0 = Traditional (Geophones only, full red area), 1.0 = DAS Active (Red area shrunk to 0%)
+  let dasCoverageTarget = 0.0;
   let animId = null;
   let time = 0;
 
@@ -193,23 +195,20 @@
 
     const banner = document.getElementById('sim-status-banner');
     if (banner) {
-      if (activeMode === 'dfos') {
+      if (dasCoverageAmount > 0.5) {
+        // DAS COVERAGE IS ACTIVE (ZERO BLIND SPOTS)
         if (zone === 'pillar') {
-          // Rockburst in extraction pillar: Highlight DSS slow-strain detection before the burst!
           banner.className = 'sim-status-banner detected';
-          banner.innerHTML = `<strong>⚠️ ESTALLIDO DE ROCA (ROCKBURST) EN PILAR P-03 (-${depthEst} m)</strong> — DAS localiza el evento dinámico al metro exacto · <strong>Sensor DSS en corona detectó microdeformación lenta previa (slow-strain +540 µε) horas antes</strong> · Geófonos tradicionales son 100% ciegos a la deformación previa`;
-          updateTelemetry(98, "8.500 Canales Ópticos", "±1.2 metros", "Pre-alerta DSS (+540 µε)");
-        } else if (zone === 'fault') {
+          banner.innerHTML = '<strong>⚠️ ESTALLIDO EN PILAR CAPTURADO POR FIBRA DAS EN GALERÍA (-' + depthEst + ' m)</strong> — La fibra en nivel de producción localiza la falla dinámica al metro exacto · Alerta continua en túneles';
+        } else if (zone === 'cave-back') {
           banner.className = 'sim-status-banner detected';
-          banner.innerHTML = `<strong>📐 CIZALLE EN FALLA GEOLÓGICA ABUTMENT (-${depthEst} m)</strong> — Sondajes B-01 y sonda lateral interceptan el plano de falla · Captura de frentes P/S sin atenuación (SNR 42 dB) · Incertidumbre: ±1.5 m`;
-          updateTelemetry(98, "8.500 Canales Ópticos", "±1.5 metros", "Cizalle Falla Activo");
+          banner.innerHTML = '<strong>⚡ FRACTURA EN CAVE-BACK (-' + depthEst + ' m) CAPTURADA POR FIBRA DE SACRIFICIO B-SAC</strong> — Registro acústico directo a 14 m del foco en el área antes ciega · Cero atenuación';
         } else {
           banner.className = 'sim-status-banner detected';
-          banner.innerHTML = `<strong>⚡ EVENTO EN ZONA SISMOGÉNICA CAVE-BACK (-${depthEst} m)</strong> — Sondaje B-02 a 24 m captura la onda fresca antes de disiparse (SNR 45 dB) · Frecuencias >200 Hz intactas · Incertidumbre: ±1.8 m`;
-          updateTelemetry(98, "8.500 Canales Ópticos", "±1.8 metros", "Activo (Doble Banda)");
+          banner.innerHTML = '<strong>⚡ EVENTO EN MACIZO ROCOSO (-' + depthEst + ' m)</strong> — Capturado por la red perimetral vertical en Daisy-Chain (Furlong & Anderson) · Incertidumbre hipocentral reducida a ±1.8 m';
         }
       } else {
-        // TRADITIONAL GEOPHONE NETWORK IN 3D BOREHOLES
+        // TRADITIONAL GEOPHONE NETWORK (ONLY IN TUNNELS)
         const geophones = getGeophoneStations(mainWidth, getDepthY(1820), getDepthY(1650), getDepthY(2040), (mainWidth * 0.32) - 70, mainWidth * 0.32, mainWidth * 0.72, (mainWidth * 0.32 + mainWidth * 0.72) / 2);
 
         let minDistPx = Infinity;
@@ -223,28 +222,18 @@
 
         const distMeters = Math.round(minDistPx / ppm);
 
-        if (zone === 'pillar') {
+        if (zone === 'cave-back' || inRangeCount === 0) {
           banner.className = 'sim-status-banner blindspot';
-          banner.innerHTML = `<strong>💥 ESTALLIDO EN PILAR: BOREHOLES CAPTURAN ONDA (${inRangeCount} est. a ${distMeters} m) PERO 0% PRE-ALERTA</strong> — Los sensores capturan la llegada destructiva pero no registran la lenta acumulación de esfuerzo previa (0 Hz) · <strong>Sin tiempo de evacuación</strong> · Incertidumbre: ±22 m`;
-          updateTelemetry(25, "12 Geófonos en Boreholes", "±22 metros", "0% (Ciego a slow-strain)");
-        } else if (inRangeCount === 0) {
-          banner.className = 'sim-status-banner blindspot';
-          banner.innerHTML = `<strong>❌ ONDA ATENUADA: INVISIBLE A BOREHOLES INFERIORES</strong> — El evento ocurrió a <strong>${distMeters} m</strong> de la estación más cercana (límite físico: 300 m) · Frecuencias >150 Hz absorbidas por fricción inelástica antes de llegar a los túneles · Geófonos: 0% detección`;
-          updateTelemetry(10, "12 Geófonos en Boreholes", "No detectado (Atenuado)", "0% (Ciego en macizo)");
-        } else if (inRangeCount >= 4) {
-          banner.className = 'sim-status-banner detected';
-          banner.innerHTML = `<strong>⚠️ DETECCIÓN MULTIESTACIÓN (${inRangeCount} estaciones a ${distMeters} m ≤ 300 m)</strong> — Señal capturada localmente fuera de la EDZ · Permite triangulación puntual · Cero datos continuos de deformación del macizo · Incertidumbre: ±18 m`;
-          updateTelemetry(30, "12 Geófonos en Boreholes", "±18 metros", "0% (Sin slow-strain)");
+          banner.innerHTML = '<strong>❌ ONDA ATENUADA EN ÁREA ROJA FUERA DE ALCANCE (' + distMeters + ' m de túneles)</strong> — Geófonos ciegos por atenuación inelástica (>300 m) · <strong>Haz clic en "Encender Cobertura DAS" para ver cómo se reduce el área roja y se captura el sismo</strong>';
         } else {
-          banner.className = 'sim-status-banner blindspot';
-          banner.innerHTML = `<strong>⚠️ COBERTURA INSUFICIENTE PARA LOCALIZACIÓN (${inRangeCount} estación a ${distMeters} m)</strong> — Se requieren ≥4 estaciones triaxiales para resolver hipocentro en 3D · Error de posición severo · Incertidumbre: ±38 m`;
-          updateTelemetry(15, "12 Geófonos en Boreholes", "±38 metros (No localizable)", "0% (Sin slow-strain)");
+          banner.className = 'sim-status-banner detected';
+          banner.innerHTML = '<strong>⚠️ DETECCIÓN PARCIAL (' + inRangeCount + ' geófonos a ' + distMeters + ' m)</strong> — Capturado cerca del túnel pero con alta incertidumbre (±22 m) · Sin cobertura vertical en la corona';
         }
       }
     }
   }
 
-  // Click on rock mass
+    // Click on rock mass
   canvas.addEventListener('click', (e) => {
     const rect = canvas.getBoundingClientRect();
     const x = e.clientX - rect.left;
@@ -275,23 +264,22 @@
     }
   });
 
-  // Mode Switch
+  // Mode Switch & Smooth DAS Coverage Transition
   function setMode(mode) {
     activeMode = mode;
+    dasCoverageTarget = (mode === 'dfos') ? 1.0 : 0.0;
     const banner = document.getElementById('sim-status-banner');
 
     if (mode === 'dfos') {
       if (banner) {
         banner.className = 'sim-status-banner detected';
-        banner.innerHTML = '<strong>FIBERANDES DFOS: ARREGLO EFICIENTE EN DAISY-CHAIN</strong> — 8.500 canales con 1 solo interrogador DAS + Switch DSS · Lazos en U en pozos cementados y túneles · Sincronización PTP';
+        banner.innerHTML = '<strong>⚡ COBERTURA FIBERANDES DAS ACTIVADA</strong> — Los sondajes perimetrales verticales y de sacrificio (Furlong & Anderson) eliminan el área roja fuera de alcance · 100% Cobertura Continua';
       }
-      updateTelemetry(98, "8.500 Canales (1 DAS + Switch DSS)", "±1.8 metros", "Activo (Doble Banda)");
     } else {
       if (banner) {
         banner.className = 'sim-status-banner blindspot';
-        banner.innerHTML = '<strong>RED SÍSMICA TRADICIONAL (GEÓFONOS TRIAXIALES EN BOREHOLES 3D)</strong> — 12 estaciones en perforaciones de 15-25m para salir de la EDZ · Cobertura 3D limitada a niveles de explotación · <strong>Vacío superior sobre Cave-Back</strong> y ciego a slow-strain previo (0 Hz)';
+        banner.innerHTML = '<strong>📡 RED SÍSMICA TRADICIONAL (GEÓFONOS EN TÚNELES)</strong> — Límite físico de 300 m genera un <strong>área roja ciega masiva sobre el Cave-Back</strong> · Haz clic en <em>"Encender Cobertura FiberAndes DAS"</em> para ver cómo se reduce';
       }
-      updateTelemetry(25, "12 Geófonos en Boreholes", "±22 metros", "0% (Ciego a slow-strain)");
     }
   }
 
@@ -447,6 +435,19 @@
   // -------------------------------------------------------------
   function draw() {
     time += 0.02;
+
+    // Smoothly animate dasCoverageAmount towards target (0.0 to 1.0)
+    dasCoverageAmount += (dasCoverageTarget - dasCoverageAmount) * 0.055;
+    if (Math.abs(dasCoverageTarget - dasCoverageAmount) < 0.003) {
+      dasCoverageAmount = dasCoverageTarget;
+    }
+
+    // Dynamic telemetry interpolation based on active coverage
+    const curCov = Math.round(42 + dasCoverageAmount * 56);
+    const curSens = dasCoverageAmount > 0.5 ? "12.000 Canales DAS (1 Interrogador)" : "36 Geófonos Triaxiales en Túneles";
+    const curUncert = (22 - dasCoverageAmount * 20.2).toFixed(1) + " m";
+    const curStatus = dasCoverageAmount > 0.5 ? "Cero Puntos Ciegos (100% Activo)" : "Área Roja Ciega (>300 m)";
+    updateTelemetry(curCov, curSens, "±" + curUncert, curStatus);
 
     ctx.clearRect(0, 0, width, height);
 
@@ -684,7 +685,7 @@
     ctx.fillStyle = '#00f0ff';
     ctx.font = 'bold 8.5px "JetBrains Mono", monospace';
     ctx.textAlign = 'center';
-    ctx.fillText('CASETA DFOS (DAS + DSS)', shackX, ySurface - 28);
+    ctx.fillText('CASETA FIBERANDES DAS', shackX, ySurface - 28);
     ctx.restore();
 
     // -------------------------------------------------------------
@@ -1102,58 +1103,66 @@
     ctx.strokeStyle = 'rgba(0, 225, 255, 0.4)';
     ctx.strokeRect(shaftX - 6, ySurface, 12, yHaulage - ySurface);
 
-    // 6. INSTRUMENTATION LAYERS (Mode Dependent)
-    if (activeMode === 'geophones') {
-      // ---------------------------------------------------------
-      // MODE: TRADITIONAL POINT SEISMOLOGY (GEOPHONES IN TUNNELS)
-      // ---------------------------------------------------------
+    // -------------------------------------------------------------
+    // 6. INSTRUMENTATION LAYERS (UNIFIED GEOPHONES + DYNAMIC DAS COVERAGE EXPANSION)
+    // Demonstrates physically how turning ON DAS coverage shrinks and eliminates the red blind area
+    // -------------------------------------------------------------
 
-      // Helper to compute the uppermost reach of 300m geophone coverage across the cross section
-      function getUpperCoverageY(xVal) {
-        let topY = yBottom;
-        geophoneStations.forEach(g => {
-          const dx = Math.abs(xVal - g.x);
-          if (dx <= r300) {
-            const dy = Math.sqrt(r300 * r300 - dx * dx);
-            const candidateY = g.y - dy;
-            if (candidateY < topY) {
-              topY = candidateY;
-            }
+    // Helper to compute the uppermost reach of 300m geophone coverage across the cross section
+    function getUpperCoverageY(xVal) {
+      let topY = yBottom;
+      geophoneStations.forEach(g => {
+        const dx = Math.abs(xVal - g.x);
+        if (dx <= r300) {
+          const dy = Math.sqrt(r300 * r300 - dx * dx);
+          const candidateY = g.y - dy;
+          if (candidateY < topY) {
+            topY = candidateY;
           }
-        });
-        return topY;
-      }
+        }
+      });
+      return topY;
+    }
 
-      // A. Real Curved Out-of-Range Area (Zona Fuera de Alcance >300 m)
-      // Follows the exact mathematical envelope of 300m detection circles from borehole geophones
+    // =========================================================
+    // A. DYNAMIC RED OUT-OF-RANGE AREA (SHRINKS WHEN DAS IS TURNED ON)
+    // =========================================================
+    if (dasCoverageAmount < 0.99) {
+      const redAlpha = Math.max(0, 1.0 - dasCoverageAmount);
       ctx.save();
       ctx.beginPath();
       ctx.moveTo(0, ySurface);
       ctx.lineTo(mainWidth, ySurface);
-      ctx.lineTo(mainWidth, Math.min(yBottom, getUpperCoverageY(mainWidth)));
+
+      // As dasCoverageAmount increases from 0 to 1, the red blind area's lower edge shrinks upward towards ySurface:
+      const rightFullY = Math.min(yBottom, getUpperCoverageY(mainWidth));
+      const rightShrunkY = ySurface + (rightFullY - ySurface) * (1.0 - dasCoverageAmount);
+      ctx.lineTo(mainWidth, rightShrunkY);
+
       for (let px = mainWidth; px >= 0; px -= 4) {
-        const py = Math.min(yBottom, getUpperCoverageY(px));
-        ctx.lineTo(px, py);
+        const fullBlindY = Math.min(yBottom, getUpperCoverageY(px));
+        const shrunkBlindY = ySurface + (fullBlindY - ySurface) * (1.0 - dasCoverageAmount);
+        ctx.lineTo(px, shrunkBlindY);
       }
       ctx.closePath();
 
-      // Subtle warning gradient across true out-of-range rock mass
+      // Red warning gradient across the remaining blind area
       const blindGrad = ctx.createLinearGradient(0, ySurface, 0, yCaveTop + 40);
-      blindGrad.addColorStop(0, 'rgba(255, 40, 26, 0.16)');
-      blindGrad.addColorStop(0.7, 'rgba(255, 40, 26, 0.10)');
-      blindGrad.addColorStop(1, 'rgba(255, 40, 26, 0.02)');
+      blindGrad.addColorStop(0, "rgba(255, 30, 20, " + (0.22 * redAlpha) + ")");
+      blindGrad.addColorStop(0.7, "rgba(255, 40, 26, " + (0.14 * redAlpha) + ")");
+      blindGrad.addColorStop(1, "rgba(255, 40, 26, " + (0.03 * redAlpha) + ")");
       ctx.fillStyle = blindGrad;
       ctx.fill();
 
-      // Curved boundary dashed stroke (strictly >300 m from all geophones)
-      ctx.strokeStyle = 'rgba(255, 75, 85, 0.65)';
-      ctx.lineWidth = 1.6;
+      // Shrunk boundary dashed stroke
+      ctx.strokeStyle = "rgba(255, 75, 85, " + (0.85 * redAlpha) + ")";
+      ctx.lineWidth = 1.8;
       ctx.setLineDash([6, 6]);
       ctx.stroke();
       ctx.setLineDash([]);
 
-      // Diagonal attenuation hatching in out-of-range zone
-      ctx.strokeStyle = 'rgba(255, 75, 85, 0.04)';
+      // Diagonal attenuation hatching
+      ctx.strokeStyle = "rgba(255, 75, 85, " + (0.05 * redAlpha) + ")";
       ctx.lineWidth = 1;
       for (let hx = -height; hx < mainWidth + height; hx += 32) {
         ctx.beginPath();
@@ -1161,357 +1170,354 @@
         ctx.lineTo(hx + 180, ySurface + 180);
         ctx.stroke();
       }
+
+      // Explanatory badge in the center of the shrinking red area
+      const blindCenterY = ySurface + (yCaveTop - 50 - ySurface) * (1.0 - dasCoverageAmount);
+      if (blindCenterY > ySurface + 14) {
+        ctx.fillStyle = "rgba(255, 90, 90, " + (0.9 * redAlpha) + ")";
+        ctx.font = 'bold 9.5px "JetBrains Mono", monospace';
+        ctx.textAlign = 'center';
+        if (dasCoverageAmount < 0.2) {
+          ctx.fillText('🔴 ÁREA ROJA FUERA DE ALCANCE (>300 m DE BOREHOLES DE TÚNEL)', caveCenterX, blindCenterY);
+          ctx.font = '8px "JetBrains Mono", monospace';
+          ctx.fillStyle = "rgba(255, 170, 170, " + (0.75 * redAlpha) + ")";
+          ctx.fillText('Vacío superior ciego: ondas >150 Hz disipadas antes de llegar a los geófonos', caveCenterX, blindCenterY + 13);
+        } else {
+          ctx.fillText('⚡ REDUCIENDO ÁREA CIEGA... (' + Math.round((1 - dasCoverageAmount) * 58) + '% RESTANTE)', caveCenterX, blindCenterY);
+        }
+      }
       ctx.restore();
 
-      // Subtle geological label (NO opaque box covering the rock mass or wave propagation)
-      ctx.save();
-      ctx.fillStyle = 'rgba(255, 107, 107, 0.75)';
-      ctx.font = 'bold 9px "JetBrains Mono", monospace';
-      ctx.textAlign = 'center';
-      ctx.fillText('ZONA FUERA DE ALCANCE (>300 m DE BOREHOLES)', caveCenterX, yCaveTop - 56);
-      ctx.font = '7.5px "JetBrains Mono", monospace';
-      ctx.fillStyle = 'rgba(255, 160, 160, 0.55)';
-      ctx.fillText('Frecuencias >150 Hz atenuadas por absorción inelástica', caveCenterX, yCaveTop - 43);
-      ctx.restore();
+      // Sombra Acústica del Air Gap en modo geófonos
+      if (dasCoverageAmount < 0.5) {
+        ctx.save();
+        ctx.fillStyle = "rgba(10, 15, 25, " + (0.6 * (1.0 - dasCoverageAmount * 2)) + ")";
+        ctx.beginPath();
+        ctx.moveTo(caveLeft - 5, yAirGap);
+        ctx.lineTo(caveRight + 5, yAirGap);
+        ctx.lineTo(caveRight + 18, yUndercut);
+        ctx.lineTo(caveLeft - 18, yUndercut);
+        ctx.closePath();
+        ctx.fill();
+        ctx.restore();
+      }
+    }
 
-      // Sombra Acústica del Air Gap (Acoustic Void Shadow Cone)
+    // =========================================================
+    // B. EXPANDING DAS COVERAGE ENVELOPE (LIGHTS UP AS DAS ACTIVATES)
+    // =========================================================
+    if (dasCoverageAmount > 0.05) {
       ctx.save();
-      ctx.fillStyle = 'rgba(10, 15, 25, 0.55)';
+      const dasAlpha = dasCoverageAmount;
+      const bPermWestX = caveLeft - 44;
+      const bPermEastX = caveRight + 44;
+
+      const dasGrad = ctx.createLinearGradient(0, ySurface, 0, yProduction);
+      dasGrad.addColorStop(0, "rgba(0, 240, 255, " + (0.07 * dasAlpha) + ")");
+      dasGrad.addColorStop(0.5, "rgba(0, 255, 163, " + (0.05 * dasAlpha) + ")");
+      dasGrad.addColorStop(1, "rgba(0, 240, 255, " + (0.02 * dasAlpha) + ")");
+      ctx.fillStyle = dasGrad;
+
+      // Draw coverage envelope encompassing the entire caving volume and flanks
       ctx.beginPath();
-      ctx.moveTo(caveLeft - 5, yAirGap);
-      ctx.lineTo(caveRight + 5, yAirGap);
-      ctx.lineTo(caveRight + 18, yUndercut);
-      ctx.lineTo(caveLeft - 18, yUndercut);
+      ctx.moveTo(bPermWestX - 16, ySurface);
+      ctx.lineTo(bPermEastX + 16, ySurface);
+      ctx.lineTo(bPermEastX + 16, yHaulage + 20);
+      ctx.lineTo(bPermWestX - 16, yHaulage + 20);
       ctx.closePath();
       ctx.fill();
 
-      ctx.strokeStyle = 'rgba(255, 120, 0, 0.4)';
-      ctx.lineWidth = 1;
-      ctx.setLineDash([3, 4]);
+      ctx.strokeStyle = "rgba(0, 240, 255, " + (0.35 * dasAlpha) + ")";
+      ctx.lineWidth = 1.2;
+      ctx.setLineDash([4, 4]);
       ctx.stroke();
       ctx.setLineDash([]);
 
-      ctx.fillStyle = 'rgba(255, 170, 0, 0.75)';
-      ctx.font = '7.5px "JetBrains Mono", monospace';
-      ctx.textAlign = 'center';
-      ctx.fillText('SOMBRA ACÚSTICA: El vacío bloquea la transmisión directa de ondas hacia túneles', caveCenterX, (yAirGap + yUndercut) / 2);
-      ctx.restore();
-
-      // B. Individual 300m Sensitivity Lobes around each borehole station
-      geophoneStations.forEach((geo) => {
+      if (dasCoverageAmount > 0.6) {
         ctx.save();
-        ctx.strokeStyle = 'rgba(0, 225, 255, 0.22)';
+        const badgeText = '✅ COBERTURA VOLUMÉTRICA DAS 100% · CERO PUNTOS CIEGOS (FURLONG & ANDERSON)';
+        ctx.font = 'bold 8.5px "JetBrains Mono", monospace';
+        const txtWidth = ctx.measureText(badgeText).width;
+        ctx.fillStyle = 'rgba(4, 10, 20, 0.92)';
+        ctx.strokeStyle = 'rgba(0, 240, 255, ' + (0.75 * dasAlpha) + ')';
         ctx.lineWidth = 1;
-        ctx.setLineDash([3, 4]);
         ctx.beginPath();
-        ctx.arc(geo.x, geo.y, r300, 0, Math.PI * 2);
-        ctx.stroke();
-        ctx.setLineDash([]);
-
-        const radGrad = ctx.createRadialGradient(geo.x, geo.y, 0, geo.x, geo.y, r300);
-        radGrad.addColorStop(0, 'rgba(0, 225, 255, 0.04)');
-        radGrad.addColorStop(0.8, 'rgba(0, 225, 255, 0.012)');
-        radGrad.addColorStop(1, 'rgba(0, 225, 255, 0)');
-        ctx.fillStyle = radGrad;
+        if (ctx.roundRect) {
+          ctx.roundRect(caveCenterX - txtWidth / 2 - 8, ySurface + 6, txtWidth + 16, 16, 3);
+        } else {
+          ctx.rect(caveCenterX - txtWidth / 2 - 8, ySurface + 6, txtWidth + 16, 16);
+        }
         ctx.fill();
-        ctx.restore();
-      });
-
-      // C. Excavation Damaged Zone (EDZ, 2-4m) around drifts
-      ctx.save();
-      ctx.strokeStyle = 'rgba(255, 176, 32, 0.28)';
-      ctx.lineWidth = 1;
-      ctx.setLineDash([3, 4]);
-      ctx.strokeRect(caveLeft - 36, yUndercut - 10, (caveRight - caveLeft) + 72, 20);
-      ctx.strokeRect(caveLeft - 66, yProduction - 11, (caveRight - caveLeft) + 132, 22);
-      ctx.strokeRect(caveLeft - 86, yHaulage - 13, (caveRight - caveLeft) + 172, 26);
-
-      ctx.fillStyle = 'rgba(255, 176, 32, 0.55)';
-      ctx.font = '7.5px "JetBrains Mono", monospace';
-      ctx.textAlign = 'right';
-      ctx.fillText('Halo EDZ (2-4m daño tronadura)', caveLeft - 72, yProduction - 14);
-      ctx.restore();
-
-      // D. Discrete Triaxial Geophone Stations in Cemented Boreholes (15–25m into Virgin Rock)
-      geophoneStations.forEach((geo, idx) => {
-        let hitIntensity = 0;
-        activeWaves.forEach(w => {
-          const d = Math.hypot(geo.x - w.x, geo.y - w.y);
-          if (Math.abs(d - w.radiusP) < 18) {
-            const atten = Math.pow(Math.max(0, 1.0 - (d / r300)), 2.0);
-            hitIntensity = Math.max(hitIntensity, atten);
-          }
-        });
-
-        // 1. Drilled Borehole line & Grout Sheath (from tunnel perimeter into solid rock)
-        ctx.save();
-        ctx.strokeStyle = 'rgba(100, 120, 150, 0.45)';
-        ctx.lineWidth = 4; // Cement grout seal
-        ctx.beginPath();
-        ctx.moveTo(geo.tunnelX, geo.tunnelY);
-        ctx.lineTo(geo.x, geo.y);
         ctx.stroke();
 
-        ctx.strokeStyle = '#7a93b4';
-        ctx.lineWidth = 1.2;
-        ctx.setLineDash([2, 2]);
-        ctx.beginPath();
-        ctx.moveTo(geo.tunnelX, geo.tunnelY);
-        ctx.lineTo(geo.x, geo.y);
-        ctx.stroke();
-        ctx.setLineDash([]);
-
-        // Borehole collar at tunnel wall
-        ctx.fillStyle = '#ffb020';
-        ctx.fillRect(geo.tunnelX - 2, geo.tunnelY - 2, 4, 4);
-
-        // 2. Triaxial Geophone Sensor Capsule in Competent Rock (Beyond EDZ)
-        const capsuleColor = hitIntensity > 0.08 ? '#ff4b55' : '#ffb020';
-        ctx.fillStyle = capsuleColor;
-        ctx.strokeStyle = '#ffffff';
-        ctx.lineWidth = 1.2;
-        ctx.shadowColor = capsuleColor;
-        ctx.shadowBlur = hitIntensity > 0.08 ? 14 : 5;
-
-        // Triaxial sensor capsule
-        const sSize = 7;
-        ctx.fillRect(geo.x - sSize / 2, geo.y - sSize / 2, sSize, sSize);
-        ctx.strokeRect(geo.x - sSize / 2, geo.y - sSize / 2, sSize, sSize);
-
-        // XYZ triaxial axes cross inside capsule
-        ctx.strokeStyle = '#111c2b';
-        ctx.lineWidth = 1;
-        ctx.beginPath();
-        ctx.moveTo(geo.x - 2, geo.y); ctx.lineTo(geo.x + 2, geo.y);
-        ctx.moveTo(geo.x, geo.y - 2); ctx.lineTo(geo.x, geo.y + 2);
-        ctx.stroke();
-
-        // Wave detection pulse ring
-        const ringR = 8 + Math.sin(time * 3 + idx * 2.5);
-        ctx.strokeStyle = hitIntensity > 0.08 ? 'rgba(255, 75, 85, 0.85)' : 'rgba(255, 176, 32, 0.35)';
-        ctx.lineWidth = 1;
-        ctx.beginPath();
-        ctx.arc(geo.x, geo.y, ringR, 0, Math.PI * 2);
-        ctx.stroke();
-
-        // Station label & borehole depth info
-        ctx.fillStyle = '#ffc83b';
-        ctx.font = 'bold 8px "JetBrains Mono", monospace';
+        ctx.fillStyle = '#00f0ff';
         ctx.textAlign = 'center';
-        ctx.fillText(geo.id, geo.x, geo.y - 6);
-        ctx.font = '7px "JetBrains Mono", monospace';
-        ctx.fillStyle = '#8f9fb6';
-        ctx.fillText(geo.depth, geo.x, geo.y + 13);
+        ctx.fillText(badgeText, caveCenterX, ySurface + 17.5);
         ctx.restore();
-      });
+      }
+      ctx.restore();
+    }
 
-    } else {
-      // ---------------------------------------------------------
-      // MODE: FIBERANDES DAS (FURLONG & ANDERSON ARRAY MODEL IN DAISY-CHAIN)
-      // 1. Permanent perimeter vertical boreholes surrounding the orebody on both flanks
-      // 2. Sacrificial fibers in the mineralized orebody shearing at the cave-back
-      // 3. Daisy-chain gallery network connecting undercut, extraction & haulage
-      // ---------------------------------------------------------
-
-      const bPermWestX = caveLeft - 44;   // Permanent West Flank Borehole (outside caving envelope)
-      const bPermEastX = caveRight + 44;  // Permanent East Flank Borehole (outside caving envelope)
-      const bSac1X = caveCenterX - 24;     // Sacrificial 1 in Orebody
-      const bSac2X = caveCenterX + 24;     // Sacrificial 2 in Orebody
-      const yTrunkSurface = ySurface - 2;
-      const yBoreholeBottom = yHaulage + 28;
-
-      // 1. SURFACE DAISY-CHAIN TRUNK CABLE (Caseta DAS to Perimeter & Sacrificial Boreholes)
+    // =========================================================
+    // C. TRADITIONAL BOREHOLE GEOPHONES (ALWAYS PRESENT IN TUNNELS)
+    // =========================================================
+    // Sensitivity lobes around each borehole station (300m)
+    geophoneStations.forEach((geo) => {
       ctx.save();
-      ctx.strokeStyle = 'rgba(0, 240, 255, 0.45)';
-      ctx.lineWidth = 2.2;
-      ctx.setLineDash([4, 2]);
+      const geoAlpha = (dasCoverageAmount > 0.6) ? 0.35 : 1.0;
+      ctx.strokeStyle = "rgba(0, 225, 255, " + (0.18 * geoAlpha) + ")";
+      ctx.lineWidth = 1;
+      ctx.setLineDash([3, 4]);
       ctx.beginPath();
-      ctx.moveTo(bPermWestX, yTrunkSurface);
-      ctx.lineTo(shackX, yTrunkSurface);
-      ctx.lineTo(shaftX, yTrunkSurface);
-      ctx.lineTo(bSac1X, yTrunkSurface);
-      ctx.lineTo(bSac2X, yTrunkSurface);
-      ctx.lineTo(bPermEastX, yTrunkSurface);
+      ctx.arc(geo.x, geo.y, r300, 0, Math.PI * 2);
       ctx.stroke();
       ctx.setLineDash([]);
 
-      // Hermetic ODF splice nodes on surface trunk
-      [bPermWestX, shackX, shaftX, bSac1X, bSac2X, bPermEastX].forEach(cx => {
-        ctx.fillStyle = cx === shackX ? '#00ffa3' : '#00f0ff';
-        ctx.shadowColor = '#00f0ff';
-        ctx.shadowBlur = 8;
-        ctx.beginPath();
-        ctx.arc(cx, yTrunkSurface, 2.8, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.strokeStyle = '#ffffff';
-        ctx.lineWidth = 0.8;
-        ctx.stroke();
-      });
+      const radGrad = ctx.createRadialGradient(geo.x, geo.y, 0, geo.x, geo.y, r300);
+      radGrad.addColorStop(0, "rgba(0, 225, 255, " + (0.03 * geoAlpha) + ")");
+      radGrad.addColorStop(0.8, "rgba(0, 225, 255, " + (0.008 * geoAlpha) + ")");
+      radGrad.addColorStop(1, 'rgba(0, 225, 255, 0)');
+      ctx.fillStyle = radGrad;
+      ctx.fill();
       ctx.restore();
+    });
 
-      // 2. DAS BOREHOLES (Permanent Perimeter vs Sacrificial in Orebody)
-      const fiberBoreholes = [
-        { id: 'B-Perm-W', p1: { x: bPermWestX, y: ySurface }, p2: { x: bPermWestX, y: yBoreholeBottom }, color: '#00f0ff', label: 'B-Perm-W (DAS Loop Flanco Oeste)', isLoop: true, isSacrificial: false },
-        { id: 'B-Sac-1', p1: { x: bSac1X, y: ySurface }, p2: { x: bSac1X, y: yCaveTop + 14 }, color: '#ffaa00', label: 'B-Sac-1 (DAS Sacrificio)', isLoop: false, isSacrificial: true },
-        { id: 'B-Sac-2', p1: { x: bSac2X, y: ySurface }, p2: { x: bSac2X, y: yCaveTop + 14 }, color: '#ffaa00', label: 'B-Sac-2 (DAS Sacrificio)', isLoop: false, isSacrificial: true },
-        { id: 'B-Perm-E', p1: { x: bPermEastX, y: ySurface }, p2: { x: bPermEastX, y: yBoreholeBottom }, color: '#00f0ff', label: 'B-Perm-E (DAS Loop Flanco Este)', isLoop: true, isSacrificial: false }
-      ];
+    // Cemented borehole lines and geophone capsules
+    geophoneStations.forEach((geo, idx) => {
+      let hitIntensity = 0;
+      activeWaves.forEach(w => {
+        const d = Math.hypot(geo.x - w.x, geo.y - w.y);
+        if (Math.abs(d - w.radiusP) < 18) {
+          const atten = Math.pow(Math.max(0, 1.0 - (d / r300)), 2.0);
+          hitIntensity = Math.max(hitIntensity, atten);
+        }
+      });
 
-      fiberBoreholes.forEach((bh, idx) => {
-        const dx = bh.p2.x - bh.p1.x;
-        const dy = bh.p2.y - bh.p1.y;
-        const bLen = Math.hypot(dx, dy) || 1;
-        const nx = (-dy / bLen) * 2.2;
-        const ny = (dx / bLen) * 2.2;
+      const geoAlpha = (dasCoverageAmount > 0.6) ? 0.45 : 1.0;
 
-        // Protective cement grout sheath
-        ctx.strokeStyle = 'rgba(11, 32, 56, 0.85)';
-        ctx.lineWidth = bh.isLoop ? 7 : 5;
+      // 1. Drilled Borehole line & Grout Sheath
+      ctx.save();
+      ctx.globalAlpha = geoAlpha;
+      ctx.strokeStyle = 'rgba(100, 120, 150, 0.45)';
+      ctx.lineWidth = 3.5;
+      ctx.beginPath();
+      ctx.moveTo(geo.tunnelX, geo.tunnelY);
+      ctx.lineTo(geo.x, geo.y);
+      ctx.stroke();
+
+      ctx.strokeStyle = '#7a93b4';
+      ctx.lineWidth = 1.2;
+      ctx.setLineDash([2, 2]);
+      ctx.beginPath();
+      ctx.moveTo(geo.tunnelX, geo.tunnelY);
+      ctx.lineTo(geo.x, geo.y);
+      ctx.stroke();
+      ctx.setLineDash([]);
+
+      // Collar
+      ctx.fillStyle = '#ffb020';
+      ctx.fillRect(geo.tunnelX - 2, geo.tunnelY - 2, 4, 4);
+
+      // Capsule
+      const capsuleColor = hitIntensity > 0.08 ? '#ff4b55' : '#ffb020';
+      ctx.fillStyle = capsuleColor;
+      ctx.strokeStyle = '#ffffff';
+      ctx.lineWidth = 1.2;
+      ctx.shadowColor = capsuleColor;
+      ctx.shadowBlur = hitIntensity > 0.08 ? 14 : 4;
+
+      const sSize = 6.5;
+      ctx.fillRect(geo.x - sSize / 2, geo.y - sSize / 2, sSize, sSize);
+      ctx.strokeRect(geo.x - sSize / 2, geo.y - sSize / 2, sSize, sSize);
+
+      // Station ID
+      ctx.fillStyle = '#ffc83b';
+      ctx.font = 'bold 7.5px "JetBrains Mono", monospace';
+      ctx.textAlign = 'center';
+      ctx.fillText(geo.id, geo.x, geo.y - 5);
+      ctx.restore();
+    });
+
+    // =========================================================
+    // D. FIBERANDES DAS ARRAY (LIGHTS UP AS DAS COVERAGE ACTIVATES)
+    // =========================================================
+    const bPermWestX = caveLeft - 44;   // Permanent West Flank Borehole
+    const bPermEastX = caveRight + 44;  // Permanent East Flank Borehole
+    const bSac1X = caveCenterX - 24;     // Sacrificial 1 in Orebody
+    const bSac2X = caveCenterX + 24;     // Sacrificial 2 in Orebody
+    const yTrunkSurface = ySurface - 2;
+    const yBoreholeBottom = yHaulage + 28;
+
+    // DAS fibers opacity scales with dasCoverageAmount (visible as subtle ghost when off, fully glowing when on)
+    const fiberAlpha = Math.max(0.18, dasCoverageAmount);
+
+    ctx.save();
+    ctx.globalAlpha = fiberAlpha;
+
+    // 1. Surface Trunk Line (Caseta to all boreholes in daisy chain)
+    ctx.strokeStyle = 'rgba(0, 240, 255, 0.45)';
+    ctx.lineWidth = 2.2;
+    ctx.setLineDash([4, 2]);
+    ctx.beginPath();
+    ctx.moveTo(bPermWestX, yTrunkSurface);
+    ctx.lineTo(shackX, yTrunkSurface);
+    ctx.lineTo(shaftX, yTrunkSurface);
+    ctx.lineTo(bSac1X, yTrunkSurface);
+    ctx.lineTo(bSac2X, yTrunkSurface);
+    ctx.lineTo(bPermEastX, yTrunkSurface);
+    ctx.stroke();
+    ctx.setLineDash([]);
+
+    // Hermetic ODF splice nodes
+    [bPermWestX, shackX, shaftX, bSac1X, bSac2X, bPermEastX].forEach(cx => {
+      ctx.fillStyle = cx === shackX ? '#00ffa3' : '#00f0ff';
+      ctx.shadowColor = '#00f0ff';
+      ctx.shadowBlur = 8;
+      ctx.beginPath();
+      ctx.arc(cx, yTrunkSurface, 2.8, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.strokeStyle = '#ffffff';
+      ctx.lineWidth = 0.8;
+      ctx.stroke();
+    });
+
+    // 2. DAS Boreholes (Perimeter loops + Sacrificial cables)
+    const fiberBoreholes = [
+      { id: 'B-Perm-W', p1: { x: bPermWestX, y: ySurface }, p2: { x: bPermWestX, y: yBoreholeBottom }, color: '#00f0ff', label: 'B-Perm-W (Loop Flanco Oeste)', isLoop: true, isSacrificial: false },
+      { id: 'B-Sac-1', p1: { x: bSac1X, y: ySurface }, p2: { x: bSac1X, y: yCaveTop + 14 }, color: '#ffaa00', label: 'B-Sac-1 (DAS Sacrificio)', isLoop: false, isSacrificial: true },
+      { id: 'B-Sac-2', p1: { x: bSac2X, y: ySurface }, p2: { x: bSac2X, y: yCaveTop + 14 }, color: '#ffaa00', label: 'B-Sac-2 (DAS Sacrificio)', isLoop: false, isSacrificial: true },
+      { id: 'B-Perm-E', p1: { x: bPermEastX, y: ySurface }, p2: { x: bPermEastX, y: yBoreholeBottom }, color: '#00f0ff', label: 'B-Perm-E (Loop Flanco Este)', isLoop: true, isSacrificial: false }
+    ];
+
+    fiberBoreholes.forEach((bh, idx) => {
+      const dx = bh.p2.x - bh.p1.x;
+      const dy = bh.p2.y - bh.p1.y;
+      const bLen = Math.hypot(dx, dy) || 1;
+      const nx = (-dy / bLen) * 2.2;
+      const ny = (dx / bLen) * 2.2;
+
+      // Cement grout sheath
+      ctx.strokeStyle = 'rgba(11, 32, 56, 0.85)';
+      ctx.lineWidth = bh.isLoop ? 7 : 5;
+      ctx.beginPath();
+      ctx.moveTo(bh.p1.x, bh.p1.y);
+      ctx.lineTo(bh.p2.x, bh.p2.y);
+      ctx.stroke();
+
+      let cableBurst = 0;
+      activeWaves.forEach(w => {
+        const d = distToSegment({ x: w.x, y: w.y }, bh.p1, bh.p2);
+        if (Math.abs(d - w.radiusP) < 14) {
+          cableBurst = Math.max(cableBurst, 1.0);
+        }
+      });
+
+      const breathing = Math.sin(time * 3 + idx * 0.8) * 0.12;
+      const alpha = Math.min(1.0, 0.75 + breathing + cableBurst * 0.6);
+
+      ctx.save();
+      ctx.strokeStyle = cableBurst > 0.15 ? '#ffffff' : bh.color;
+      ctx.lineWidth = cableBurst > 0.15 ? 3.8 : 2.2;
+      ctx.shadowColor = bh.color;
+      ctx.shadowBlur = cableBurst > 0.15 ? 18 : 8;
+      ctx.globalAlpha = alpha * fiberAlpha;
+
+      if (bh.isLoop) {
+        ctx.beginPath();
+        ctx.moveTo(bh.p1.x + nx, bh.p1.y + ny);
+        ctx.lineTo(bh.p2.x + nx, bh.p2.y + ny);
+        ctx.quadraticCurveTo(
+          bh.p2.x + (dx / bLen) * 3.5, bh.p2.y + (dy / bLen) * 3.5,
+          bh.p2.x - nx, bh.p2.y - ny
+        );
+        ctx.lineTo(bh.p1.x - nx, bh.p1.y - ny);
+        ctx.stroke();
+      } else {
         ctx.beginPath();
         ctx.moveTo(bh.p1.x, bh.p1.y);
         ctx.lineTo(bh.p2.x, bh.p2.y);
         ctx.stroke();
+      }
+      ctx.restore();
 
-        let cableBurst = 0;
-        activeWaves.forEach(w => {
-          const d = distToSegment({ x: w.x, y: w.y }, bh.p1, bh.p2);
-          if (Math.abs(d - w.radiusP) < 14) {
-            const unattenuatedFactor = Math.pow(Math.max(0, 1.0 - (d / r300)), 1.4);
-            cableBurst = Math.max(cableBurst, unattenuatedFactor);
-          }
-        });
+      // Optical core line
+      ctx.strokeStyle = '#ffffff';
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      if (bh.isLoop) {
+        ctx.moveTo(bh.p1.x + nx, bh.p1.y + ny);
+        ctx.lineTo(bh.p2.x + nx, bh.p2.y + ny);
+        ctx.quadraticCurveTo(
+          bh.p2.x + (dx / bLen) * 3.5, bh.p2.y + (dy / bLen) * 3.5,
+          bh.p2.x - nx, bh.p2.y - ny
+        );
+        ctx.lineTo(bh.p1.x - nx, bh.p1.y - ny);
+      } else {
+        ctx.moveTo(bh.p1.x, bh.p1.y);
+        ctx.lineTo(bh.p2.x, bh.p2.y);
+      }
+      ctx.stroke();
 
-        const breathing = Math.sin(time * 3 + idx * 0.8) * 0.12;
-        const alpha = Math.min(1.0, 0.75 + breathing + cableBurst * 0.6);
-
+      if (bh.isSacrificial) {
         ctx.save();
-        ctx.strokeStyle = cableBurst > 0.15 ? '#ffffff' : bh.color;
-        ctx.lineWidth = cableBurst > 0.15 ? 3.8 : 2.2;
-        ctx.shadowColor = bh.color;
-        ctx.shadowBlur = cableBurst > 0.15 ? 18 : 8;
-        ctx.globalAlpha = alpha;
-
-        if (bh.isLoop) {
-          // Double-ended loop with continuous U-turn turnaround splice at the toe
-          ctx.beginPath();
-          ctx.moveTo(bh.p1.x + nx, bh.p1.y + ny);
-          ctx.lineTo(bh.p2.x + nx, bh.p2.y + ny);
-          ctx.quadraticCurveTo(
-            bh.p2.x + (dx / bLen) * 3.5, bh.p2.y + (dy / bLen) * 3.5,
-            bh.p2.x - nx, bh.p2.y - ny
-          );
-          ctx.lineTo(bh.p1.x - nx, bh.p1.y - ny);
-          ctx.stroke();
-        } else {
-          // Single sacrificial fiber line penetrating down to the cave-back
-          ctx.beginPath();
-          ctx.moveTo(bh.p1.x, bh.p1.y);
-          ctx.lineTo(bh.p2.x, bh.p2.y);
-          ctx.stroke();
-        }
-        ctx.restore();
-
-        // Optical core
+        ctx.fillStyle = '#ffaa00';
+        ctx.shadowColor = '#ff4444';
+        ctx.shadowBlur = 10;
+        ctx.beginPath();
+        ctx.arc(bh.p2.x, bh.p2.y, 3.2, 0, Math.PI * 2);
+        ctx.fill();
         ctx.strokeStyle = '#ffffff';
         ctx.lineWidth = 1;
         ctx.beginPath();
-        if (bh.isLoop) {
-          ctx.moveTo(bh.p1.x + nx, bh.p1.y + ny);
-          ctx.lineTo(bh.p2.x + nx, bh.p2.y + ny);
-          ctx.quadraticCurveTo(
-            bh.p2.x + (dx / bLen) * 3.5, bh.p2.y + (dy / bLen) * 3.5,
-            bh.p2.x - nx, bh.p2.y - ny
-          );
-          ctx.lineTo(bh.p1.x - nx, bh.p1.y - ny);
-        } else {
-          ctx.moveTo(bh.p1.x, bh.p1.y);
-          ctx.lineTo(bh.p2.x, bh.p2.y);
-        }
+        ctx.moveTo(bh.p2.x - 3.5, bh.p2.y - 2.5);
+        ctx.lineTo(bh.p2.x + 3.5, bh.p2.y + 2.5);
         ctx.stroke();
+        ctx.restore();
+      }
 
-        if (bh.isSacrificial) {
-          // Severed active shear failure boundary indicator
-          ctx.save();
-          ctx.fillStyle = '#ffaa00';
-          ctx.shadowColor = '#ff4444';
-          ctx.shadowBlur = 10;
-          ctx.beginPath();
-          ctx.arc(bh.p2.x, bh.p2.y, 3.2, 0, Math.PI * 2);
-          ctx.fill();
-          ctx.strokeStyle = '#ffffff';
-          ctx.lineWidth = 1;
-          ctx.beginPath();
-          ctx.moveTo(bh.p2.x - 3.5, bh.p2.y - 2.5);
-          ctx.lineTo(bh.p2.x + 3.5, bh.p2.y + 2.5);
-          ctx.stroke();
-          ctx.restore();
-        }
+      ctx.fillStyle = bh.color;
+      ctx.font = 'bold 8px "JetBrains Mono", monospace';
+      ctx.textAlign = 'center';
+      const labelY = (idx % 2 === 0) ? bh.p1.y - 7 : bh.p1.y - 17;
+      ctx.fillText(bh.label, bh.p1.x, labelY);
+    });
 
-        // Borehole labels
-        ctx.fillStyle = bh.color;
-        ctx.font = 'bold 8px "JetBrains Mono", monospace';
-        ctx.textAlign = 'center';
-        const labelY = (idx % 2 === 0) ? bh.p1.y - 7 : bh.p1.y - 17;
-        ctx.fillText(bh.label, bh.p1.x, labelY);
-      });
+    // 3. Multi-level Underground Gallery Fiber Network (Daisy-Chain)
+    ctx.strokeStyle = '#00ffa3';
+    ctx.lineWidth = 2.0;
+    ctx.shadowColor = '#00ffa3';
+    ctx.shadowBlur = 6;
+    ctx.beginPath();
+    ctx.moveTo(shaftX, ySurface);
+    ctx.lineTo(shaftX, yUndercut - 4);
+    ctx.lineTo(caveRight + 30, yUndercut - 4);
+    ctx.lineTo(caveRight + 30, yProduction - 5);
+    ctx.lineTo(caveLeft - 60, yProduction - 5);
+    ctx.lineTo(caveLeft - 60, yHaulage - 6);
+    ctx.lineTo(caveRight + 60, yHaulage - 6);
+    ctx.stroke();
 
-      // 3. MULTI-LEVEL UNDERGROUND GALLERY FIBER NETWORK (DAISY-CHAIN ACROSS UNDERCUT, EXTRACTION & HAULAGE)
-      let driftBurst = 0;
-      activeWaves.forEach(w => {
-        if (Math.abs(w.y - yProduction) < 50 && w.radiusP < 140) {
-          driftBurst = Math.max(driftBurst, 1.0 - (w.radiusP / 140));
-        }
-      });
+    // Gallery Splice Nodes
+    const ugSpliceBoxes = [
+      { x: shaftX, y: yUndercut - 4 },
+      { x: caveRight + 30, y: yUndercut - 4 },
+      { x: caveRight + 30, y: yProduction - 5 },
+      { x: caveLeft - 60, y: yProduction - 5 },
+      { x: caveLeft - 60, y: yHaulage - 6 },
+      { x: caveRight + 60, y: yHaulage - 6 }
+    ];
+    ugSpliceBoxes.forEach(sb => {
+      ctx.fillStyle = '#00ffa3';
+      ctx.shadowColor = '#00ffa3';
+      ctx.shadowBlur = 6;
+      ctx.fillRect(sb.x - 2.5, sb.y - 2.5, 5, 5);
+      ctx.strokeStyle = '#ffffff';
+      ctx.lineWidth = 0.8;
+      ctx.strokeRect(sb.x - 2.5, sb.y - 2.5, 5, 5);
+    });
 
-      ctx.save();
-      ctx.strokeStyle = driftBurst > 0.15 ? '#ffffff' : '#00ffa3';
-      ctx.lineWidth = driftBurst > 0.15 ? 3.5 : 2.0;
-      ctx.shadowColor = driftBurst > 0.15 ? '#00f0ff' : '#00ffa3';
-      ctx.shadowBlur = driftBurst > 0.15 ? 14 : 6;
-
-      ctx.beginPath();
-      // Pique down to Undercut level
-      ctx.moveTo(shaftX, ySurface);
-      ctx.lineTo(shaftX, yUndercut - 4);
-
-      // Level 1: Undercut Drift run
-      ctx.lineTo(caveRight + 30, yUndercut - 4);
-
-      // Vertical Riser East down to Level 2 (Production)
-      ctx.lineTo(caveRight + 30, yProduction - 5);
-
-      // Level 2: Production / Drawpoints Drift run (traversing west)
-      ctx.lineTo(caveLeft - 60, yProduction - 5);
-
-      // Vertical Riser West down to Level 3 (Haulage)
-      ctx.lineTo(caveLeft - 60, yHaulage - 6);
-
-      // Level 3: Haulage Drift run (traversing east)
-      ctx.lineTo(caveRight + 60, yHaulage - 6);
-      ctx.stroke();
-
-      // Splice boxes underground (Hermetic minewide ODFs between levels)
-      const ugSpliceBoxes = [
-        { x: shaftX, y: yUndercut - 4 },
-        { x: caveRight + 30, y: yUndercut - 4 },
-        { x: caveRight + 30, y: yProduction - 5 },
-        { x: caveLeft - 60, y: yProduction - 5 },
-        { x: caveLeft - 60, y: yHaulage - 6 },
-        { x: caveRight + 60, y: yHaulage - 6 }
-      ];
-      ugSpliceBoxes.forEach(sb => {
-        ctx.fillStyle = '#00ffa3';
-        ctx.shadowColor = '#00ffa3';
-        ctx.shadowBlur = 6;
-        ctx.fillRect(sb.x - 2.5, sb.y - 2.5, 5, 5);
-        ctx.strokeStyle = '#ffffff';
-        ctx.lineWidth = 0.8;
-        ctx.strokeRect(sb.x - 2.5, sb.y - 2.5, 5, 5);
-      });
-      ctx.restore();
-
-      // 4. CONTINUOUS LASER INTERROGATION PULSES (FURLONG & ANDERSON DAISY-CHAIN)
-      // Array Loop 1: Flanking Perimeter Boreholes Daisy-Chain (Caseta -> West Borehole Loop -> Surface Trunk -> East Borehole Loop -> Caseta)
+    // 4. Continuous Laser Pulses (active when dasCoverageAmount > 0.25)
+    if (dasCoverageAmount > 0.25) {
       const perimeterDaisyChainPath = [
         { x: shackX, y: yTrunkSurface },
         { x: bPermWestX - 2, y: yTrunkSurface },
@@ -1526,7 +1532,6 @@
       ];
       drawFiberLaserRay(perimeterDaisyChainPath, 130, 2, '#00f0ff', 28);
 
-      // Array Loop 2: Multi-Level Underground Gallery Daisy-Chain (Caseta -> Shaft -> Undercut -> Production -> Haulage -> Shaft Return)
       const galleryDaisyChainPath = [
         { x: shackX, y: yTrunkSurface },
         { x: shaftX, y: yTrunkSurface },
@@ -1542,7 +1547,6 @@
       ];
       drawFiberLaserRay(galleryDaisyChainPath, 110, 2, '#00ffa3', 28);
 
-      // Sacrificial Ray 1 (B-Sac-1: Orebody down to Cave Back - Rayleigh Backscatter Reverse Pulse)
       const bSac1Path = [
         { x: shackX, y: yTrunkSurface },
         { x: bSac1X, y: yTrunkSurface },
@@ -1552,7 +1556,6 @@
       ];
       drawFiberLaserRay(bSac1Path, 75, 1, '#ffaa00', 24);
 
-      // Sacrificial Ray 2 (B-Sac-2: Orebody down to Cave Back - Rayleigh Backscatter Reverse Pulse)
       const bSac2Path = [
         { x: shackX, y: yTrunkSurface },
         { x: bSac2X, y: yTrunkSurface },
@@ -1562,6 +1565,7 @@
       ];
       drawFiberLaserRay(bSac2Path, 82, 1, '#ffaa00', 24);
     }
+    ctx.restore();
 
     // 7. SEISMIC WAVE PROPAGATION WITH PHYSICAL INELASTIC ATTENUATION
     for (let wIdx = activeWaves.length - 1; wIdx >= 0; wIdx--) {

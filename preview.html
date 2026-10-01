@@ -37,7 +37,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700;800&display=swap" rel="stylesheet">
 
-  <link rel="stylesheet" href="css/styles.css?v=20260928_05">
+  <link rel="stylesheet" href="css/styles.css?v=20261001_05">
 
   <style>
     /* Direct Layout Guarantee for 3D Simulator */
@@ -438,8 +438,8 @@
               <span>CORTE TRANSVERSAL GEOMECÁNICO INTERACTIVO · BLOCK CAVING &amp; DFOS</span>
             </div>
             <div class="sim-modes">
-              <button class="sim-mode-btn active" data-sim="dfos" id="btn-mode-dfos">FiberAndes DAS (Arreglo Furlong &amp; Anderson)</button>
-              <button class="sim-mode-btn" data-sim="esi" id="btn-mode-esi">Red Sísmica Tradicional (Geófonos en Boreholes 3D)</button>
+              <button class="sim-mode-btn active" data-sim="esi" id="btn-mode-esi">📡 Red Tradicional (Geófonos · Ver Área Roja)</button>
+              <button class="sim-mode-btn" data-sim="dfos" id="btn-mode-dfos">⚡ Encender Cobertura FiberAndes DAS (Reducir Área Roja)</button>
             </div>
             <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
               <span style="font-family:var(--font-mono); font-size:11px; color:var(--fg-2); margin-right:4px;">PROBAR ESCENARIOS:</span>
@@ -461,8 +461,8 @@
               <span class="sim-hud-dot"></span>
               <span id="sim-hud-text">💡 Pasa el cursor por el modelo para inspeccionar cada elemento</span>
             </div>
-            <div class="sim-status-banner detected" id="sim-status-banner">
-              <strong>FIBERANDES DAS: ARREGLO FURLONG &amp; ANDERSON (DAISY-CHAIN)</strong> — 12.000 canales con 1 solo interrogador DAS · Fibras laterales que rodean el yacimiento + Sacrificio en mineral + Monitoreo entre niveles
+            <div class="sim-status-banner blindspot" id="sim-status-banner">
+              <strong>📡 RED SÍSMICA TRADICIONAL (GEÓFONOS EN TÚNELES)</strong> — Límite físico de 300 m genera un <strong>área roja ciega masiva sobre el Cave-Back</strong> · Haz clic en <em>"Encender Cobertura FiberAndes DAS"</em> para ver cómo se reduce
             </div>
           </div>
 
@@ -877,7 +877,7 @@
   <script src="js/hero-canvas.js"></script>
 
   <!-- 2D Mine Geomechanics & Caving Simulator (3D simulator preserved in js/mine-3d-simulator.js) -->
-  <script src="js/mine-2d-simulator.js?v=20261001_03"></script>
+  <script src="js/mine-2d-simulator.js?v=20261001_05"></script>
 
   <script src="js/configurator.js"></script>
   <script src="js/app.js"></script>
