@@ -1,0 +1,1382 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FiberAndes — Distributed Fiber Optic Sensing (DFOS) en Chile | DAS · DSS · DTS</title>
+  <meta name="description" content="Primera empresa en Chile de Distributed Fiber Optic Sensing (DFOS) a escala industrial. Monitoreo continuo y en tiempo real de macizo rocoso, presas de relaves, obras civiles e infraestructura con tecnologías DAS, DSS y DTS.">
+  <meta name="author" content="FiberAndes SpA">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://www.fiberandes.cl/">
+
+  <!-- Open Graph / Facebook / LinkedIn -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://www.fiberandes.cl/">
+  <meta property="og:site_name" content="FiberAndes">
+  <meta property="og:locale" content="es_CL">
+  <meta property="og:title" content="FiberAndes — Distributed Fiber Optic Sensing (DFOS) en Chile">
+  <meta property="og:description" content="Transformamos la fibra óptica en miles de sensores continuos en tiempo real para macizo rocoso, presas de relaves y obras civiles. Cero puntos ciegos.">
+  <meta property="og:image" content="https://www.fiberandes.cl/assets/og-image.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="675">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="FiberAndes — DFOS Industrial en Chile">
+  <meta name="twitter:description" content="Monitoreo continuo de macizo rocoso, relaves y puentes mediante fibra óptica distribuida (DAS, DSS, DTS).">
+  <meta name="twitter:image" content="https://www.fiberandes.cl/assets/og-image.jpg">
+
+  <meta name="theme-color" content="#060911">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+  <link rel="apple-touch-icon" href="assets/favicon.svg">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/styles.css?v=20260928_05">
+
+  <style>
+    /* Direct Layout Guarantee for 3D Simulator */
+    .sim-3d-visual {
+      position: relative !important;
+      height: 560px !important;
+      background: #03060C !important;
+      border: 1px solid var(--line-strong) !important;
+      border-radius: var(--r-lg) !important;
+      overflow: hidden !important;
+      box-shadow: 0 16px 48px rgba(0, 0, 0, 0.6) !important;
+    }
+    .sim-3d-viewport {
+      position: absolute !important;
+      inset: 0 !important;
+      width: 100% !important;
+      height: 100% !important;
+      z-index: 1 !important;
+      cursor: grab;
+    }
+    .sim-3d-viewport:active { cursor: grabbing; }
+    .sim-3d-viewport canvas {
+      width: 100% !important;
+      height: 100% !important;
+      display: block !important;
+      outline: none !important;
+    }
+    .sim-geotech-legend-bar {
+      margin-top: 14px;
+      padding: 14px 16px;
+      background: rgba(6, 12, 22, 0.95);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: var(--r-md);
+      backdrop-filter: blur(10px);
+    }
+    .legend-bar-title {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--cyan);
+      letter-spacing: 0.05em;
+      margin-bottom: 12px;
+      text-transform: uppercase;
+    }
+    .legend-bar-items {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 10px;
+    }
+    .legend-card {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 9px 12px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.07);
+      border-radius: var(--r-sm);
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .legend-card:hover {
+      background: rgba(255, 255, 255, 0.06);
+      border-color: rgba(0, 240, 255, 0.35);
+    }
+    .legend-card svg {
+      flex-shrink: 0;
+    }
+    .legend-card-text {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      min-width: 0;
+    }
+    .legend-card-text strong {
+      font-size: 11px;
+      color: #fff;
+      font-family: var(--font-sans);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .legend-card-text span {
+      font-size: 10px;
+      color: var(--fg-2);
+      font-family: var(--font-mono);
+      line-height: 1.3;
+    }
+    /* Clean cockpit layout: Console Header & Telemetry Dock OUTSIDE the canvas (Zero obstruction) */
+    .sim-dashboard-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: stretch;
+      gap: 12px;
+      margin-bottom: 12px;
+      width: 100%;
+      box-sizing: border-box;
+    }
+    @media (max-width: 992px) {
+      .sim-dashboard-header {
+        flex-direction: column;
+      }
+    }
+
+    .sim-hud-inspector {
+      display: flex !important;
+      align-items: center !important;
+      gap: 10px !important;
+      background: rgba(6, 15, 28, 0.95) !important;
+      border: 1px solid rgba(0, 240, 255, 0.35) !important;
+      border-radius: var(--r-sm) !important;
+      padding: 10px 16px !important;
+      font-family: var(--font-mono) !important;
+      font-size: 11px !important;
+      color: #fff !important;
+      flex: 1 1 380px !important;
+      min-height: 44px !important;
+      box-sizing: border-box !important;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4) !important;
+      position: static !important;
+      max-width: none !important;
+    }
+    .sim-hud-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--cyan);
+      box-shadow: 0 0 8px var(--cyan);
+      flex-shrink: 0;
+    }
+
+    .sim-status-banner {
+      display: block !important;
+      font-family: var(--font-mono) !important;
+      font-size: 11px !important;
+      padding: 10px 16px !important;
+      border-radius: var(--r-sm) !important;
+      font-weight: 500 !important;
+      line-height: 1.5 !important;
+      flex: 1.3 1 480px !important;
+      min-height: 44px !important;
+      box-sizing: border-box !important;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4) !important;
+      position: static !important;
+      max-width: none !important;
+      transition: all 0.25s ease !important;
+    }
+    .sim-status-banner.detected {
+      background: rgba(0, 255, 163, 0.12) !important;
+      color: #00ffa3 !important;
+      border: 1px solid rgba(0, 255, 163, 0.45) !important;
+    }
+    .sim-status-banner.blindspot {
+      background: rgba(255, 75, 85, 0.16) !important;
+      color: #ff6b6b !important;
+      border: 1px solid rgba(255, 75, 85, 0.55) !important;
+    }
+
+    .sim-3d-telemetry {
+      display: grid !important;
+      grid-template-columns: repeat(4, 1fr) !important;
+      gap: 16px !important;
+      background: rgba(6, 11, 20, 0.95) !important;
+      border: 1px solid rgba(255, 255, 255, 0.12) !important;
+      border-radius: var(--r-sm) !important;
+      padding: 12px 20px !important;
+      margin-top: 10px !important;
+      margin-bottom: 12px !important;
+      width: 100% !important;
+      box-sizing: border-box !important;
+      position: static !important;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4) !important;
+    }
+    @media (max-width: 768px) {
+      .sim-3d-telemetry {
+        grid-template-columns: repeat(2, 1fr) !important;
+      }
+    }
+    .sim-tel-cell { display: flex !important; flex-direction: column !important; }
+    .sim-tel-cell .l {
+      font-family: var(--font-mono) !important;
+      font-size: 10px !important;
+      color: var(--fg-2) !important;
+      letter-spacing: 0.08em !important;
+      text-transform: uppercase !important;
+    }
+    .sim-tel-cell .v {
+      font-family: var(--font-display) !important;
+      font-size: 15px !important;
+      font-weight: 700 !important;
+      margin-top: 2px !important;
+    }
+
+    @media (max-width: 900px) {
+      .sim-3d-visual { height: 460px !important; }
+      .sim-3d-telemetry { grid-template-columns: repeat(2, 1fr) !important; gap: 8px !important; }
+      .legend-bar-items { grid-template-columns: 1fr !important; }
+      .sim-overlay-hint { display: none !important; }
+    }
+  </style>
+
+  <!-- Structured Data JSON-LD -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Organization",
+        "name": "FiberAndes",
+        "alternateName": "FiberAndes Chile",
+        "url": "https://www.fiberandes.cl",
+        "logo": "https://www.fiberandes.cl/assets/logo.svg",
+        "description": "Primera empresa en Chile de Distributed Fiber Optic Sensing (DFOS) a escala industrial. Monitoreo continuo de macizo rocoso, tranques de relaves y obras de ingeniería con DAS, DSS y DTS.",
+        "foundingDate": "2026",
+        "address": {
+          "@type": "PostalAddress",
+          "addressLocality": "Santiago",
+          "addressRegion": "Región Metropolitana",
+          "addressCountry": "CL"
+        },
+        "contactPoint": {
+          "@type": "ContactPoint",
+          "email": "contacto@fiberandes.cl",
+          "contactType": "sales",
+          "availableLanguage": ["Spanish", "English"]
+        }
+      },
+      {
+        "@type": "WebSite",
+        "name": "FiberAndes",
+        "url": "https://www.fiberandes.cl",
+        "inLanguage": ["es", "en"]
+      }
+    ]
+  }
+  </script>
+</head>
+<body>
+
+  <!-- ============================ HEADER / NAVIGATION ============================ -->
+  <header class="nav" role="banner">
+    <div class="wrap">
+      <a class="brand" href="index.html" aria-label="FiberAndes Inicio">
+        <img class="logo-svg" src="assets/logo.svg" alt="FiberAndes — Distributed Sensing Chile">
+      </a>
+
+      <nav class="nav-links" role="navigation" aria-label="Menú principal">
+        <a href="#comparativa">¿Por Qué DFOS?</a>
+        <a href="#tecnologias">Tecnologías</a>
+        <a href="#evidencia">Ciencia & Papers</a>
+        <a href="#aplicaciones">Aplicaciones</a>
+        <a href="#tecnologia-modelo">Sondajes & Modelo</a>
+        <a href="#plataforma">Software Hub</a>
+        <a href="#configurador">Cotizador</a>
+        <a href="#nosotros">Equipo Científico</a>
+        <a href="#contacto">Pilotos & Contacto</a>
+      </nav>
+
+      <div class="nav-right">
+        <div class="status-pill" title="Monitoreo activo">
+          <span class="status-dot"></span>
+          <span data-i18n="nav.status">RED ACTIVA · TIEMPO REAL</span>
+        </div>
+
+        <div class="lang-toggle" role="group" aria-label="Selector de idioma">
+          <button data-lang="es" class="active">ES</button>
+          <button data-lang="en">EN</button>
+        </div>
+
+        <a href="#contacto" class="btn btn-primary btn-sm" data-i18n="nav.cta">Cotizar Proyecto</a>
+
+        <button class="nav-toggle" aria-label="Abrir menú de navegación" aria-expanded="false">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Mobile Navigation Dropdown -->
+  <div class="mobile-nav" role="navigation" aria-label="Menú móvil">
+    <a href="#comparativa" data-i18n="nav.why">¿Por Qué DFOS?</a>
+    <a href="#tecnologias" data-i18n="nav.tech">Tecnologías</a>
+    <a href="#evidencia">Ciencia & Papers</a>
+    <a href="#aplicaciones" data-i18n="nav.apps">Aplicaciones</a>
+    <a href="#tecnologia-modelo">Sondajes & Modelo</a>
+    <a href="#plataforma" data-i18n="nav.platform">Plataforma Hub</a>
+    <a href="#configurador" data-i18n="nav.configurator">Cotizador</a>
+    <a href="#nosotros">Equipo Científico</a>
+    <a href="#contacto" data-i18n="nav.contact">Contacto</a>
+    <a href="#contacto" class="btn btn-primary" style="margin-top:20px;" data-i18n="nav.cta">Cotizar Proyecto</a>
+  </div>
+
+  <main>
+    <!-- ============================ HERO SECTION ============================ -->
+    <section class="hero" id="inicio">
+      <canvas id="hero-canvas" aria-hidden="true"></canvas>
+      <div class="hero-veil"></div>
+
+      <div class="wrap">
+        <div class="hero-content">
+          <div class="hero-pill-row reveal">
+            <span class="eyebrow"><span class="idx">CHILE</span> <span data-i18n="hero.badge">Pioneros en Chile · Sensoramiento Distribuido a Escala Industrial</span></span>
+          </div>
+
+          <h1 class="hero-tag reveal">
+            <span data-i18n="hero.h1.1">Toda la fibra es el sensor.</span><br>
+            <span class="gradient-text" data-i18n="hero.h1.2">Monitoreo continuo en tiempo real y sin puntos ciegos.</span>
+          </h1>
+
+          <p class="hero-sub reveal" data-i18n="hero.sub">
+            La primera red de Distributed Fiber Optic Sensing (DFOS) en Chile para minería e infraestructura crítica. Medición simultánea de vibración acústica (DAS), deformación milimétrica (DSS) y gradiente de temperatura (DTS) a lo largo de hasta 50 km.
+          </p>
+
+          <div class="hero-cta reveal">
+            <a href="#contacto" class="btn btn-primary" data-i18n="hero.cta.primary">
+              Solicitar Evaluación Técnica <span class="arr">→</span>
+            </a>
+            <a href="#comparativa" class="btn btn-secondary" data-i18n="hero.cta.secondary">
+              Ver Comparativa vs ESI
+            </a>
+          </div>
+
+          <!-- Hero Real-Time Telemetry Ribbon -->
+          <div class="hero-telemetry reveal">
+            <div class="telemetry-cell">
+              <span class="telemetry-label">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                <span data-i18n="hero.t1.l">COBERTURA ESPACIAL</span>
+              </span>
+              <div class="telemetry-value">100%<span class="unit">CONTINUA</span></div>
+              <p class="telemetry-desc" data-i18n="hero.t1.d">Monitoreo sin interrupciones</p>
+            </div>
+
+            <div class="telemetry-cell">
+              <span class="telemetry-label">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3h18v18H3zM9 9h6v6H9z"/></svg>
+                <span data-i18n="hero.t2.l">RESOLUCIÓN MÉTRICA</span>
+              </span>
+              <div class="telemetry-value">1.0<span class="unit">METRO</span></div>
+              <p class="telemetry-desc" data-i18n="hero.t2.d">Puntos virtuales cada metro</p>
+            </div>
+
+            <div class="telemetry-cell">
+              <span class="telemetry-label">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m4.93 4.93 14.14 14.14"/></svg>
+                <span data-i18n="hero.t3.l">ALCANCE ÓPTICO</span>
+              </span>
+              <div class="telemetry-value">50+<span class="unit">KM / CANAL</span></div>
+              <p class="telemetry-desc" data-i18n="hero.t3.d">Hasta 50 km por canal</p>
+            </div>
+
+            <div class="telemetry-cell">
+              <span class="telemetry-label">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                <span data-i18n="hero.t4.l">PUNTOS CIEGOS</span>
+              </span>
+              <div class="telemetry-value">0%<span class="unit">RIESGO</span></div>
+              <p class="telemetry-desc" data-i18n="hero.t4.d">Detección total de eventos</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================ SECTION 01: COMPARATIVA DFOS vs ESI ============================ -->
+    <section class="section-pad" id="comparativa">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <span class="eyebrow"><span class="idx">01</span> <span data-i18n="comp.eyebrow">01 · Cambio de Paradigma</span></span>
+          <h2 class="h-section" data-i18n="comp.title">Modelo 3D: Sondajes con DAS vs. Geófonos en Galerías</h2>
+          <p class="lead" data-i18n="comp.lead">
+            Los geófonos tradicionales solo se pueden instalar en las paredes de los túneles transitables, dejando el 70% del macizo rocoso profundo y el avance del cave-back en un punto ciego crítico. Con FiberAndes, perforamos e inyectamos fibra óptica en sondajes profundos (daisy-chaining), monitoreando el corazón de la roca sin puntos ciegos.
+          </p>
+        </div>
+
+        <!-- Interactive 3D Comparison Arena & Live Simulator -->
+        <div class="comparison-box reveal">
+          <div class="sim-controls">
+            <div class="sim-title">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>
+              <span>CORTE TRANSVERSAL GEOMECÁNICO INTERACTIVO · BLOCK CAVING &amp; DFOS</span>
+            </div>
+            <div class="sim-modes">
+              <button class="sim-mode-btn active" data-sim="dfos" id="btn-mode-dfos">FiberAndes DAS (Sondajes + Galerías)</button>
+              <button class="sim-mode-btn" data-sim="esi" id="btn-mode-esi">Red Sísmica Tradicional (Geófonos en Boreholes 3D)</button>
+            </div>
+            <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+              <span style="font-family:var(--font-mono); font-size:11px; color:var(--fg-2); margin-right:4px;">PROBAR ESCENARIOS:</span>
+              <button class="sim-mode-btn" id="btn-sim-caveback" style="background:rgba(0,240,255,0.12); color:var(--cyan); border:1px solid var(--cyan); display:flex; align-items:center; gap:5px; font-size:11px; padding:6px 12px;">
+                💥 1. Sismo en Cave-Back (-1.000 m)
+              </button>
+              <button class="sim-mode-btn" id="btn-sim-rockburst" style="background:rgba(255,102,0,0.12); color:#ffaa33; border:1px solid #ff7700; display:flex; align-items:center; gap:5px; font-size:11px; padding:6px 12px;">
+                ⚠️ 2. Estallido en Pilar Túnel (-1.820 m)
+              </button>
+              <button class="sim-mode-btn" id="btn-sim-fault" style="background:rgba(0,255,163,0.12); color:var(--emerald); border:1px solid var(--emerald); display:flex; align-items:center; gap:5px; font-size:11px; padding:6px 12px;">
+                📐 3. Cizalle Falla Abutment
+              </button>
+            </div>
+          </div>
+
+          <!-- Dedicated Top Console (Outside Canvas): Dynamic Hover HUD & Seismic Status Banner -->
+          <div class="sim-dashboard-header">
+            <div class="sim-hud-inspector" id="sim-hud-inspector">
+              <span class="sim-hud-dot"></span>
+              <span id="sim-hud-text">💡 Pasa el cursor por el modelo para inspeccionar cada elemento</span>
+            </div>
+            <div class="sim-status-banner detected" id="sim-status-banner">
+              <strong>FIBERANDES DFOS: ARREGLO EFICIENTE EN DAISY-CHAIN</strong> — 8.500 canales con 1 solo interrogador DAS + Switch DSS · Lazos en U en pozos y túneles
+            </div>
+          </div>
+
+          <!-- 2D Geomechanical Canvas Container (100% DESPEJADO, SIN RECUADROS ENCIMA) -->
+          <div class="sim-3d-visual" id="mine-3d-canvas-container" title="Haz clic en cualquier punto del macizo rocoso para generar sismicidad">
+          </div>
+
+          <!-- Real-time 3D Telemetry Strip (Outside Canvas, Below) -->
+          <div class="sim-3d-telemetry" id="sim-telemetry-strip">
+            <div class="sim-tel-cell">
+              <span class="l">COBERTURA VOLUMÉTRICA</span>
+              <span class="v" id="tel-val-cov" style="color:var(--emerald);">98%</span>
+            </div>
+            <div class="sim-tel-cell">
+              <span class="l">SENSORES ACTIVOS</span>
+              <span class="v" id="tel-val-sens" style="color:#fff;">8.500 Canales (1 Interrogador DAS)</span>
+            </div>
+            <div class="sim-tel-cell">
+              <span class="l">INCERTIDUMBRE HIPOCENTRO</span>
+              <span class="v" id="tel-val-uncert" style="color:var(--cyan);">±1.8 metros</span>
+            </div>
+            <div class="sim-tel-cell">
+              <span class="l">SLOW-STRAIN EN ROCA</span>
+              <span class="v" id="tel-val-strain" style="color:var(--emerald);">Activo (Doble Banda)</span>
+            </div>
+          </div>
+
+          <!-- Geotechnical Symbology & Sensor Reference Guide (Horizontal, Outside Canvas) -->
+          <div class="sim-geotech-legend-bar">
+            <div class="legend-bar-title">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+              <span>CONVENCIONES DEL MODELO GEOMECÁNICO (MINIATURAS REALES):</span>
+            </div>
+            <div class="legend-bar-items">
+              <div class="legend-card">
+                <svg width="34" height="18" viewBox="0 0 34 18">
+                  <path d="M 6,16 L 6,4 A 4 4 0 0 1 14,4 L 14,16" stroke="#00f0ff" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+                  <circle cx="6" cy="16" r="2" fill="#00ffa3"/>
+                  <circle cx="14" cy="16" r="2" fill="#00ffa3"/>
+                  <line x1="20" y1="9" x2="32" y2="9" stroke="#00ffa3" stroke-width="2.5" stroke-linecap="round"/>
+                </svg>
+                <div class="legend-card-text">
+                  <strong>Fibra Permanente en Loop (Cian/Verde)</strong>
+                  <span>En túneles y roca perimetral intacta · Retorno en U inmune al caving</span>
+                </div>
+              </div>
+
+              <div class="legend-card">
+                <svg width="34" height="18" viewBox="0 0 34 18">
+                  <line x1="4" y1="3" x2="22" y2="13" stroke="#ffaa00" stroke-width="2.8" stroke-linecap="round"/>
+                  <circle cx="22" cy="13" r="3" fill="#ffaa00"/>
+                  <line x1="20" y1="11" x2="24" y2="15" stroke="#ffffff" stroke-width="1.2"/>
+                  <line x1="25" y1="12" x2="31" y2="16" stroke="#ff4b55" stroke-width="1.5" stroke-dasharray="2 2"/>
+                </svg>
+                <div class="legend-card-text">
+                  <strong>Cable Sacrificio / Consumible (Ámbar)</strong>
+                  <span>Cementado en orebody · Mide microfracturación hasta cortarse con el caving</span>
+                </div>
+              </div>
+
+              <div class="legend-card">
+                <svg width="34" height="18" viewBox="0 0 34 18">
+                  <path d="M 2,5 Q 17,0 32,5" stroke="#ff281a" stroke-width="2.5" fill="none"/>
+                  <rect x="5" y="7" width="24" height="7" fill="rgba(255,140,40,0.25)" stroke="#ff8c28" stroke-width="1" stroke-dasharray="2 2"/>
+                </svg>
+                <div class="legend-card-text">
+                  <strong>Cave-Back y Air Gap (Crítico)</strong>
+                  <span>Cavidad controlada para evitar "Air Blast" · Fibra calibra la extracción</span>
+                </div>
+              </div>
+
+              <div class="legend-card">
+                <svg width="34" height="18" viewBox="0 0 34 18"><line x1="2" y1="15" x2="22" y2="4" stroke="#7a93b4" stroke-width="2.5" stroke-dasharray="3 2"/><rect x="21" y="2" width="9" height="9" fill="#ffb020" stroke="#ffffff" stroke-width="1.2"/><line x1="23" y1="6.5" x2="28" y2="6.5" stroke="#111c2b"/><line x1="25.5" y1="4" x2="25.5" y2="9" stroke="#111c2b"/></svg>
+                <div class="legend-card-text">
+                  <strong>Cápsulas Híbridas Borehole (Tradicional)</strong>
+                  <span>Pozos 15–25m fuera de EDZ · Geófono triaxial + Acelerómetro</span>
+                </div>
+              </div>
+
+              <div class="legend-card">
+                <svg width="34" height="18" viewBox="0 0 34 18"><rect x="1" y="4" width="32" height="10" fill="#111c2b" stroke="#00e1ff" stroke-width="1.2"/><rect x="10" y="4" width="14" height="10" fill="rgba(255,102,0,0.4)" stroke="#ff7700" stroke-width="1.2"/></svg>
+                <div class="legend-card-text">
+                  <strong>Galerías y Pilares en Carga</strong>
+                  <span>Túneles de producción y pilares de roca con riesgo de estallido</span>
+                </div>
+              </div>
+
+              <div class="legend-card">
+                <svg width="34" height="18" viewBox="0 0 34 18"><circle cx="4" cy="9" r="3" fill="#ff4b55"/><path d="M 11,4 A 7 7 0 0 1 11,14" stroke="#00f0ff" stroke-width="2" fill="none"/><path d="M 19,1 A 12 12 0 0 1 19,17" stroke="#ffc83b" stroke-width="2" stroke-dasharray="3 2" fill="none"/></svg>
+                <div class="legend-card-text">
+                  <strong>Ondas Sísmicas P (Cian) y S (Ámbar)</strong>
+                  <span>Disipación por atenuación inelástica (Q) al superar 300 m</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Side-by-side Comparative Cards -->
+          <div class="comp-grid">
+            <div class="comp-card discrete">
+              <span class="comp-badge">Red Sísmica Tradicional (Geófonos Triaxiales 3D)</span>
+              <h3>Geófonos en Boreholes de Túnel</h3>
+              <p>Instrumentación sísmica convencional en perforaciones cementadas (15 a 25 m en hastiales/techos) para superar la EDZ del túnel.</p>
+              <ul class="comp-list">
+                <li>
+                  <svg class="icon-x" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m15 9-6 6M9 9l6 6"/></svg>
+                  <span><strong>Fuerte Atenuación Inelástica (Q):</strong> Las altas frecuencias (&gt;150 Hz) de microsismos ($M_W &lt; 0$) se disipan en el macizo rocoso fracturado. A &gt;350 m del Cave-Back en ascenso, la señal cae bajo el piso de ruido ambiental antes de alcanzar los boreholes inferiores.</span>
+                </li>
+                <li>
+                  <svg class="icon-x" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m15 9-6 6M9 9l6 6"/></svg>
+                  <span><strong>Vacío Superior en Cota (Pérdida de Apertura 3D):</strong> Al progresar el caving hacia arriba, no existen galerías accesibles sobre la corona para perforar boreholes, generando un cono ciego superior sin cobertura vertical.</span>
+                </li>
+                <li>
+                  <svg class="icon-x" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m15 9-6 6M9 9l6 6"/></svg>
+                  <span><strong>Malla Puntual Discreta (±15 a ±25 m):</strong> Decenas de estaciones versus decenas de miles de canales continuos de fibra óptica distribuida.</span>
+                </li>
+                <li>
+                  <svg class="icon-x" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m15 9-6 6M9 9l6 6"/></svg>
+                  <span><strong>Cero Medición de Deformación Lenta (Slow-Strain, 0 Hz):</strong> Sensores inerciales dinámicos que no pueden medir la sobrecarga cuasi-estática y microdeformación lenta previa al estallido de roca (*rockburst*).</span>
+                </li>
+              </ul>
+            </div>
+
+            <div class="comp-card dfos">
+              <span class="comp-badge">Revolución FiberAndes (DFOS)</span>
+              <h3>Distributed Fiber Optic Sensing</h3>
+              <p>El cable de fibra óptica completo ES el sensor: un único hilo equivale a más de 50.000 sensores continuos.</p>
+              <ul class="comp-list">
+                <li>
+                  <svg class="icon-check" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+                  <span><strong>100% Cobertura Continua:</strong> Muestreo ininterrumpido cada 1 metro a lo largo de toda la extensión.</span>
+                </li>
+                <li>
+                  <svg class="icon-check" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+                  <span><strong>100% Pasivo en Terreno:</strong> Solo viaja luz. Sin electricidad ni baterías en faena. Inmune a rayos, EMI y polvo.</span>
+                </li>
+                <li>
+                  <svg class="icon-check" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+                  <span><strong>Costo marginal mínimo:</strong> Monitorear 10 km adicionales solo requiere extender fibra estándar o blindada.</span>
+                </li>
+                <li>
+                  <svg class="icon-check" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+                  <span><strong>Multimodalidad simultánea:</strong> Combina sismicidad acústica (DAS), deformación (DSS) y filtraciones térmicas (DTS).</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================ SECTION 02: TECNOLOGÍAS (DAS · DSS · DTS) ============================ -->
+    <section class="section-pad" id="tecnologias" style="background: var(--bg-alt);">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <span class="eyebrow"><span class="idx">02</span> <span data-i18n="tech.eyebrow">02 · Tecnologías DFOS</span></span>
+          <h2 class="h-section" data-i18n="tech.title">Tres pilares físicos sobre la misma fibra óptica</h2>
+          <p class="lead" data-i18n="tech.lead">
+            Interrogamos el cable mediante pulsos láser coherentes para medir tres fenómenos de retrodispersión óptica independientes:
+          </p>
+        </div>
+
+        <div class="tech-grid">
+          <!-- DAS -->
+          <div class="tech-card reveal" data-tech="das">
+            <div>
+              <div class="tech-header">
+                <span class="tech-acronym">DAS</span>
+                <div class="tech-icon-wrap" aria-hidden="true">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12h3l3-8 4 16 3-10 2 5h5"/></svg>
+                </div>
+              </div>
+              <h3 class="tech-name">Distributed Acoustic Sensing</h3>
+              <p class="tech-desc">
+                Detección acústica distribuida mediante dispersión Rayleigh coherente ($\Phi$-OTDR). Mide ondas sísmicas inducidas, microfracturación de macizo rocoso y vibraciones dinámicas con muestreo de hasta 20 kHz.
+              </p>
+              <div class="tech-specs-box">
+                <div class="tech-spec-row">
+                  <span class="k">Dispersión Óptica</span>
+                  <span class="v">Rayleigh de Fase</span>
+                </div>
+                <div class="tech-spec-row">
+                  <span class="k">Frecuencias</span>
+                  <span class="v">0.05 Hz a 20 kHz</span>
+                </div>
+                <div class="tech-spec-row">
+                  <span class="k">Resolución Espacial</span>
+                  <span class="v">1 a 10 metros</span>
+                </div>
+              </div>
+            </div>
+            <a href="#tecnologias" class="tech-link" data-open-drawer="das" id="link-drawer-das">
+              Ver detalle técnico DAS <span class="arr">→</span>
+            </a>
+          </div>
+
+          <!-- DSS -->
+          <div class="tech-card reveal" data-tech="dss">
+            <div>
+              <div class="tech-header">
+                <span class="tech-acronym">DSS</span>
+                <div class="tech-icon-wrap" aria-hidden="true">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 14a8 8 0 0 1 16 0M2 19h20M12 2v4M8 6l2 2M16 6l-2 2"/></svg>
+                </div>
+              </div>
+              <h3 class="tech-name">Distributed Strain Sensing</h3>
+              <p class="tech-desc">
+                Detección de deformación distribuida mediante dispersión Brillouin (BOTDA / BOTDR). Mide micro-deformación estática y dinámica ($\pm 2\,\mu\varepsilon$), detectando subsidencia, convergencia en túneles y cizallamiento en taludes.
+              </p>
+              <div class="tech-specs-box">
+                <div class="tech-spec-row">
+                  <span class="k">Dispersión Óptica</span>
+                  <span class="v">Brillouin (BOTDA)</span>
+                </div>
+                <div class="tech-spec-row">
+                  <span class="k">Exactitud</span>
+                  <span class="v">±2 micro-strain ($\mu\varepsilon$)</span>
+                </div>
+                <div class="tech-spec-row">
+                  <span class="k">Resolución Espacial</span>
+                  <span class="v">0.2 a 1 metro</span>
+                </div>
+              </div>
+            </div>
+            <a href="#tecnologias" class="tech-link" data-open-drawer="dss" id="link-drawer-dss">
+              Ver detalle técnico DSS <span class="arr">→</span>
+            </a>
+          </div>
+
+          <!-- DTS -->
+          <div class="tech-card reveal" data-tech="dts">
+            <div>
+              <div class="tech-header">
+                <span class="tech-acronym">DTS</span>
+                <div class="tech-icon-wrap" aria-hidden="true">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 14.76V3.5a2.5 2.5 0 0 0-5 0v11.26a4.5 4.5 0 1 0 5 0z"/></svg>
+                </div>
+              </div>
+              <h3 class="tech-name">Distributed Temperature Sensing</h3>
+              <p class="tech-desc">
+                Detección térmica distribuida mediante dispersión Raman inelástica. Identifica filtraciones milimétricas en tranques de relaves (seepage), fugas en tuberías de proceso y monitoreo térmico en cables de alta potencia.
+              </p>
+              <div class="tech-specs-box">
+                <div class="tech-spec-row">
+                  <span class="k">Dispersión Óptica</span>
+                  <span class="v">Raman (Anti-Stokes)</span>
+                </div>
+                <div class="tech-spec-row">
+                  <span class="k">Exactitud Térmica</span>
+                  <span class="v">Hasta 0.01 °C</span>
+                </div>
+                <div class="tech-spec-row">
+                  <span class="k">Resolución Espacial</span>
+                  <span class="v">1.0 metro continuo</span>
+                </div>
+              </div>
+            </div>
+            <a href="#tecnologias" class="tech-link" data-open-drawer="dts" id="link-drawer-dts">
+              Ver detalle técnico DTS <span class="arr">→</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================ SECTION 03: FUNDAMENTOS CIENTÍFICOS & PAPERS ============================ -->
+    <section class="section-pad" id="evidencia" style="background: var(--bg);">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <span class="eyebrow"><span class="idx">03</span> <span>03 · Evidencia Científica & Papers</span></span>
+          <h2 class="h-section">Validación empírica en minería y macizos rocosos profundos</h2>
+          <p class="lead">
+            Nuestros principios de diseño no son supuestos teóricos: se basan en el cuerpo de investigación científica más reciente sobre Distributed Acoustic Sensing aplicado a condiciones extremas de esfuerzo minero (como el proyecto Onaping Depth de Glencore y el Bedretto Underground Lab).
+          </p>
+        </div>
+
+        <!-- Scientific Case Cards Grid -->
+        <div class="science-grid reveal">
+          <!-- Card 1: Monitoreo de Doble Banda -->
+          <div class="science-card">
+            <div>
+              <div class="science-header">
+                <span class="science-badge">Paradigma Científico</span>
+                <span class="science-stat">&lt; 0.1 Hz a kHz</span>
+              </div>
+              <h3 class="science-title">Monitoreo de Doble Banda: Sismos y Deformación Lenta</h3>
+              <p class="science-text">
+                Los sensores sísmicos convencionales poseen filtros paso-alto que ignoran frecuencias inferiores a 5–10 Hz. DAS opera en <strong>Doble Banda simultánea</strong>: captura la microsismicidad dinámica de alta frecuencia (&gt;10 Hz) y, al mismo tiempo, mide la <strong>tasa de deformación lenta (slow-strain, &lt;0.1 Hz)</strong>. Esta deformación cuasi-estática revela la redistribución de esfuerzos y la relajación asísmica del macizo rocoso horas y días antes de un estallido de roca (strainburst).
+              </p>
+            </div>
+            <div class="science-footnote">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+              <span>Paper Ref: Karrenbach et al. / EAGE &amp; Mining Geophysics Review</span>
+            </div>
+          </div>
+
+          <!-- Card 2: Caso Onaping Depth -->
+          <div class="science-card">
+            <div>
+              <div class="science-header">
+                <span class="science-badge copper">Caso Real · Glencore Onaping</span>
+                <span class="science-stat">-40% Incertidumbre</span>
+              </div>
+              <h3 class="science-title">Reducción de Incertidumbre Espacial en Sondajes</h3>
+              <p class="science-text">
+                En el proyecto minero <strong>Onaping Depth (Glencore, Canadá)</strong>, la incorporación de arreglos de fibra óptica DAS en sondajes profundos integrados a la red de geófonos triaxiales demostró una reducción contundente del error de localización hipocentral: la desviación estándar del error bajó de <strong>5 m a 3 m</strong> (~40% de mejora). La densidad continua de trayectorias de rayos a lo largo del pozo elimina ambigüedades espaciales de estaciones discretas.
+              </p>
+            </div>
+            <div class="science-footnote">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+              <span>Paper Ref: Glencore Onaping Depth DAS Trial / Caving &amp; Seismicity</span>
+            </div>
+          </div>
+
+          <!-- Card 3: Caving & Cave-Back -->
+          <div class="science-card">
+            <div>
+              <div class="science-header">
+                <span class="science-badge emerald">Block &amp; Panel Caving</span>
+                <span class="science-stat">M &lt; 0 hasta M -2</span>
+              </div>
+              <h3 class="science-title">Seguimiento de Cave-Back y Zona Plastificada</h3>
+              <p class="science-text">
+                En métodos de hundimiento por bloques masivos, predecir la propagación vertical del quiebre (cave-back) es vital. La fibra óptica instalada en sondajes sub-verticales sobre el bloque detecta eventos de magnitudes extremadamente bajas (hasta Mw -2.0) asociados al quiebre inicial y mapea la expansión de la <strong>zona plastificada (yielded zone)</strong>. Además, la tasa de deformación entrega advertencia anticipada días antes de que el cizalle corte el cable.
+              </p>
+            </div>
+            <div class="science-footnote">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+              <span>Paper Ref: Bedretto Underground Laboratory &amp; Mine Seismology Studies</span>
+            </div>
+          </div>
+
+          <!-- Card 4: Borehole Daisy-Chaining & Engineered Fiber -->
+          <div class="science-card">
+            <div>
+              <div class="science-header">
+                <span class="science-badge purple">Ingeniería de Faena</span>
+                <span class="science-stat">+20 dB SNR · 120 dB Rango</span>
+              </div>
+              <h3 class="science-title">Sondajes Daisy-Chaining &amp; Fibras de Alta Dispersión</h3>
+              <p class="science-text">
+                Para optimizar la inversión en faena, desplegamos arreglos <strong>daisy-chain</strong>: un único cable continuo entra y sale de múltiples sondajes geomecánicos mediante bucles de fondo de pozo (*downhole turnarounds*). Con el uso de <em>engineered fibers</em> (fibras con micro-reflectores), se incrementa la retrodispersión Rayleigh en +20 dB, alcanzando un rango dinámico de 120 dB idéntico al de un geófono de laboratorio, pero distribuido en miles de metros.
+              </p>
+            </div>
+            <div class="science-footnote">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+              <span>Paper Ref: Advances in Downhole Optoelectronics &amp; Specialty Fibers</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Comparative Matrix Table -->
+        <div class="science-table-wrap reveal">
+          <table class="science-table" aria-label="Matriz comparativa Red Híbrida Borehole vs FiberAndes DFOS">
+            <thead>
+              <tr>
+                <th scope="col">Parámetro Técnico</th>
+                <th scope="col">Red Híbrida Borehole (Geófono + Acelerómetro IMS)</th>
+                <th scope="col">FiberAndes DFOS (DAS + DSS + DTS)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Parámetro Físico Fundamental</td>
+                <td><strong>Velocidad (u̇, mm/s)</strong> con geófono pasivo + <strong>Aceleración (ü, g)</strong> con acelerómetro piezoeléctrico</td>
+                <td><strong>Tasa de Deformación Dinámica (ε̇, nε/s)</strong> con DAS + <strong>Deformación Estática (ε, µε)</strong> con DSS continua</td>
+              </tr>
+              <tr>
+                <td>Densidad Espacial de Canales</td>
+                <td>30 a 80 cápsulas discretas cementadas en toda la mina</td>
+                <td><strong>10.000 sensores virtuales continuos</strong> cada 10 km (1 canal cada 1 metro ininterrumpido)</td>
+              </tr>
+              <tr>
+                <td>Banda de Frecuencia y Deformación Lenta</td>
+                <td>Paso-alto dinámico (&gt;4.5 Hz a kHz) · <strong>0% respuesta a deformación estática (0 Hz / DC)</strong></td>
+                <td><strong>Doble Banda Nativa:</strong> Dinámica de alta frecuencia (&gt;5 kHz con DAS) + <strong>Slow-strain estático (0 Hz a &lt;0.1 Hz con DSS)</strong></td>
+              </tr>
+              <tr>
+                <td>Pre-alerta a Estallidos de Roca (Rockburst)</td>
+                <td>Ciego a la microdeformación previa · Registra solo el impacto una vez ocurrida la fractura dinámica</td>
+                <td><strong>Detección de sobrecarga previa:</strong> mide la aceleración de creep cuasi-estático horas y días antes del colapso</td>
+              </tr>
+              <tr>
+                <td>Sensibilidad a Microeventos (Mw)</td>
+                <td>Geófono hasta Mw ~ -1.5 (lejos) · Acelerómetro hasta Mw ~ -2.5 (únicamente a &lt;50 m por atenuación Q)</td>
+                <td><strong>Hasta Mw &lt; -2.5 continuo:</strong> fibra cementada en sondaje cruza el frente de quiebre a metros de distancia</td>
+              </tr>
+              <tr>
+                <td>Apertura 3D en Cota (Cave-Back)</td>
+                <td><strong>Vacío Superior:</strong> restringido a niveles inferiores transitables · Sin acceso sobre la corona</td>
+                <td><strong>Sondajes profundos desde superficie:</strong> atraviesa la corona y cierra el volumen 3D superior sin requerir túneles</td>
+              </tr>
+              <tr>
+                <td>Incertidumbre de Localización</td>
+                <td>Desviación estándar típica: ±15 a ±25 m en geometría planar de galerías</td>
+                <td><strong>Desviación reducida a ±1.8 metros</strong> (densidad nanométrica de trayectorias de rayos en pozo)</td>
+              </tr>
+              <tr>
+                <td>Supervivencia ante Cizalle de Falla</td>
+                <td>Si la roca corta el cable de cobre, la estación híbrida se pierde irreversiblemente</td>
+                <td><strong>Lectura continua hasta el punto de corte:</strong> detecta la cota métrica exacta del plano de cizalle</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================ SECTION 04: APLICACIONES ============================ -->
+    <section class="section-pad" id="aplicaciones" style="background: var(--bg-alt);">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <span class="eyebrow"><span class="idx">04</span> <span data-i18n="app.eyebrow">04 · Aplicaciones Industriales</span></span>
+          <h2 class="h-section" data-i18n="app.title">Diseñado para la geología extrema de los Andes</h2>
+          <p class="lead" data-i18n="app.lead">
+            Desde las profundidades de la minería subterránea chilena hasta tranques de relave y obras civiles de gran envergadura.
+          </p>
+        </div>
+
+        <div class="apps-grid">
+          <!-- App 1: Macizo Rocoso & Minería Subterránea -->
+          <div class="app-card reveal">
+            <div class="app-media">
+              <img src="assets/app-macizorocoso.jpg" alt="Monitoreo de macizo rocoso y minería subterránea con fibra óptica FiberAndes" loading="lazy">
+              <span class="app-media-badge">Minería Subterránea</span>
+            </div>
+            <div class="app-body">
+              <h3>Macizo Rocoso & Túneles Mineros</h3>
+              <p>
+                Monitoreo continuo de desprendimientos, caving, estabilidad de piques y control de fortificación. Cables de fibra embebidos en el macizo detectan microfracturación previa a estallidos de roca (rockburst) y convergencia en galerías con precisión milimétrica.
+              </p>
+              <div class="app-tags">
+                <span class="app-tag">DAS Microsísmico</span>
+                <span class="app-tag">DSS Convergencia</span>
+                <span class="app-tag">Block Caving</span>
+                <span class="app-tag">Control de Tronadura</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- App 2: Tranques y Presas de Relave -->
+          <div class="app-card reveal">
+            <div class="app-media">
+              <img src="assets/app-relaves.jpg" alt="Monitoreo de presas y tranques de relaves con DFOS en Chile" loading="lazy">
+              <span class="app-media-badge">Tranques de Relaves</span>
+            </div>
+            <div class="app-body">
+              <h3>Tranques & Presas de Relave</h3>
+              <p>
+                Cumplimiento estricto de la normativa Sernageomin y estándar global GISTM. Integración simultánea de detección de filtraciones y líneas freáticas de saturación (DTS) con el monitoreo de asentamiento y deformación del muro (DSS) a lo largo de kilómetros.
+              </p>
+              <div class="app-tags">
+                <span class="app-tag">DTS Filtraciones (Seepage)</span>
+                <span class="app-tag">DSS Asentamiento Dique</span>
+                <span class="app-tag">Estabilidad Geotécnica</span>
+                <span class="app-tag">GISTM Ready</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Secondary Industrial Sectors -->
+        <div class="apps-secondary reveal">
+          <div class="app-mini-card">
+            <svg class="app-mini-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 21h18M5 21V7l7-4 7 4v14M10 9v4M14 9v4"/></svg>
+            <h4>Obras Civiles & Puentes</h4>
+            <p>Monitoreo de salud estructural (SHM) en puentes de gran luz, viaductos, presas hidroeléctricas y fundaciones profundas.</p>
+          </div>
+
+          <div class="app-mini-card">
+            <svg class="app-mini-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="m2 2 20 20M2 12h20M12 2v20"/></svg>
+            <h4>Taludes en Rajo Abierto</h4>
+            <p>Perfil continuo de cizallamiento y deformación en bermas y bancos de extracción, inmune a bloqueos por polvo o niebla.</p>
+          </div>
+
+          <div class="app-mini-card">
+            <svg class="app-mini-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 14h6v6H4zM14 4h6v6h-6zM7 14V7a3 3 0 0 1 3-3h4"/></svg>
+            <h4>Ductos & Mineroductos</h4>
+            <p>Localización inmediata de derrames, fugas térmicas en tuberías de concentrado de cobre y detección perimetral de intrusión.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================ SECTION 05: MODELO TECNOLÓGICO ============================ -->
+    <section class="section-pad" id="tecnologia-modelo" style="background: var(--bg-alt);">
+      <div class="wrap">
+        <div class="hw-layout">
+          <div class="reveal">
+            <span class="eyebrow"><span class="idx">05</span> <span>05 · Arquitectura & Modelo de Despliegue</span></span>
+            <h2 class="h-section">Ingeniería de despliegue y procesamiento avanzado</h2>
+            <p class="lead">
+              No nos limitamos a instalar cables: integramos la mejor optoelectrónica mundial y diseñamos redes de sensoramiento adaptadas a la geología minera más desafiante.
+            </p>
+
+            <ul class="hw-specs">
+              <li>
+                <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                <div>
+                  <strong>Integración de Interrogadores de Clase Mundial</strong>
+                  <span>Trabajamos con interrogadores optoelectrónicos de última generación (DAS, DSS, DTS), seleccionando la tecnología óptica idónea para cada tipo de activo y longitud de monitoreo.</span>
+                </div>
+              </li>
+              <li>
+                <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m4.93 4.93 14.14 14.14"/></svg>
+                <div>
+                  <strong>Instrumentación en Sondajes Profundos (Daisy-Chain)</strong>
+                  <span>Desplegamos arreglos de fibra óptica dentro de pozos y sondajes geológicos, transformándolos en verdaderos sensores continuos 3D de temperatura, deformación y sismicidad en profundidad.</span>
+                </div>
+              </li>
+              <li>
+                <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M9 9h6v6H9z"/></svg>
+                <div>
+                  <strong>Algoritmos de Procesamiento de Señales Propios</strong>
+                  <span>Desarrollamos algoritmos avanzados para filtrar ruido operacional, aislar microfracturas inducidas de tronaduras y correlacionar deformaciones con modelos geomecánicos.</span>
+                </div>
+              </li>
+              <li>
+                <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                <div>
+                  <strong>Respaldo en Geofísica y Geomecánica</strong>
+                  <span>Diseño experimental liderado por especialistas en sismología con fibra óptica y geología de peligros en Chile.</span>
+                </div>
+              </li>
+            </ul>
+
+            <div style="margin-top: 28px;">
+              <a href="#contacto" class="btn btn-secondary">
+                Proponer un Piloto en Faena <span class="arr">→</span>
+              </a>
+            </div>
+          </div>
+
+          <div class="reveal">
+            <figure class="hw-media">
+              <img src="assets/hardware-interrogador.jpg" alt="Integración y despliegue de interrogadores optoelectrónicos para minería" loading="lazy">
+            </figure>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================ SECTION 06: PLATAFORMA HUB ============================ -->
+    <section class="section-pad" id="plataforma">
+      <div class="wrap">
+        <div class="hub-banner reveal">
+          <div class="hub-grid">
+            <div>
+              <span class="eyebrow"><span class="idx">06</span> <span data-i18n="hub.eyebrow">06 · Software & Analítica</span></span>
+              <h2 class="h-section" style="margin-top: 14px;" data-i18n="hub.title">FiberAndes Hub: De la luz al insight operacional</h2>
+              <p class="lead" data-i18n="hub.lead">
+                Visualización en cascada (Waterfall plots) 2D/3D en tiempo real, correlación geotécnica y alarmas instantáneas.
+              </p>
+
+              <div class="hub-features">
+                <div class="hub-feat-item">
+                  <h4>Cascadas Optoelectrónicas</h4>
+                  <p>Mapeo continuo de distancia vs tiempo vs energía espectral para discriminación inmediata de eventos.</p>
+                </div>
+                <div class="hub-feat-item">
+                  <h4>Inteligencia Artificial Local</h4>
+                  <p>Clasificación automática: distingue tronaduras operacionales de microfracturas de roca o tráfico de camiones.</p>
+                </div>
+                <div class="hub-feat-item">
+                  <h4>Integración BIM & GIS 3D</h4>
+                  <p>Superposición del cable de fibra georreferenciado sobre el modelo topográfico y geológico de la faena.</p>
+                </div>
+                <div class="hub-feat-item">
+                  <h4>Alertas Multicanal 24/7</h4>
+                  <p>Despacho en sub-segundos por WhatsApp, SMS, Webhook y relés físicos a salas de control mineras.</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Interactive Hub Telemetry Simulation Display -->
+            <div class="hub-mockup">
+              <div class="mockup-header">
+                <div class="mockup-dots">
+                  <span class="mockup-dot active"></span>
+                  <span class="mockup-dot"></span>
+                  <span class="mockup-dot"></span>
+                </div>
+                <span class="mockup-status">STREAM EN VIVO · LATENCIA 0.12s</span>
+              </div>
+              <div class="mockup-waterfall">
+                <div class="mockup-waterfall-lines"></div>
+                <div style="position:relative; z-index:2; text-align:center;">
+                  <span style="font-size:12px; color:var(--cyan); letter-spacing:0.1em; display:block;">CASCADA ACÚSTICA DAS · GALERÍA SUR</span>
+                  <strong style="font-size:16px; color:#fff;">50.000 PUNTOS SENSORES MONITOREADOS</strong>
+                </div>
+              </div>
+              <div style="display:flex; justify-content:space-between; margin-top:14px; font-size:11px; color:var(--fg-2);">
+                <span>CANAL 01: MACIZO ROCOSO</span>
+                <span>TASA: 10 kHz</span>
+                <span style="color:var(--emerald);">ESTADO: ÓPTIMO</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================ SECTION 07: CONFIGURADOR INTERACTIVO ============================ -->
+    <section class="section-pad" id="configurador" style="background: var(--bg-alt);">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <span class="eyebrow"><span class="idx">07</span> <span data-i18n="cfg.eyebrow">07 · Asesor Interactivo</span></span>
+          <h2 class="h-section" data-i18n="cfg.title">Configura la arquitectura para tu proyecto</h2>
+          <p class="lead" data-i18n="cfg.lead">
+            Selecciona tu tipo de activo y objetivo para obtener una recomendación preliminar de instrumentación DFOS.
+          </p>
+        </div>
+
+        <div class="configurator-wrap reveal">
+          <div class="cfg-steps">
+            <!-- Controls -->
+            <div class="cfg-controls">
+              <div>
+                <span class="cfg-group-label">1. Tipo de Activo o Infraestructura</span>
+                <div class="cfg-options-grid">
+                  <button class="cfg-opt-btn active" data-cfg-asset="tailings">Tranque de Relaves</button>
+                  <button class="cfg-opt-btn" data-cfg-asset="rockmass">Macizo Rocoso</button>
+                  <button class="cfg-opt-btn" data-cfg-asset="openpit">Talud Rajo Abierto</button>
+                  <button class="cfg-opt-btn" data-cfg-asset="civil">Puente / Presa Civil</button>
+                  <button class="cfg-opt-btn" data-cfg-asset="pipeline">Ducto / Mineroducto</button>
+                </div>
+              </div>
+
+              <div>
+                <span class="cfg-group-label">2. Extensión del Trazado (Kilómetros)</span>
+                <div class="cfg-slider-wrap">
+                  <div class="cfg-slider-head">
+                    <span>Longitud de monitoreo:</span>
+                    <span class="v" id="cfg-length-val">5 km</span>
+                  </div>
+                  <input type="range" min="0.5" max="40" step="0.5" value="5" class="cfg-slider" id="cfg-length-slider" aria-label="Longitud en kilómetros">
+                </div>
+              </div>
+
+              <div>
+                <span class="cfg-group-label">3. Prioridad de Monitoreo</span>
+                <div class="cfg-options-grid">
+                  <button class="cfg-opt-btn active" data-cfg-priority="all">Multimodal (DAS+DSS+DTS)</button>
+                  <button class="cfg-opt-btn" data-cfg-priority="vibrations">Vibración / Sismos (DAS)</button>
+                  <button class="cfg-opt-btn" data-cfg-priority="strain">Deformación Pura (DSS)</button>
+                  <button class="cfg-opt-btn" data-cfg-priority="seepage">Filtraciones (DTS)</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Dynamic Output Box -->
+            <div class="cfg-result-box">
+              <div>
+                <div class="cfg-res-head">
+                  <span class="cfg-res-title">ARQUITECTURA RECOMENDADA</span>
+                  <h3 class="cfg-res-system" id="cfg-res-system">FiberAndes Core · DTS + DSS + DAS</h3>
+                  <div class="cfg-res-tags" id="cfg-res-tags">
+                    <span class="cfg-res-tag dts">DTS</span>
+                    <span class="cfg-res-tag dss">DSS</span>
+                    <span class="cfg-res-tag das">DAS</span>
+                  </div>
+                </div>
+
+                <div class="cfg-res-summary" id="cfg-res-summary">
+                  <!-- Injected via JavaScript -->
+                </div>
+              </div>
+
+              <div>
+                <button class="btn btn-primary" style="width:100%;" id="cfg-cta-btn">
+                  Solicitar Propuesta para esta Configuración <span class="arr">→</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================ SECTION 08: EQUIPO & CIENCIA ============================ -->
+    <section class="section-pad" id="nosotros">
+      <div class="wrap">
+        <div class="section-head reveal" style="max-width:820px;">
+          <span class="eyebrow"><span class="idx">08</span> <span>08 · Equipo Fundador & Respaldo Científico</span></span>
+          <h2 class="h-section">Ciencia de frontera para la minería chilena</h2>
+          <p class="lead">
+            FiberAndes nace de la unión entre la investigación pionera en sismología con fibra óptica y la experiencia en terreno en geología de peligros en los Andes.
+          </p>
+        </div>
+
+        <div style="display:grid; grid-template-columns: repeat(2, 1fr); gap:28px;" class="reveal">
+          <div style="background:var(--bg-card); border:1px solid var(--line-strong); border-radius:var(--r-xl); padding:36px; display:flex; flex-direction:column; justify-content:space-between;">
+            <div>
+              <span style="font-family:var(--font-mono); font-size:11px; letter-spacing:0.16em; text-transform:uppercase; color:var(--cyan); display:block; margin-bottom:8px;">CO-FUNDADORA · CHIEF SCIENTIST</span>
+              <h3 style="font-size:24px; margin-bottom:8px;">Verónica Geete Elgueta</h3>
+              <div style="font-family:var(--font-mono); font-size:13px; color:var(--cyan); margin-bottom:18px;">Dra. (c) en Geofísica · University of Washington (Earth & Space Sciences)</div>
+              <p style="font-size:15px; color:var(--fg-1); line-height:1.6;">
+                Investigadora doctoral especializada en <strong>Distributed Acoustic Sensing (DAS)</strong> aplicado a sismicidad en volcanes y zonas de subducción. Amplia experiencia en el diseño y despliegue físico de experimentos en terreno y en el desarrollo de algoritmos de procesamiento avanzado de señales fotónicas.
+              </p>
+            </div>
+            <div style="margin-top:24px; padding-top:16px; border-top:1px solid var(--line-light); font-size:13px; color:var(--fg-2);">
+              Seattle, WA, EE.UU. / Santiago, Chile
+            </div>
+          </div>
+
+          <div style="background:var(--bg-card); border:1px solid var(--line-strong); border-radius:var(--r-xl); padding:36px; display:flex; flex-direction:column; justify-content:space-between;">
+            <div>
+              <span style="font-family:var(--font-mono); font-size:11px; letter-spacing:0.16em; text-transform:uppercase; color:var(--copper); display:block; margin-bottom:8px;">CO-FUNDADOR · GEOLOGICAL OPERATIONS</span>
+              <h3 style="font-size:24px; margin-bottom:8px;">José Estay Herrera</h3>
+              <div style="font-family:var(--font-mono); font-size:13px; color:var(--copper); margin-bottom:18px;">Geólogo · Especialista en Peligros Geológicos</div>
+              <p style="font-size:15px; color:var(--fg-1); line-height:1.6;">
+                Geólogo con especialización en caracterización de peligros geológicos, geomecánica de macizos rocosos, estabilidad de taludes y riesgo sísmico en el contexto geodinámico andino. A cargo de la formulación de pilotos, arquitectura geológica de tendido y vinculación con la industria minera.
+              </p>
+            </div>
+            <div style="margin-top:24px; padding-top:16px; border-top:1px solid var(--line-light); font-size:13px; color:var(--fg-2);">
+              San Felipe / Santiago, Chile
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================ SECTION 09: CONTACTO ============================ -->
+    <section class="section-pad" id="contacto">
+      <div class="wrap contact-layout">
+        <div class="contact-info reveal">
+          <span class="eyebrow"><span class="idx">09</span> <span>09 · Hablemos de Ingeniería & Pilotos</span></span>
+          <h2 class="big-cta" style="margin-top: 18px;" data-i18n="ct.title">Convierte tu infraestructura en una red inteligente.</h2>
+          <p class="lead" data-i18n="ct.lead">
+            Nuestro equipo de ingenieros ópticos y geofísicos está listo para desplegar pilotos en faena y proyectos industriales en todo Chile.
+          </p>
+
+          <div class="contact-channels">
+            <div class="channel-row">
+              <div class="channel-icon" aria-hidden="true">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 7L2 7"/></svg>
+              </div>
+              <div>
+                <strong style="display:block; color:#fff; font-size:14px;">Correo Directo</strong>
+                <span>contacto@fiberandes.cl</span>
+              </div>
+            </div>
+
+            <div class="channel-row">
+              <div class="channel-icon" aria-hidden="true">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+              </div>
+              <div>
+                <strong style="display:block; color:#fff; font-size:14px;">Sede Central & Soporte en Terreno</strong>
+                <span>Santiago · Antofagasta · Rancagua · Calama</span>
+              </div>
+            </div>
+
+            <div class="channel-row">
+              <div class="channel-icon" aria-hidden="true">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m4.93 4.93 14.14 14.14"/></svg>
+              </div>
+              <div>
+                <strong style="display:block; color:#fff; font-size:14px;">Web & Dominios Oficiales</strong>
+                <span>www.fiberandes.cl</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Contact Form -->
+        <form class="contact-form reveal" id="contact-form" action="https://formsubmit.co/ajax/contacto@fiberandes.cl" method="POST">
+          <input type="hidden" name="_subject" value="Nuevo contacto desde FiberAndes.cl">
+          <input type="hidden" name="_template" value="table">
+          <input type="hidden" name="_captcha" value="false">
+
+          <div class="form-field">
+            <label for="contact-name">Nombre y Apellidos *</label>
+            <input type="text" id="contact-name" name="name" required placeholder="Ej. Javier Carrasco">
+          </div>
+
+          <div class="form-field">
+            <label for="contact-company">Empresa / Minera *</label>
+            <input type="text" id="contact-company" name="company" required placeholder="Ej. Minera Los Pelambres / Codelco">
+          </div>
+
+          <div class="form-field">
+            <label for="contact-email">Correo Corporativo *</label>
+            <input type="email" id="contact-email" name="email" required placeholder="nombre@empresa.cl">
+          </div>
+
+          <div class="form-field">
+            <label for="contact-phone">Teléfono / WhatsApp</label>
+            <input type="tel" id="contact-phone" name="phone" placeholder="+56 9 1234 5678">
+          </div>
+
+          <div class="form-field full">
+            <label for="contact-interest">Aplicación Principal</label>
+            <select id="contact-interest" name="application">
+              <option value="relaves">Tranque o Presa de Relaves (DTS + DSS)</option>
+              <option value="macizorocoso">Macizo Rocoso & Minería Subterránea (DAS + DSS)</option>
+              <option value="talud">Estabilidad de Taludes en Rajo Abierto (DSS)</option>
+              <option value="obrasciviles">Obras Civiles (Puentes / Presas de Hormigón / Túneles)</option>
+              <option value="ductos">Mineroductos / Tuberías / Detección de Fugas (DTS)</option>
+              <option value="otro">Otra Aplicación Industrial</option>
+            </select>
+          </div>
+
+          <div class="form-field full">
+            <label for="contact-message">Detalles del Proyecto *</label>
+            <textarea id="contact-message" name="message" required placeholder="Descríbenos tu requerimiento, longitud aproximada de trazado y desafíos operacionales..."></textarea>
+          </div>
+
+          <div class="form-submit-row">
+            <button type="submit" class="btn btn-primary" id="btn-submit-contact" data-i18n="ct.btn">
+              Enviar Consulta Técnica <span class="arr">→</span>
+            </button>
+            <a href="https://wa.me/56994290168?text=Hola%20FiberAndes%2C%20me%20gustar%C3%ADa%20evaluar%20una%20soluci%C3%B3n%20DFOS." target="_blank" rel="noopener" class="btn btn-ghost" data-i18n="ct.whatsapp">
+              WhatsApp Directo
+            </a>
+            <div class="form-success-box" id="form-success">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+              <span data-i18n="ct.success">¡Gracias! Hemos recibido tu solicitud. Un ingeniero se contactará contigo en menos de 24 horas.</span>
+            </div>
+          </div>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <!-- ============================ FOOTER ============================ -->
+  <footer class="footer" role="contentinfo">
+    <div class="wrap">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <a class="brand" href="index.html" aria-label="FiberAndes Inicio">
+            <img class="logo-svg" src="assets/logo.svg" alt="FiberAndes Logo">
+          </a>
+          <p>
+            Primera empresa en Chile de Distributed Fiber Optic Sensing (DFOS) a escala industrial. Monitoreo continuo, en tiempo real y sin puntos ciegos para minería e infraestructura crítica.
+          </p>
+        </div>
+
+        <div class="footer-cols">
+          <div class="footer-col">
+            <h5>Tecnologías</h5>
+            <a href="#tecnologias" data-open-drawer="das">DAS (Acústica & Vibraciones)</a>
+            <a href="#tecnologias" data-open-drawer="dss">DSS (Deformación Milimétrica)</a>
+            <a href="#tecnologias" data-open-drawer="dts">DTS (Temperatura & Filtraciones)</a>
+            <a href="#hardware">Interrogadores FiberAndes Core</a>
+          </div>
+
+          <div class="footer-col">
+            <h5>Aplicaciones</h5>
+            <a href="#aplicaciones">Macizo Rocoso & Caving</a>
+            <a href="#aplicaciones">Tranques de Relaves (GISTM)</a>
+            <a href="#aplicaciones">Presas & Puentes Civiles</a>
+            <a href="#aplicaciones">Mineroductos & Tuberías</a>
+          </div>
+
+          <div class="footer-col">
+            <h5>Empresa & Contacto</h5>
+            <a href="mailto:contacto@fiberandes.cl">contacto@fiberandes.cl</a>
+            <a href="#contacto">Cotizar Proyecto</a>
+            <a href="https://wa.me/56994290168" target="_blank" rel="noopener">WhatsApp Comercial</a>
+            <a href="https://www.linkedin.com" target="_blank" rel="noopener">LinkedIn</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-bot" style="flex-direction: column; gap: 8px; text-align: center; border-top: 1px solid var(--line-light); padding-top: 20px;">
+        <p style="margin: 0; font-size: 13px; color: var(--fg-2);">
+          Startup chilena co-fundada por <strong style="color: #fff;">Verónica Geete Elgueta</strong> (Dra. (c) en Geofísica, University of Washington, especialista en DAS) y <strong style="color: #fff;">José Estay Herrera</strong> (Geólogo especialista en Peligros Geológicos).
+        </p>
+        <div style="display: flex; justify-content: space-between; width: 100%; font-size: 12px; color: var(--fg-3); margin-top: 6px; flex-wrap: wrap; gap: 10px;">
+          <span>© 2026 FiberAndes SpA. Todos los derechos reservados. San Felipe / Santiago, Chile.</span>
+          <span>Distributed Fiber Optic Sensing · Made in Chile</span>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ============================ SLIDE-OVER TECHNICAL DRAWER ============================ -->
+  <div class="drawer-backdrop" id="tech-drawer" role="dialog" aria-modal="true" aria-labelledby="drawer-title">
+    <div class="drawer-panel">
+      <button class="drawer-close-btn" aria-label="Cerrar panel técnico">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>
+        <span>ESC / CERRAR</span>
+      </button>
+
+      <div class="drawer-content">
+        <div class="drawer-head">
+          <span class="drawer-tag" id="drawer-tag">ESPECIFICACIÓN TÉCNICA</span>
+          <h3 class="drawer-title" id="drawer-title">Título Técnico</h3>
+          <p class="drawer-lead" id="drawer-lead">Descripción resumida del principio optoelectrónico.</p>
+        </div>
+
+        <table class="drawer-specs-table">
+          <tbody id="drawer-specs-body">
+            <!-- Injected via JavaScript -->
+          </tbody>
+        </table>
+
+        <div class="drawer-body" id="drawer-body-content">
+          <!-- Injected via JavaScript -->
+        </div>
+
+        <div style="margin-top: 36px; padding-top: 24px; border-top: 1px solid var(--line-light);">
+          <a href="#contacto" class="btn btn-primary" style="width:100%;" onclick="document.getElementById('tech-drawer').classList.remove('open'); document.body.style.overflow='';">
+            Solicitar Ficha Técnica Completa en PDF <span class="arr">→</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================ WHATSAPP FLOATING BUTTON ============================ -->
+  <a class="wa-fab" href="https://wa.me/56994290168?text=Hola%20FiberAndes%2C%20me%20gustar%C3%ADa%20saber%20m%C3%A1s%20sobre%20sus%20soluciones%20DFOS." target="_blank" rel="noopener" aria-label="Contactar a FiberAndes por WhatsApp">
+    <span class="wa-fab-icon" aria-hidden="true">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.816 9.816 0 0 0 12.04 2m.01 1.67c2.2 0 4.26.86 5.82 2.42a8.225 8.225 0 0 1 2.41 5.83c0 4.54-3.7 8.24-8.24 8.24-1.48 0-2.93-.4-4.2-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.196 8.196 0 0 1-1.26-4.38c0-4.54 3.7-8.24 8.24-8.24m4.52 11.66c-.25-.13-1.47-.72-1.7-.81-.23-.08-.39-.13-.56.13-.16.25-.64.81-.78.98-.15.16-.29.18-.53.06-.25-.13-1.05-.39-1.99-1.23-.74-.66-1.23-1.47-1.38-1.72-.14-.25-.02-.38.11-.5.11-.11.25-.29.37-.43.13-.15.16-.25.25-.41.08-.16.04-.31-.02-.43-.06-.13-.56-1.35-.77-1.85-.2-.49-.41-.42-.56-.43h-.48c-.16 0-.43.06-.66.31-.23.25-.87.85-.87 2.07s.89 2.41 1.01 2.57c.13.16 1.76 2.69 4.26 3.77.6.26 1.06.41 1.43.53.6.19 1.15.16 1.58.1.48-.07 1.47-.6 1.68-1.18.21-.58.21-1.07.15-1.18-.07-.1-.23-.16-.47-.29"/>
+      </svg>
+    </span>
+    <span class="wa-fab-label">Hablar con Ingeniería</span>
+  </a>
+
+  <!-- Scripts -->
+  <script src="js/drawer-data.js"></script>
+  <script src="js/i18n.js"></script>
+  <script src="js/hero-canvas.js"></script>
+
+  <!-- 2D Mine Geomechanics & Caving Simulator (3D simulator preserved in js/mine-3d-simulator.js) -->
+  <script src="js/mine-2d-simulator.js?v=20260929_07"></script>
+
+  <script src="js/configurator.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

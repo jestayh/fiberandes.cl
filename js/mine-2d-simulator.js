@@ -406,6 +406,11 @@
         const d2 = distHead - ((s - 1) / steps) * tailLen;
         const pA = getPosAt(d1);
         const pB = getPosAt(d2);
+
+        // Prevent seam jumping: if points are far apart, they wrap across path endpoints
+        const stepDist = Math.hypot(pB.x - pA.x, pB.y - pA.y);
+        if (stepDist > tailLen * 1.4) continue;
+
         const fade = 1 - (s / steps);
 
         ctx.strokeStyle = color;
@@ -460,6 +465,7 @@
     const caveRight = mainWidth * 0.72;
     const caveCenterX = (caveLeft + caveRight) / 2;
     const shaftX = caveLeft - 70;
+    const shackX = mainWidth * 0.22;
 
     const geophoneStations = getGeophoneStations(mainWidth, yProduction, yUndercut, yHaulage, shaftX, caveLeft, caveRight, caveCenterX);
     const r300 = getAttenRadius();
@@ -477,7 +483,9 @@
         { id: 'B-01', p1: { x: caveLeft - 35, y: ySurface }, p2: { x: caveLeft - 35, y: yHaulage + 20 }, role: 'permanent' },
         { id: 'B-02', p1: { x: mainWidth * 0.16, y: ySurface }, p2: { x: caveCenterX, y: yProduction + 10 }, role: 'sacrificial' },
         { id: 'B-03', p1: { x: caveRight + 25, y: ySurface }, p2: { x: caveRight + 25, y: yHaulage + 20 }, role: 'permanent' },
-        { id: 'B-04', p1: { x: caveRight + 95, y: ySurface }, p2: { x: caveCenterX + 40, y: yAirGap - 30 }, role: 'sacrificial' }
+        { id: 'B-04', p1: { x: caveRight + 95, y: ySurface }, p2: { x: caveCenterX + 40, y: yAirGap - 30 }, role: 'sacrificial' },
+        { id: 'S-Abut-W', p1: { x: caveLeft - 60, y: yProduction - 5 }, p2: { x: caveLeft - 110, y: yCaveTop + 20 }, role: 'abutment_loop' },
+        { id: 'S-Abut-E', p1: { x: caveRight + 60, y: yProduction - 5 }, p2: { x: caveRight + 110, y: yCaveTop + 20 }, role: 'abutment_loop' }
       ].find(bh => distToSegment({ x: hoverX, y: hoverY }, bh.p1, bh.p2) < 14) : null;
 
       // Check proximity to geophones in traditional mode
@@ -491,7 +499,9 @@
         }
       } else if (fiberBoreholeMatches) {
         if (fiberBoreholeMatches.role === 'sacrificial') {
-          hudText.innerHTML = `⚡ <strong>Cable Consumible de Sacrificio (${fiberBoreholeMatches.id}):</strong> Cable simple cementado en el orebody. Mide microfisuración del cave-back y se corta con el colapso, mapeando el avance del techo y previniendo el Air Blast.`;
+          hudText.innerHTML = `⚡ <strong>Cable Consumible de Sacrificio (${fiberBoreholeMatches.id}):</strong> Cable simple cementado en el orebody. El pulso baja y retorna en reversa por la misma fibra, midiendo microfisuración hasta cortarse con el caving para prevenir el Air Blast.`;
+        } else if (fiberBoreholeMatches.role === 'abutment_loop') {
+          hudText.innerHTML = `🔗 <strong>Sondaje Abutment en Loop (${fiberBoreholeMatches.id}):</strong> Perforado desde la galería de producción hacia los pilares de contorno. Circuito cerrado en U conectado al anillo de túneles para monitorear esfuerzos y deformación sin riesgo de corte.`;
         } else {
           hudText.innerHTML = `🔗 <strong>Cable Permanente en Loop (${fiberBoreholeMatches.id}):</strong> Instalado en roca elástica perimetral. Vida útil permanente, inmune al caving, con retorno en U para tolerancia a fallas.`;
         }
@@ -650,7 +660,6 @@
     ctx.stroke();
 
     // Surface facilities: DAS/DSS Central Interrogator Shack + Communication mast
-    const shackX = mainWidth * 0.22;
     ctx.fillStyle = '#0b1c2e';
     ctx.fillRect(shackX - 16, ySurface - 24, 32, 20);
     ctx.strokeStyle = '#00f0ff';
@@ -1095,11 +1104,18 @@
         { id: 'B-02', p1: { x: b02X, y: ySurface }, p2: { x: caveCenterX, y: yProduction + 10 }, color: '#ffaa00', label: 'B-02 (DAS Sacrificio)', isLoop: false, isSacrificial: true },
         { id: 'B-03', p1: { x: b03X, y: ySurface }, p2: { x: b03X, y: yHaulage + 20 }, color: '#00ffa3', label: 'B-03 (DSS Loop Perm)', isLoop: true, isSacrificial: false },
         { id: 'B-04', p1: { x: b04X, y: ySurface }, p2: { x: caveCenterX + 40, y: yAirGap - 30 }, color: '#ffaa00', label: 'B-04 (DAS Sacrificio)', isLoop: false, isSacrificial: true },
-        { id: 'S-Abut-W', p1: { x: caveLeft - 60, y: yProduction }, p2: { x: caveLeft - 110, y: yCaveTop + 20 }, color: '#00ffa3', label: 'Sondaje Abutment (Perm)', isLoop: false, isSacrificial: false },
-        { id: 'S-Abut-E', p1: { x: caveRight + 60, y: yProduction }, p2: { x: caveRight + 110, y: yCaveTop + 20 }, color: '#00ffa3', label: 'Sondaje Abutment (Perm)', isLoop: false, isSacrificial: false }
+        { id: 'S-Abut-W', p1: { x: caveLeft - 60, y: yProduction - 5 }, p2: { x: caveLeft - 110, y: yCaveTop + 20 }, color: '#00ffa3', label: 'S-Abut-W (Loop Perm)', isLoop: true, isSacrificial: false },
+        { id: 'S-Abut-E', p1: { x: caveRight + 60, y: yProduction - 5 }, p2: { x: caveRight + 110, y: yCaveTop + 20 }, color: '#00ffa3', label: 'S-Abut-E (Loop Perm)', isLoop: true, isSacrificial: false }
       ];
 
       fiberBoreholes.forEach((bh, idx) => {
+        // Normal vector for parallel loop rendering regardless of angle
+        const dx = bh.p2.x - bh.p1.x;
+        const dy = bh.p2.y - bh.p1.y;
+        const bLen = Math.hypot(dx, dy) || 1;
+        const nx = (-dy / bLen) * 2.2;
+        const ny = (dx / bLen) * 2.2;
+
         // Grout protective sheath around borehole
         ctx.strokeStyle = 'rgba(11, 32, 56, 0.85)';
         ctx.lineWidth = bh.isLoop ? 7 : 5;
@@ -1128,12 +1144,15 @@
         ctx.globalAlpha = alpha;
 
         if (bh.isLoop) {
-          // Double-ended loop (down and up fibers inside same casing)
+          // Double-ended loop with continuous U-turn cap
           ctx.beginPath();
-          ctx.moveTo(bh.p1.x - 2, bh.p1.y);
-          ctx.lineTo(bh.p2.x - 2, bh.p2.y);
-          ctx.arc(bh.p2.x, bh.p2.y, 2, Math.PI, 0, true);
-          ctx.lineTo(bh.p1.x + 2, bh.p1.y);
+          ctx.moveTo(bh.p1.x + nx, bh.p1.y + ny);
+          ctx.lineTo(bh.p2.x + nx, bh.p2.y + ny);
+          ctx.quadraticCurveTo(
+            bh.p2.x + (dx / bLen) * 3.5, bh.p2.y + (dy / bLen) * 3.5,
+            bh.p2.x - nx, bh.p2.y - ny
+          );
+          ctx.lineTo(bh.p1.x - nx, bh.p1.y - ny);
           ctx.stroke();
         } else {
           ctx.beginPath();
@@ -1148,10 +1167,13 @@
         ctx.lineWidth = 1;
         ctx.beginPath();
         if (bh.isLoop) {
-          ctx.moveTo(bh.p1.x - 2, bh.p1.y);
-          ctx.lineTo(bh.p2.x - 2, bh.p2.y);
-          ctx.arc(bh.p2.x, bh.p2.y, 2, Math.PI, 0, true);
-          ctx.lineTo(bh.p1.x + 2, bh.p1.y);
+          ctx.moveTo(bh.p1.x + nx, bh.p1.y + ny);
+          ctx.lineTo(bh.p2.x + nx, bh.p2.y + ny);
+          ctx.quadraticCurveTo(
+            bh.p2.x + (dx / bLen) * 3.5, bh.p2.y + (dy / bLen) * 3.5,
+            bh.p2.x - nx, bh.p2.y - ny
+          );
+          ctx.lineTo(bh.p1.x - nx, bh.p1.y - ny);
         } else {
           ctx.moveTo(bh.p1.x, bh.p1.y);
           ctx.lineTo(bh.p2.x, bh.p2.y);
@@ -1182,6 +1204,16 @@
           ctx.textAlign = 'center';
           const labelY = (idx % 2 === 0) ? bh.p1.y - 7 : bh.p1.y - 17;
           ctx.fillText(bh.label, bh.p1.x, labelY);
+        } else if (bh.id === 'S-Abut-W') {
+          ctx.fillStyle = bh.color;
+          ctx.font = 'bold 8px "JetBrains Mono", monospace';
+          ctx.textAlign = 'right';
+          ctx.fillText('S-Abut-W (Loop)', bh.p2.x - 6, bh.p2.y - 2);
+        } else if (bh.id === 'S-Abut-E') {
+          ctx.fillStyle = bh.color;
+          ctx.font = 'bold 8px "JetBrains Mono", monospace';
+          ctx.textAlign = 'left';
+          ctx.fillText('S-Abut-E (Loop)', bh.p2.x + 6, bh.p2.y - 2);
         }
       });
 
@@ -1222,7 +1254,9 @@
         { x: shaftX, y: yUndercut - 4 },
         { x: shaftX, y: yProduction - 5 },
         { x: caveRight + 30, y: yUndercut - 4 },
-        { x: caveRight + 30, y: yProduction - 5 }
+        { x: caveRight + 30, y: yProduction - 5 },
+        { x: caveLeft - 60, y: yProduction - 5 },
+        { x: caveRight + 60, y: yProduction - 5 }
       ];
       ugSpliceBoxes.forEach(sb => {
         ctx.fillStyle = '#00ffa3';
@@ -1247,19 +1281,28 @@
       ];
       drawFiberLaserRay(b01LoopPath, 85, 2, '#00f0ff', 24);
 
-      // Loop B: Underground Mine Ring (Caseta -> Shaft -> Undercut Drift -> East Riser -> Production Drift -> Shaft -> Caseta)
+      // Loop B: Underground Mine Ring with Abutment Loops (Caseta -> Shaft -> Undercut -> East Riser -> East Abutment Loop -> Production Drift -> West Abutment Loop -> Shaft -> Caseta)
       const mineRingPath = [
         { x: shackX, y: yTrunkSurface },
         { x: shaftX, y: yTrunkSurface },
         { x: shaftX, y: yUndercut - 4 },
         { x: caveRight + 30, y: yUndercut - 4 },
         { x: caveRight + 30, y: yProduction - 5 },
+        // Branch into East Abutment Borehole Loop
+        { x: caveRight + 60, y: yProduction - 5 },
+        { x: caveRight + 110, y: yCaveTop + 20 },
+        { x: caveRight + 60, y: yProduction - 5 },
+        // Traverse Production Drift to West
         { x: caveLeft - 60, y: yProduction - 5 },
+        // Branch into West Abutment Borehole Loop
+        { x: caveLeft - 110, y: yCaveTop + 20 },
+        { x: caveLeft - 60, y: yProduction - 5 },
+        // Return via Production Drift to Shaft
         { x: shaftX, y: yProduction - 5 },
         { x: shaftX, y: yTrunkSurface },
         { x: shackX, y: yTrunkSurface }
       ];
-      drawFiberLaserRay(mineRingPath, 105, 3, '#00f0ff', 30);
+      drawFiberLaserRay(mineRingPath, 115, 3, '#00f0ff', 30);
 
       // Loop C: East Borehole B-03 DSS Strain Loop (Caseta -> B03 Down -> U-turn -> B03 Up -> Caseta)
       const b03LoopPath = [
@@ -1272,19 +1315,23 @@
       ];
       drawFiberLaserRay(b03LoopPath, 78, 2, '#00ffa3', 24);
 
-      // Path D: Borehole Sacrificio B-02 (Consumible en Cave-Back / Orebody)
+      // Path D: Borehole Sacrificio B-02 (Consumible en Cave-Back / Orebody - Ida y Retorno en Reversa)
       const b02Path = [
         { x: shackX, y: yTrunkSurface },
         { x: b02X, y: yTrunkSurface },
-        { x: caveCenterX, y: yProduction + 10 }
+        { x: caveCenterX, y: yProduction + 10 },
+        { x: b02X, y: yTrunkSurface },
+        { x: shackX, y: yTrunkSurface }
       ];
       drawFiberLaserRay(b02Path, 90, 2, '#ffaa00', 26);
 
-      // Path E: Borehole Sacrificio B-04 (Monitoreo Techo Air Gap)
+      // Path E: Borehole Sacrificio B-04 (Monitoreo Techo Air Gap - Ida y Retorno en Reversa)
       const b04Path = [
         { x: shackX, y: yTrunkSurface },
         { x: b04X, y: yTrunkSurface },
-        { x: caveCenterX + 40, y: yAirGap - 30 }
+        { x: caveCenterX + 40, y: yAirGap - 30 },
+        { x: b04X, y: yTrunkSurface },
+        { x: shackX, y: yTrunkSurface }
       ];
       drawFiberLaserRay(b04Path, 82, 2, '#ffaa00', 24);
     }
