@@ -478,14 +478,17 @@
       const isVoid = (hoverX >= caveLeft + 20 && hoverX <= caveRight - 20 && hoverY >= yCaveTop && hoverY <= yAirGap + 15);
       const isMuckpile = (hoverX >= caveLeft + 15 && hoverX <= caveRight - 15 && hoverY > yAirGap + 15 && hoverY <= yUndercut);
 
-      // Check proximity to fiber boreholes in DFOS mode
+      // Check proximity to fiber boreholes in DAS mode (Furlong & Anderson)
+      const bPermWestX = caveLeft - 44;
+      const bPermEastX = caveRight + 44;
+      const bSac1X = caveCenterX - 24;
+      const bSac2X = caveCenterX + 24;
+
       const fiberBoreholeMatches = activeMode === 'dfos' ? [
-        { id: 'B-01', p1: { x: caveLeft - 35, y: ySurface }, p2: { x: caveLeft - 35, y: yHaulage + 20 }, role: 'permanent' },
-        { id: 'B-02', p1: { x: b02X, y: ySurface }, p2: { x: caveCenterX - 20, y: yCaveTop + 18 }, role: 'sacrificial' },
-        { id: 'B-03', p1: { x: caveRight + 25, y: ySurface }, p2: { x: caveRight + 25, y: yHaulage + 20 }, role: 'permanent' },
-        { id: 'B-04', p1: { x: b04X, y: ySurface }, p2: { x: caveCenterX + 25, y: yCaveTop + 18 }, role: 'sacrificial' },
-        { id: 'S-Abut-W', p1: { x: caveLeft - 60, y: yProduction - 5 }, p2: { x: caveLeft - 110, y: yCaveTop + 20 }, role: 'abutment_loop' },
-        { id: 'S-Abut-E', p1: { x: caveRight + 60, y: yProduction - 5 }, p2: { x: caveRight + 110, y: yCaveTop + 20 }, role: 'abutment_loop' }
+        { id: 'B-Perm-W', p1: { x: bPermWestX, y: ySurface }, p2: { x: bPermWestX, y: yHaulage + 28 }, role: 'perimeter_permanent' },
+        { id: 'B-Perm-E', p1: { x: bPermEastX, y: ySurface }, p2: { x: bPermEastX, y: yHaulage + 28 }, role: 'perimeter_permanent' },
+        { id: 'B-Sac-1', p1: { x: bSac1X, y: ySurface }, p2: { x: bSac1X, y: yCaveTop + 14 }, role: 'sacrificial' },
+        { id: 'B-Sac-2', p1: { x: bSac2X, y: ySurface }, p2: { x: bSac2X, y: yCaveTop + 14 }, role: 'sacrificial' }
       ].find(bh => distToSegment({ x: hoverX, y: hoverY }, bh.p1, bh.p2) < 14) : null;
 
       // Check proximity to geophones in traditional mode
@@ -493,17 +496,15 @@
 
       if (hoverY < ySurface) {
         if (Math.abs(hoverX - shackX) < 32) {
-          hudText.innerHTML = '🏔️ <strong>Caseta Central DFOS (Cota 0 m):</strong> Rack 19" con <strong>Interrogador DAS</strong> (sismicidad Rayleigh) y <strong>DSS</strong> (deformación Brillouin) en el mismo cable multi-hilo';
+          hudText.innerHTML = '🏔️ <strong>Caseta Central DAS (Superficie):</strong> Un único <strong>Interrogador DAS de alta coherencia</strong> que monitorea en tiempo real toda la red de sondajes perimetrales, cables de sacrificio y galerías en Daisy-Chain';
         } else {
-          hudText.innerHTML = '🔗 <strong>Red Troncal en Daisy-Chain (Superficie):</strong> 1 cable blindado continuo conecta en serie todos los sondajes y el pique mediante empalmes ODF';
+          hudText.innerHTML = '🔗 <strong>Troncal en Daisy-Chain (Furlong & Anderson):</strong> Un solo cable continuo conecta en serie los sondajes perimetrales y el pique sin requerir interrogadores adicionales';
         }
       } else if (fiberBoreholeMatches) {
         if (fiberBoreholeMatches.role === 'sacrificial') {
-          hudText.innerHTML = `⚡ <strong>Cable Consumible de Sacrificio (${fiberBoreholeMatches.id}):</strong> Cable simple cementado en el orebody. El pulso baja y retorna en reversa por la misma fibra, midiendo microfisuración hasta cortarse con el caving para prevenir el Air Blast.`;
-        } else if (fiberBoreholeMatches.role === 'abutment_loop') {
-          hudText.innerHTML = `🔗 <strong>Sondaje Abutment en Loop (${fiberBoreholeMatches.id}):</strong> Perforado desde la galería de producción hacia los pilares de contorno. Circuito cerrado en U conectado al anillo de túneles para monitorear esfuerzos y deformación sin riesgo de corte.`;
+          hudText.innerHTML = `⚡ <strong>Fibra DAS de Sacrificio (${fiberBoreholeMatches.id}):</strong> Instalada en el macizo a explotar. Registra la microfracturación acústica hasta cortarse al desprenderse el mineral. La fibra superior sigue operativa hasta la cota del quiebre (Furlong & Anderson).`;
         } else {
-          hudText.innerHTML = `🔗 <strong>Cable Permanente en Loop (${fiberBoreholeMatches.id}):</strong> Instalado en roca elástica perimetral. Vida útil permanente, inmune al caving, con retorno en U para tolerancia a fallas.`;
+          hudText.innerHTML = `🔗 <strong>Fibra DAS Perimetral Permanente (${fiberBoreholeMatches.id}):</strong> Sondaje vertical en roca competente fuera del caving. Larga vida útil permanente, conectada en Daisy-Chain con el flanco opuesto para rodear el yacimiento.`;
         }
       } else if (nearGeophone) {
         hudText.innerHTML = `📡 <strong>Estación Sísmica ${nearGeophone.id}:</strong> Geófono triaxial en pozo cimentado de ${nearGeophone.depth} (Alcance radial: 300 m)`;
@@ -946,6 +947,39 @@
     ctx.fillStyle = 'rgba(160, 180, 205, 0.85)';
     ctx.fillText('Mineral Quebrado en Descenso', caveCenterX, (yAirGapBot + yUndercut) / 2 + 6);
 
+    // Severed fiber fragments in Muckpile (Furlong & Anderson model)
+    // As rock yields and falls into the muckpile, sacrificial fibers shear away and drop
+    const severedCables = [
+      { x1: caveCenterX - 24, y1: yAirGapBot + 24, x2: caveCenterX - 18, y2: yAirGapBot + 42 },
+      { x1: caveCenterX - 12, y1: yAirGapBot + 52, x2: caveCenterX - 26, y2: yAirGapBot + 70 },
+      { x1: caveCenterX + 18, y1: yAirGapBot + 28, x2: caveCenterX + 28, y2: yAirGapBot + 50 },
+      { x1: caveCenterX + 32, y1: yAirGapBot + 62, x2: caveCenterX + 16, y2: yAirGapBot + 80 },
+      { x1: caveCenterX - 4,  y1: yAirGapBot + 38, x2: caveCenterX + 6,  y2: yAirGapBot + 58 }
+    ];
+
+    severedCables.forEach(sc => {
+      ctx.strokeStyle = '#ff9900';
+      ctx.lineWidth = 1.8;
+      ctx.setLineDash([3, 2]);
+      ctx.beginPath();
+      ctx.moveTo(sc.x1, sc.y1);
+      ctx.lineTo(sc.x2, sc.y2);
+      ctx.stroke();
+      ctx.setLineDash([]);
+
+      // Severed shear break dots
+      ctx.fillStyle = '#ff4444';
+      ctx.beginPath();
+      ctx.arc(sc.x1, sc.y1, 1.8, 0, Math.PI * 2);
+      ctx.arc(sc.x2, sc.y2, 1.8, 0, Math.PI * 2);
+      ctx.fill();
+    });
+
+    ctx.fillStyle = 'rgba(255, 170, 0, 0.85)';
+    ctx.font = '7.5px "JetBrains Mono", monospace';
+    ctx.textAlign = 'center';
+    ctx.fillText('⚡ Fibras de sacrificio cortadas al desprenderse el mineral (Furlong & Anderson)', caveCenterX, yAirGapBot + 86);
+
     // 5 Downward Flow Arrows (aligned with each drawbell below!)
     const bellCount = 5;
     const bellSpacing = (caveRight - caveLeft - 30) / (bellCount - 1);
@@ -1273,32 +1307,36 @@
 
     } else {
       // ---------------------------------------------------------
-      // MODE: FIBERANDES DFOS (CONTINUOUS FIBER ARRAY IN BOREHOLES & GALLERIES)
+      // MODE: FIBERANDES DAS (FURLONG & ANDERSON ARRAY MODEL IN DAISY-CHAIN)
+      // 1. Permanent perimeter vertical boreholes surrounding the orebody on both flanks
+      // 2. Sacrificial fibers in the mineralized orebody shearing at the cave-back
+      // 3. Daisy-chain gallery network connecting undercut, extraction & haulage
       // ---------------------------------------------------------
 
-      const b01X = caveLeft - 35;
-      const b02X = caveCenterX - 45;
-      const b03X = caveRight + 25;
-      const b04X = caveCenterX + 45;
+      const bPermWestX = caveLeft - 44;   // Permanent West Flank Borehole (outside caving envelope)
+      const bPermEastX = caveRight + 44;  // Permanent East Flank Borehole (outside caving envelope)
+      const bSac1X = caveCenterX - 24;     // Sacrificial 1 in Orebody
+      const bSac2X = caveCenterX + 24;     // Sacrificial 2 in Orebody
       const yTrunkSurface = ySurface - 2;
+      const yBoreholeBottom = yHaulage + 28;
 
-      // 1. SURFACE MULTI-FIBER TRUNK CABLE (Connecting Caseta to all Boreholes and Shaft in Daisy Chain)
+      // 1. SURFACE DAISY-CHAIN TRUNK CABLE (Caseta DAS to Perimeter & Sacrificial Boreholes)
       ctx.save();
       ctx.strokeStyle = 'rgba(0, 240, 255, 0.45)';
       ctx.lineWidth = 2.2;
       ctx.setLineDash([4, 2]);
       ctx.beginPath();
-      ctx.moveTo(b02X, yTrunkSurface);
+      ctx.moveTo(bPermWestX, yTrunkSurface);
       ctx.lineTo(shackX, yTrunkSurface);
-      ctx.lineTo(b01X, yTrunkSurface);
       ctx.lineTo(shaftX, yTrunkSurface);
-      ctx.lineTo(b03X, yTrunkSurface);
-      ctx.lineTo(b04X, yTrunkSurface);
+      ctx.lineTo(bSac1X, yTrunkSurface);
+      ctx.lineTo(bSac2X, yTrunkSurface);
+      ctx.lineTo(bPermEastX, yTrunkSurface);
       ctx.stroke();
       ctx.setLineDash([]);
 
-      // Hermetic ODF splice nodes at each surface connection
-      [b02X, shackX, b01X, shaftX, b03X, b04X].forEach(cx => {
+      // Hermetic ODF splice nodes on surface trunk
+      [bPermWestX, shackX, shaftX, bSac1X, bSac2X, bPermEastX].forEach(cx => {
         ctx.fillStyle = cx === shackX ? '#00ffa3' : '#00f0ff';
         ctx.shadowColor = '#00f0ff';
         ctx.shadowBlur = 8;
@@ -1311,25 +1349,22 @@
       });
       ctx.restore();
 
-      // 2. BOREHOLES WITH U-TURN LOOPBACKS & SENSING FIBERS (Permanentes vs Sacrificio)
+      // 2. DAS BOREHOLES (Permanent Perimeter vs Sacrificial in Orebody)
       const fiberBoreholes = [
-        { id: 'B-01', p1: { x: b01X, y: ySurface }, p2: { x: b01X, y: yHaulage + 20 }, color: '#00f0ff', label: 'B-01 (Loop Perm)', isLoop: true, isSacrificial: false },
-        { id: 'B-02', p1: { x: b02X, y: ySurface }, p2: { x: caveCenterX - 20, y: yCaveTop + 18 }, color: '#ffaa00', label: 'B-02 (DAS Sacrificio)', isLoop: false, isSacrificial: true },
-        { id: 'B-03', p1: { x: b03X, y: ySurface }, p2: { x: b03X, y: yHaulage + 20 }, color: '#00ffa3', label: 'B-03 (DSS Loop Perm)', isLoop: true, isSacrificial: false },
-        { id: 'B-04', p1: { x: b04X, y: ySurface }, p2: { x: caveCenterX + 25, y: yCaveTop + 18 }, color: '#ffaa00', label: 'B-04 (DAS Sacrificio)', isLoop: false, isSacrificial: true },
-        { id: 'S-Abut-W', p1: { x: caveLeft - 60, y: yProduction - 5 }, p2: { x: caveLeft - 110, y: yCaveTop + 20 }, color: '#00ffa3', label: 'S-Abut-W (Loop Perm)', isLoop: true, isSacrificial: false },
-        { id: 'S-Abut-E', p1: { x: caveRight + 60, y: yProduction - 5 }, p2: { x: caveRight + 110, y: yCaveTop + 20 }, color: '#00ffa3', label: 'S-Abut-E (Loop Perm)', isLoop: true, isSacrificial: false }
+        { id: 'B-Perm-W', p1: { x: bPermWestX, y: ySurface }, p2: { x: bPermWestX, y: yBoreholeBottom }, color: '#00f0ff', label: 'B-Perm-W (DAS Loop Flanco Oeste)', isLoop: true, isSacrificial: false },
+        { id: 'B-Sac-1', p1: { x: bSac1X, y: ySurface }, p2: { x: bSac1X, y: yCaveTop + 14 }, color: '#ffaa00', label: 'B-Sac-1 (DAS Sacrificio)', isLoop: false, isSacrificial: true },
+        { id: 'B-Sac-2', p1: { x: bSac2X, y: ySurface }, p2: { x: bSac2X, y: yCaveTop + 14 }, color: '#ffaa00', label: 'B-Sac-2 (DAS Sacrificio)', isLoop: false, isSacrificial: true },
+        { id: 'B-Perm-E', p1: { x: bPermEastX, y: ySurface }, p2: { x: bPermEastX, y: yBoreholeBottom }, color: '#00f0ff', label: 'B-Perm-E (DAS Loop Flanco Este)', isLoop: true, isSacrificial: false }
       ];
 
       fiberBoreholes.forEach((bh, idx) => {
-        // Normal vector for parallel loop rendering regardless of angle
         const dx = bh.p2.x - bh.p1.x;
         const dy = bh.p2.y - bh.p1.y;
         const bLen = Math.hypot(dx, dy) || 1;
         const nx = (-dy / bLen) * 2.2;
         const ny = (dx / bLen) * 2.2;
 
-        // Grout protective sheath around borehole
+        // Protective cement grout sheath
         ctx.strokeStyle = 'rgba(11, 32, 56, 0.85)';
         ctx.lineWidth = bh.isLoop ? 7 : 5;
         ctx.beginPath();
@@ -1347,7 +1382,7 @@
         });
 
         const breathing = Math.sin(time * 3 + idx * 0.8) * 0.12;
-        const alpha = Math.min(1.0, 0.72 + breathing + cableBurst * 0.6);
+        const alpha = Math.min(1.0, 0.75 + breathing + cableBurst * 0.6);
 
         ctx.save();
         ctx.strokeStyle = cableBurst > 0.15 ? '#ffffff' : bh.color;
@@ -1357,7 +1392,7 @@
         ctx.globalAlpha = alpha;
 
         if (bh.isLoop) {
-          // Double-ended loop with continuous U-turn cap
+          // Double-ended loop with continuous U-turn turnaround splice at the toe
           ctx.beginPath();
           ctx.moveTo(bh.p1.x + nx, bh.p1.y + ny);
           ctx.lineTo(bh.p2.x + nx, bh.p2.y + ny);
@@ -1368,6 +1403,7 @@
           ctx.lineTo(bh.p1.x - nx, bh.p1.y - ny);
           ctx.stroke();
         } else {
+          // Single sacrificial fiber line penetrating down to the cave-back
           ctx.beginPath();
           ctx.moveTo(bh.p1.x, bh.p1.y);
           ctx.lineTo(bh.p2.x, bh.p2.y);
@@ -1375,7 +1411,7 @@
         }
         ctx.restore();
 
-        // White optical core line
+        // Optical core
         ctx.strokeStyle = '#ffffff';
         ctx.lineWidth = 1;
         ctx.beginPath();
@@ -1394,82 +1430,74 @@
         ctx.stroke();
 
         if (bh.isSacrificial) {
-          // Indicador de extremo de sacrificio en el cave-back (estiramiento y quiebre)
+          // Severed active shear failure boundary indicator
           ctx.save();
           ctx.fillStyle = '#ffaa00';
-          ctx.shadowColor = '#ffaa00';
-          ctx.shadowBlur = 8;
+          ctx.shadowColor = '#ff4444';
+          ctx.shadowBlur = 10;
           ctx.beginPath();
-          ctx.arc(bh.p2.x, bh.p2.y, 3, 0, Math.PI * 2);
+          ctx.arc(bh.p2.x, bh.p2.y, 3.2, 0, Math.PI * 2);
           ctx.fill();
           ctx.strokeStyle = '#ffffff';
           ctx.lineWidth = 1;
           ctx.beginPath();
-          ctx.moveTo(bh.p2.x - 3, bh.p2.y - 2);
-          ctx.lineTo(bh.p2.x + 3, bh.p2.y + 2);
+          ctx.moveTo(bh.p2.x - 3.5, bh.p2.y - 2.5);
+          ctx.lineTo(bh.p2.x + 3.5, bh.p2.y + 2.5);
           ctx.stroke();
           ctx.restore();
         }
 
-        if (bh.p1.y === ySurface) {
-          ctx.fillStyle = bh.color;
-          ctx.font = 'bold 8px "JetBrains Mono", monospace';
-          ctx.textAlign = 'center';
-          const labelY = (idx % 2 === 0) ? bh.p1.y - 7 : bh.p1.y - 17;
-          ctx.fillText(bh.label, bh.p1.x, labelY);
-        } else if (bh.id === 'S-Abut-W') {
-          ctx.fillStyle = bh.color;
-          ctx.font = 'bold 8px "JetBrains Mono", monospace';
-          ctx.textAlign = 'right';
-          ctx.fillText('S-Abut-W (Loop)', bh.p2.x - 6, bh.p2.y - 2);
-        } else if (bh.id === 'S-Abut-E') {
-          ctx.fillStyle = bh.color;
-          ctx.font = 'bold 8px "JetBrains Mono", monospace';
-          ctx.textAlign = 'left';
-          ctx.fillText('S-Abut-E (Loop)', bh.p2.x + 6, bh.p2.y - 2);
-        }
+        // Borehole labels
+        ctx.fillStyle = bh.color;
+        ctx.font = 'bold 8px "JetBrains Mono", monospace';
+        ctx.textAlign = 'center';
+        const labelY = (idx % 2 === 0) ? bh.p1.y - 7 : bh.p1.y - 17;
+        ctx.fillText(bh.label, bh.p1.x, labelY);
       });
 
-      // 3. UNDERGROUND GALLERY FIBER NETWORK (CLOSED RING LOOP ACROSS UNDERCUT & PRODUCTION)
+      // 3. MULTI-LEVEL UNDERGROUND GALLERY FIBER NETWORK (DAISY-CHAIN ACROSS UNDERCUT, EXTRACTION & HAULAGE)
       let driftBurst = 0;
       activeWaves.forEach(w => {
-        if (Math.abs(w.y - yProduction) < 40 && w.radiusP < 120) {
-          driftBurst = Math.max(driftBurst, 1.0 - (w.radiusP / 120));
+        if (Math.abs(w.y - yProduction) < 50 && w.radiusP < 140) {
+          driftBurst = Math.max(driftBurst, 1.0 - (w.radiusP / 140));
         }
       });
 
       ctx.save();
-      ctx.strokeStyle = driftBurst > 0.15 ? '#ffffff' : '#00f0ff';
+      ctx.strokeStyle = driftBurst > 0.15 ? '#ffffff' : '#00ffa3';
       ctx.lineWidth = driftBurst > 0.15 ? 3.5 : 2.0;
-      ctx.shadowColor = driftBurst > 0.15 ? '#00ffa3' : '#00f0ff';
+      ctx.shadowColor = driftBurst > 0.15 ? '#00f0ff' : '#00ffa3';
       ctx.shadowBlur = driftBurst > 0.15 ? 14 : 6;
 
       ctx.beginPath();
-      // Shaft trunk down to production
+      // Pique down to Undercut level
       ctx.moveTo(shaftX, ySurface);
-      ctx.lineTo(shaftX, yProduction - 5);
+      ctx.lineTo(shaftX, yUndercut - 4);
 
-      // Undercut Drift run
-      ctx.moveTo(shaftX, yUndercut - 4);
+      // Level 1: Undercut Drift run
       ctx.lineTo(caveRight + 30, yUndercut - 4);
 
-      // Production Drift run
-      ctx.moveTo(caveLeft - 60, yProduction - 5);
-      ctx.lineTo(caveRight + 60, yProduction - 5);
-
-      // East Riser closing the loop between Undercut & Production
-      ctx.moveTo(caveRight + 30, yUndercut - 4);
+      // Vertical Riser East down to Level 2 (Production)
       ctx.lineTo(caveRight + 30, yProduction - 5);
+
+      // Level 2: Production / Drawpoints Drift run (traversing west)
+      ctx.lineTo(caveLeft - 60, yProduction - 5);
+
+      // Vertical Riser West down to Level 3 (Haulage)
+      ctx.lineTo(caveLeft - 60, yHaulage - 6);
+
+      // Level 3: Haulage Drift run (traversing east)
+      ctx.lineTo(caveRight + 60, yHaulage - 6);
       ctx.stroke();
 
-      // Splice boxes underground (Hermetic minewide ODFs)
+      // Splice boxes underground (Hermetic minewide ODFs between levels)
       const ugSpliceBoxes = [
         { x: shaftX, y: yUndercut - 4 },
-        { x: shaftX, y: yProduction - 5 },
         { x: caveRight + 30, y: yUndercut - 4 },
         { x: caveRight + 30, y: yProduction - 5 },
         { x: caveLeft - 60, y: yProduction - 5 },
-        { x: caveRight + 60, y: yProduction - 5 }
+        { x: caveLeft - 60, y: yHaulage - 6 },
+        { x: caveRight + 60, y: yHaulage - 6 }
       ];
       ugSpliceBoxes.forEach(sb => {
         ctx.fillStyle = '#00ffa3';
@@ -1482,71 +1510,57 @@
       });
       ctx.restore();
 
-      // 4. CONTINUOUS LASER INTERROGATION PULSES (Rayo viajando en Daisy Chain / Loop Continuo)
-      // Loop A: West Borehole B-01 Double-Ended Loop (Caseta -> B01 Down -> U-turn -> B01 Up -> Caseta)
-      const b01LoopPath = [
+      // 4. CONTINUOUS LASER INTERROGATION PULSES (FURLONG & ANDERSON DAISY-CHAIN)
+      // Array Loop 1: Flanking Perimeter Boreholes Daisy-Chain (Caseta -> West Borehole Loop -> Surface Trunk -> East Borehole Loop -> Caseta)
+      const perimeterDaisyChainPath = [
         { x: shackX, y: yTrunkSurface },
-        { x: b01X - 2, y: yTrunkSurface },
-        { x: b01X - 2, y: yHaulage + 20 },
-        { x: b01X + 2, y: yHaulage + 20 },
-        { x: b01X + 2, y: yTrunkSurface },
+        { x: bPermWestX - 2, y: yTrunkSurface },
+        { x: bPermWestX - 2, y: yBoreholeBottom },
+        { x: bPermWestX + 2, y: yBoreholeBottom },
+        { x: bPermWestX + 2, y: yTrunkSurface },
+        { x: bPermEastX - 2, y: yTrunkSurface },
+        { x: bPermEastX - 2, y: yBoreholeBottom },
+        { x: bPermEastX + 2, y: yBoreholeBottom },
+        { x: bPermEastX + 2, y: yTrunkSurface },
         { x: shackX, y: yTrunkSurface }
       ];
-      drawFiberLaserRay(b01LoopPath, 85, 2, '#00f0ff', 24);
+      drawFiberLaserRay(perimeterDaisyChainPath, 130, 2, '#00f0ff', 28);
 
-      // Loop B: Underground Mine Ring with Abutment Loops (Caseta -> Shaft -> Undercut -> East Riser -> East Abutment Loop -> Production Drift -> West Abutment Loop -> Shaft -> Caseta)
-      const mineRingPath = [
+      // Array Loop 2: Multi-Level Underground Gallery Daisy-Chain (Caseta -> Shaft -> Undercut -> Production -> Haulage -> Shaft Return)
+      const galleryDaisyChainPath = [
         { x: shackX, y: yTrunkSurface },
         { x: shaftX, y: yTrunkSurface },
         { x: shaftX, y: yUndercut - 4 },
         { x: caveRight + 30, y: yUndercut - 4 },
         { x: caveRight + 30, y: yProduction - 5 },
-        // Branch into East Abutment Borehole Loop
-        { x: caveRight + 60, y: yProduction - 5 },
-        { x: caveRight + 110, y: yCaveTop + 20 },
-        { x: caveRight + 60, y: yProduction - 5 },
-        // Traverse Production Drift to West
         { x: caveLeft - 60, y: yProduction - 5 },
-        // Branch into West Abutment Borehole Loop
-        { x: caveLeft - 110, y: yCaveTop + 20 },
-        { x: caveLeft - 60, y: yProduction - 5 },
-        // Return via Production Drift to Shaft
-        { x: shaftX, y: yProduction - 5 },
-        { x: shaftX, y: yTrunkSurface },
+        { x: caveLeft - 60, y: yHaulage - 6 },
+        { x: caveRight + 60, y: yHaulage - 6 },
+        { x: shaftX, y: yHaulage - 6 },
+        { x: shaftX, y: ySurface },
         { x: shackX, y: yTrunkSurface }
       ];
-      drawFiberLaserRay(mineRingPath, 115, 3, '#00f0ff', 30);
+      drawFiberLaserRay(galleryDaisyChainPath, 110, 2, '#00ffa3', 28);
 
-      // Loop C: East Borehole B-03 DSS Strain Loop (Caseta -> B03 Down -> U-turn -> B03 Up -> Caseta)
-      const b03LoopPath = [
+      // Sacrificial Ray 1 (B-Sac-1: Orebody down to Cave Back - Rayleigh Backscatter Reverse Pulse)
+      const bSac1Path = [
         { x: shackX, y: yTrunkSurface },
-        { x: b03X - 2, y: yTrunkSurface },
-        { x: b03X - 2, y: yHaulage + 20 },
-        { x: b03X + 2, y: yHaulage + 20 },
-        { x: b03X + 2, y: yTrunkSurface },
+        { x: bSac1X, y: yTrunkSurface },
+        { x: bSac1X, y: yCaveTop + 14 },
+        { x: bSac1X, y: yTrunkSurface },
         { x: shackX, y: yTrunkSurface }
       ];
-      drawFiberLaserRay(b03LoopPath, 78, 2, '#00ffa3', 24);
+      drawFiberLaserRay(bSac1Path, 75, 1, '#ffaa00', 24);
 
-      // Path D: Borehole Sacrificio B-02 (Consumible en Cave-Back / Orebody - Ida y Retorno en Reversa)
-      const b02Path = [
+      // Sacrificial Ray 2 (B-Sac-2: Orebody down to Cave Back - Rayleigh Backscatter Reverse Pulse)
+      const bSac2Path = [
         { x: shackX, y: yTrunkSurface },
-        { x: b02X, y: yTrunkSurface },
-        { x: caveCenterX - 20, y: yCaveTop + 18 },
-        { x: b02X, y: yTrunkSurface },
+        { x: bSac2X, y: yTrunkSurface },
+        { x: bSac2X, y: yCaveTop + 14 },
+        { x: bSac2X, y: yTrunkSurface },
         { x: shackX, y: yTrunkSurface }
       ];
-      drawFiberLaserRay(b02Path, 90, 2, '#ffaa00', 26);
-
-      // Path E: Borehole Sacrificio B-04 (Monitoreo Techo Air Gap - Ida y Retorno en Reversa)
-      const b04Path = [
-        { x: shackX, y: yTrunkSurface },
-        { x: b04X, y: yTrunkSurface },
-        { x: caveCenterX + 25, y: yCaveTop + 18 },
-        { x: b04X, y: yTrunkSurface },
-        { x: shackX, y: yTrunkSurface }
-      ];
-      drawFiberLaserRay(b04Path, 82, 2, '#ffaa00', 24);
+      drawFiberLaserRay(bSac2Path, 82, 1, '#ffaa00', 24);
     }
 
     // 7. SEISMIC WAVE PROPAGATION WITH PHYSICAL INELASTIC ATTENUATION
