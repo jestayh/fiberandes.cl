@@ -37,209 +37,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700;800&display=swap" rel="stylesheet">
 
-  <link rel="stylesheet" href="css/styles.css?v=20261001_05">
+  <link rel="stylesheet" href="css/styles.css?v=20261001_06">
 
-  <style>
-    /* Direct Layout Guarantee for 3D Simulator */
-    .sim-3d-visual {
-      position: relative !important;
-      height: 560px !important;
-      background: #03060C !important;
-      border: 1px solid var(--line-strong) !important;
-      border-radius: var(--r-lg) !important;
-      overflow: hidden !important;
-      box-shadow: 0 16px 48px rgba(0, 0, 0, 0.6) !important;
-    }
-    .sim-3d-viewport {
-      position: absolute !important;
-      inset: 0 !important;
-      width: 100% !important;
-      height: 100% !important;
-      z-index: 1 !important;
-      cursor: grab;
-    }
-    .sim-3d-viewport:active { cursor: grabbing; }
-    .sim-3d-viewport canvas {
-      width: 100% !important;
-      height: 100% !important;
-      display: block !important;
-      outline: none !important;
-    }
-    .sim-geotech-legend-bar {
-      margin-top: 14px;
-      padding: 14px 16px;
-      background: rgba(6, 12, 22, 0.95);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: var(--r-md);
-      backdrop-filter: blur(10px);
-    }
-    .legend-bar-title {
-      display: flex;
-      align-items: center;
-      gap: 7px;
-      font-family: var(--font-mono);
-      font-size: 11px;
-      font-weight: 700;
-      color: var(--cyan);
-      letter-spacing: 0.05em;
-      margin-bottom: 12px;
-      text-transform: uppercase;
-    }
-    .legend-bar-items {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 10px;
-    }
-    .legend-card {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 9px 12px;
-      background: rgba(255, 255, 255, 0.03);
-      border: 1px solid rgba(255, 255, 255, 0.07);
-      border-radius: var(--r-sm);
-      transition: border-color 0.2s, background 0.2s;
-    }
-    .legend-card:hover {
-      background: rgba(255, 255, 255, 0.06);
-      border-color: rgba(0, 240, 255, 0.35);
-    }
-    .legend-card svg {
-      flex-shrink: 0;
-    }
-    .legend-card-text {
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-      min-width: 0;
-    }
-    .legend-card-text strong {
-      font-size: 11px;
-      color: #fff;
-      font-family: var(--font-sans);
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-    .legend-card-text span {
-      font-size: 10px;
-      color: var(--fg-2);
-      font-family: var(--font-mono);
-      line-height: 1.3;
-    }
-
-    /* Clean cockpit layout: Console Header & Telemetry Dock OUTSIDE the canvas (Zero obstruction) */
-    .sim-dashboard-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: stretch;
-      gap: 12px;
-      margin-bottom: 12px;
-      width: 100%;
-      box-sizing: border-box;
-    }
-    @media (max-width: 992px) {
-      .sim-dashboard-header {
-        flex-direction: column;
-      }
-    }
-
-    .sim-hud-inspector {
-      display: flex !important;
-      align-items: center !important;
-      gap: 10px !important;
-      background: rgba(6, 15, 28, 0.95) !important;
-      border: 1px solid rgba(0, 240, 255, 0.35) !important;
-      border-radius: var(--r-sm) !important;
-      padding: 10px 16px !important;
-      font-family: var(--font-mono) !important;
-      font-size: 11px !important;
-      color: #fff !important;
-      flex: 1 1 380px !important;
-      min-height: 44px !important;
-      box-sizing: border-box !important;
-      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4) !important;
-      position: static !important;
-      max-width: none !important;
-    }
-    .sim-hud-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: var(--cyan);
-      box-shadow: 0 0 8px var(--cyan);
-      flex-shrink: 0;
-    }
-
-    .sim-status-banner {
-      display: block !important;
-      font-family: var(--font-mono) !important;
-      font-size: 11px !important;
-      padding: 10px 16px !important;
-      border-radius: var(--r-sm) !important;
-      font-weight: 500 !important;
-      line-height: 1.5 !important;
-      flex: 1.3 1 480px !important;
-      min-height: 44px !important;
-      box-sizing: border-box !important;
-      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4) !important;
-      position: static !important;
-      max-width: none !important;
-      transition: all 0.25s ease !important;
-    }
-    .sim-status-banner.detected {
-      background: rgba(0, 255, 163, 0.12) !important;
-      color: #00ffa3 !important;
-      border: 1px solid rgba(0, 255, 163, 0.45) !important;
-    }
-    .sim-status-banner.blindspot {
-      background: rgba(255, 75, 85, 0.16) !important;
-      color: #ff6b6b !important;
-      border: 1px solid rgba(255, 75, 85, 0.55) !important;
-    }
-
-    .sim-3d-telemetry {
-      display: grid !important;
-      grid-template-columns: repeat(4, 1fr) !important;
-      gap: 16px !important;
-      background: rgba(6, 11, 20, 0.95) !important;
-      border: 1px solid rgba(255, 255, 255, 0.12) !important;
-      border-radius: var(--r-sm) !important;
-      padding: 12px 20px !important;
-      margin-top: 10px !important;
-      margin-bottom: 12px !important;
-      width: 100% !important;
-      box-sizing: border-box !important;
-      position: static !important;
-      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4) !important;
-    }
-    @media (max-width: 768px) {
-      .sim-3d-telemetry {
-        grid-template-columns: repeat(2, 1fr) !important;
-      }
-    }
-    .sim-tel-cell { display: flex !important; flex-direction: column !important; }
-    .sim-tel-cell .l {
-      font-family: var(--font-mono) !important;
-      font-size: 10px !important;
-      color: var(--fg-2) !important;
-      letter-spacing: 0.08em !important;
-      text-transform: uppercase !important;
-    }
-    .sim-tel-cell .v {
-      font-family: var(--font-display) !important;
-      font-size: 15px !important;
-      font-weight: 700 !important;
-      margin-top: 2px !important;
-    }
-
-    @media (max-width: 900px) {
-      .sim-3d-visual { height: 460px !important; }
-      .sim-3d-telemetry { grid-template-columns: repeat(2, 1fr) !important; gap: 8px !important; }
-      .legend-bar-items { grid-template-columns: 1fr !important; }
-      .sim-overlay-hint { display: none !important; }
-    }
-  </style>
 
   <!-- Structured Data JSON-LD -->
   <script type="application/ld+json">
@@ -288,7 +87,7 @@
 
       <nav class="nav-links" role="navigation" aria-label="Menú principal">
         <a href="#inicio">Inicio &amp; Equipo</a>
-        <a href="#simulador">Simulador Geomecánico</a>
+        <a href="#aplicaciones">Aplicaciones DAS</a>
         <a href="#contacto">Contacto Directo</a>
       </nav>
 
@@ -315,7 +114,7 @@
   <!-- Mobile Navigation Dropdown -->
   <div class="mobile-nav" role="navigation" aria-label="Menú móvil">
     <a href="#inicio">Inicio &amp; Equipo</a>
-    <a href="#simulador">Simulador Geomecánico</a>
+    <a href="#aplicaciones">Aplicaciones DAS</a>
     <a href="#contacto">Contacto Directo</a>
     <a href="#contacto" class="btn btn-primary" style="margin-top:20px;">Contactar Especialistas</a>
   </div>
@@ -419,198 +218,321 @@
       </div>
     </section>
 
-    <!-- ============================ SECTION 02: SIMULADOR GEOMECÁNICO & CONTACTO ============================ -->
-    <section class="section-pad" id="simulador">
+    <!-- ============================ SECTION 02: APLICACIONES INDUSTRIALES DEL DAS ============================ -->
+    <section class="section-pad" id="aplicaciones">
       <div class="wrap">
         <div class="section-head reveal">
-          <span class="eyebrow"><span class="idx">02</span> <span>02 · Física del Macizo Rocoso &amp; Perfil Técnico 2D</span></span>
-          <h2 class="h-section">Simulador Geomecánico 2D: Perfil Técnico de Mina &amp; Cobertura DAS</h2>
+          <span class="eyebrow"><span class="idx">02</span> <span>02 · Casos de Uso &amp; Capacidades Industriales</span></span>
+          <h2 class="h-section">Aplicaciones Industriales de Distributed Acoustic Sensing (DAS)</h2>
           <p class="lead">
-            Inspirado en las secciones de elevación reales de minería subterránea (corte tipo Chuquicamata y El Teniente): la red sísmica tradicional (estaciones numeradas [1] a [39]) se ubica exclusivamente en túneles inferiores (cotas 9700 a 9460), dejando la columna superior de roca hacia el cráter de subsidencia (cotas 9800 a 10300) en una <strong>zona roja ciega fuera de alcance sísmico (&gt;300 m)</strong>. Con FiberAndes DAS, los cables de fibra óptica descienden de arriba a abajo y recorren la rampa, logrando cobertura continua en todo el perfil.
+            Transformamos cualquier cable de fibra óptica monomodo estándar o blindado en un arreglo continuo de miles de sensores acústicos y vibracionales en tiempo real. Respaldado en los últimos avances de la literatura científica y física óptica, FiberAndes sustituye redes tradicionales puntuales para eliminar zonas ciegas en infraestructuras críticas.
           </p>
         </div>
 
-        <!-- Interactive 2D Comparison Arena & Technical Blueprint -->
-        <div class="comparison-box reveal">
-          <div class="sim-controls">
-            <div class="sim-title">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>
-              <span>PERFIL TÉCNICO INTERACTIVO · COORDENADAS MINERAS &amp; MONITOREO DAS</span>
+        <!-- 5-Step Process Pipeline Flow (Fig. 5 Review) -->
+        <div class="tech-pipeline-wrap reveal">
+          <div class="pipeline-header">
+            <div class="pipeline-title">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--cyan)" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+              <span>Arquitectura Integral: Del Fotón a la Inteligencia Artificial</span>
             </div>
-            <div class="sim-modes">
-              <button class="sim-mode-btn active" data-sim="esi" id="btn-mode-esi">📡 Red Tradicional (Geófonos Numerados 1 a 39)</button>
-              <button class="sim-mode-btn" data-sim="dfos" id="btn-mode-dfos">⚡ Cables DAS (De Arriba a Abajo + Rampa)</button>
-            </div>
-            <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
-              <span style="font-family:var(--font-mono); font-size:11px; color:var(--fg-2); margin-right:4px;">ACCIONES:</span>
-              <button class="sim-mode-btn" id="btn-sim-caveback" style="background:rgba(0,240,255,0.12); color:var(--cyan); border:1px solid var(--cyan); display:flex; align-items:center; gap:5px; font-size:11px; padding:6px 12px;">
-                💥 Sismo en Cráter / Columna (Cota 10050)
-              </button>
-              <button class="sim-mode-btn" id="btn-cam-general" style="background:rgba(255,102,0,0.12); color:#ff9f43; border:1px solid #ff7b47; display:flex; align-items:center; gap:5px; font-size:11px; padding:6px 12px;">
-                ⚠️ Sismo en Rampa Baja (Cota 9460)
-              </button>
-            </div>
+            <span class="pipeline-badge">Flujo Operacional DAS End-to-End</span>
           </div>
 
-          <!-- Dedicated Top Console (Outside Canvas): Dynamic Hover HUD & Seismic Status Banner -->
-          <div class="sim-dashboard-header">
-            <div class="sim-hud-inspector" id="sim-hud-inspector">
-              <span class="sim-hud-dot"></span>
-              <span id="sim-hud-text">💡 Pasa el cursor por el perfil de mina para inspeccionar coordenadas, niveles y estaciones</span>
+          <div class="pipeline-steps">
+            <div class="pipeline-step">
+              <span class="step-num">01 · EMISIÓN</span>
+              <span class="step-name">Sistema DAS Óptico</span>
+              <p class="step-desc">Pulsos láser coherentes de nanosegundos inyectados en la fibra. Retrodispersión Rayleigh interferométrica (φ-OTDR).</p>
             </div>
-            <div class="sim-status-banner blindspot" id="sim-status-banner">
-              <strong>📡 RED TRADICIONAL (GEÓFONOS NUMERADOS 1 A 39)</strong> — Sensores confinados abajo dejan un <strong>área roja ciega masiva sobre la cota 9800</strong> · Haz clic en <em>"Cables DAS (De Arriba a Abajo + Rampa)"</em>
-            </div>
-          </div>
 
-          <!-- 2D Blueprint Canvas Container -->
-          <div class="sim-3d-visual" id="mine-3d-canvas-container" title="Haz clic en cualquier punto del perfil minero para detonar sismos">
-          </div>
+            <div class="pipeline-step">
+              <span class="step-num">02 · ADQUISICIÓN</span>
+              <span class="step-name">Acoplamiento Físico</span>
+              <p class="step-desc">Tendido cementado en sondajes o zanjas. Transferencia de deformación mecánica del medio a la fibra con cero electrónica.</p>
+            </div>
 
-          <!-- Real-time Telemetry Strip (Outside Canvas, Below) -->
-          <div class="sim-3d-telemetry" id="sim-telemetry-strip">
-            <div class="sim-tel-cell">
-              <span class="l">COBERTURA DEL PERFIL</span>
-              <span class="v" id="tel-val-cov" style="color:var(--emerald);">35%</span>
+            <div class="pipeline-step">
+              <span class="step-num">03 · FILTRADO</span>
+              <span class="step-name">AI-Aided Denoising</span>
+              <p class="step-desc">Supresión de ruido ambiental mediante algoritmos físicos (wavelets) y redes neuronales para maximizar la relación señal/ruido (SNR).</p>
             </div>
-            <div class="sim-tel-cell">
-              <span class="l">SENSORES ACTIVOS</span>
-              <span class="v" id="tel-val-sens" style="color:#fff;">22 Geófonos Numerados en Niveles</span>
+
+            <div class="pipeline-step">
+              <span class="step-num">04 · CINEMÁTICA</span>
+              <span class="step-name">Localización 2D / 3D</span>
+              <p class="step-desc">Picado nanométrico de tiempos de arribo (ondas P y S) e inversión hipocentral con resolución espacial métrica.</p>
             </div>
-            <div class="sim-tel-cell">
-              <span class="l">INCERTIDUMBRE HIPOCENTRO</span>
-              <span class="v" id="tel-val-uncert" style="color:var(--cyan);">±26.0 metros</span>
-            </div>
-            <div class="sim-tel-cell">
-              <span class="l">ESTADO MONITOREO</span>
-              <span class="v" id="tel-val-strain" style="color:var(--amber);">Zona Roja Ciega Superior (>300 m)</span>
+
+            <div class="pipeline-step">
+              <span class="step-num">05 · DECISIÓN</span>
+              <span class="step-name">Machine Learning</span>
+              <p class="step-desc">Clasificación multievento continua con Deep Learning (CNNs / PhaseNet) y generación automática de alertas de riesgo en faena.</p>
             </div>
           </div>
+        </div>
 
-          <!-- Geotechnical Symbology & Sensor Reference Guide (Horizontal, Outside Canvas) -->
-          <div class="sim-geotech-legend-bar">
-            <div class="legend-bar-title">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
-              <span>ELEMENTOS DEL PERFIL TÉCNICO MINERO (CONVENCIONES CAD):</span>
+        <!-- Industrial Applications Grid -->
+        <div class="apps-grid reveal">
+
+          <!-- 01. FEATURED: Minería Subterránea & Reservorios (Mining & Reservoirs) -->
+          <div class="app-card-featured">
+            <div class="featured-header-row">
+              <div class="featured-icon-badge" aria-hidden="true">
+                <!-- Futuristic Subterranean Mining & Reservoir SVG -->
+                <svg width="44" height="44" viewBox="0 0 48 48" fill="none">
+                  <!-- Subterranean Isometric Cube Base -->
+                  <polygon points="24,4 42,14 24,24 6,14" stroke="#00f0ff" stroke-width="1.8" fill="rgba(0, 240, 255, 0.08)"/>
+                  <polygon points="6,14 24,24 24,44 6,34" stroke="#00f0ff" stroke-width="1.8" fill="rgba(0, 240, 255, 0.03)"/>
+                  <polygon points="24,24 42,14 42,34 24,44" stroke="#00ffa3" stroke-width="1.8" fill="rgba(0, 255, 163, 0.05)"/>
+                  <!-- Vertical Borehole Sensors -->
+                  <line x1="24" y1="4" x2="24" y2="44" stroke="#00ffa3" stroke-width="2.2" stroke-dasharray="3 2"/>
+                  <line x1="15" y1="9" x2="15" y2="39" stroke="#00f0ff" stroke-width="1.4" stroke-dasharray="2 2"/>
+                  <line x1="33" y1="9" x2="33" y2="39" stroke="#00f0ff" stroke-width="1.4" stroke-dasharray="2 2"/>
+                  <!-- Microseismic Hypocenter & Radiating Wavefronts -->
+                  <circle cx="24" cy="28" r="3.5" fill="#ff4b55"/>
+                  <circle cx="24" cy="28" r="8" stroke="#ff4b55" stroke-width="1.2" opacity="0.75" stroke-dasharray="2 2"/>
+                  <circle cx="24" cy="28" r="14" stroke="#00ffa3" stroke-width="1" opacity="0.45"/>
+                  <!-- Ground Sensor Nodes -->
+                  <circle cx="15" cy="24" r="2" fill="#00f0ff"/>
+                  <circle cx="33" cy="24" r="2" fill="#00ffa3"/>
+                </svg>
+              </div>
+              <div class="featured-title-wrap">
+                <div class="featured-eyebrow">
+                  <span style="display:inline-block; width:6px; height:6px; border-radius:50%; background:var(--emerald); box-shadow:0 0 6px var(--emerald);"></span>
+                  <span>APLICACIÓN DESTACADA · GRAN MINERÍA, BLOCK CAVING &amp; RESERVORIOS</span>
+                </div>
+                <h3 class="featured-title">Minería Subterránea &amp; Yacimientos Geológicos</h3>
+                <p class="featured-sub">
+                  Monitoreo integral de macizos rocosos en explotación continua, avance de frentes de socavación y pozos profundos. Reemplaza o complementa las redes sísmicas convencionales resolviendo la falta de apertura volumétrica y la atenuación inelástica sobre el <em>cave-back</em>.
+                </p>
+              </div>
             </div>
-            <div class="legend-bar-items">
-              <div class="legend-card">
-                <svg width="34" height="18" viewBox="0 0 34 18">
-                  <polygon points="2,2 32,2 24,16 10,16" fill="rgba(255,255,255,0.06)" stroke="#a0b9d9" stroke-width="1.5"/>
-                </svg>
-                <div class="legend-card-text">
-                  <strong>Cráter de Subsidencia / Rajo (Cota 10200)</strong>
-                  <span>Escarpes y bancos de superficie donde se origina el hundimiento</span>
+
+            <!-- 3 Pillars Breakdown (Microsismicidad, Localización Hipocentral, Tomografía) -->
+            <div class="mining-pillars-grid">
+              <!-- Pillar 1: Microsismicidad -->
+              <div class="mining-pillar">
+                <div class="pillar-head">
+                  <span class="pillar-dot" style="background:#ff4b55; box-shadow:0 0 8px #ff4b55;"></span>
+                  <h4>Microsismicidad Continua</h4>
                 </div>
+                <p>
+                  <strong>Detección de eventos de muy baja magnitud (M<sub>W</sub> &lt; 0 y hasta M<sub>W</sub> &lt; -2.5):</strong> Miles de canales virtuales en sondajes verticales cruzan las zonas de fracturamiento a metros de distancia, registrando la microfisuración antes de que las ondas de alta frecuencia se atenúen en el macizo. Pre-alerta clave ante riesgo de estallidos de roca (<em>rockburst</em>).
+                </p>
+                <span class="pillar-badge" style="background:rgba(255, 75, 85, 0.12); color:#ff6b6b; border:1px solid rgba(255, 75, 85, 0.35);">Cero Puntos Ciegos en Corona</span>
               </div>
 
-              <div class="legend-card">
-                <svg width="34" height="18" viewBox="0 0 34 18">
-                  <rect x="2" y="4" width="30" height="10" fill="#0a1423" stroke="#ffffff" stroke-width="1.2"/>
-                  <line x1="3" y1="9" x2="31" y2="9" stroke="#ff8c28" stroke-width="1.5"/>
-                </svg>
-                <div class="legend-card-text">
-                  <strong>Footprint de Hundimiento (Cota 9800)</strong>
-                  <span>Horizonte de explotación principal y bateas de extracción</span>
+              <!-- Pillar 2: Localización Hipocentral -->
+              <div class="mining-pillar">
+                <div class="pillar-head">
+                  <span class="pillar-dot" style="background:var(--cyan); box-shadow:0 0 8px var(--cyan);"></span>
+                  <h4>Localización Hipocentral Submétrica</h4>
                 </div>
+                <p>
+                  <strong>Muestreo denso cada 1 a 5 metros:</strong> Proporciona un registro continuo del campo de ondas que permite picado de tiempos de arribo de ondas P y S con precisión de nanosegundos. Algoritmos de Deep Learning (PhaseNet) automatizan la asociación de fases, reduciendo la incertidumbre espacial de ±25 m (geófonos) a ±1.8 m (DAS).
+                </p>
+                <span class="pillar-badge" style="background:var(--cyan-dim); color:var(--cyan); border:1px solid rgba(0, 240, 255, 0.35);">Precisión ±1.8 m · AI PhaseNet</span>
               </div>
 
-              <div class="legend-card">
-                <svg width="34" height="18" viewBox="0 0 34 18">
-                  <path d="M2,2 L14,7 L4,12 L20,16" fill="none" stroke="#ff6b35" stroke-width="2.5" stroke-linecap="round"/>
-                </svg>
-                <div class="legend-card-text">
-                  <strong>Rampa de Acceso Espiral (Naranja)</strong>
-                  <span>Declive en zigzag desde cota 9950 hasta transporte 9460</span>
+              <!-- Pillar 3: Tomografía Sísmica -->
+              <div class="mining-pillar">
+                <div class="pillar-head">
+                  <span class="pillar-dot" style="background:var(--emerald); box-shadow:0 0 8px var(--emerald);"></span>
+                  <h4>Tomografía Sísmica 3D / 4D</h4>
                 </div>
-              </div>
-
-              <div class="legend-card">
-                <svg width="34" height="18" viewBox="0 0 34 18">
-                  <rect x="4" y="3" width="12" height="12" fill="#ffffff" stroke="#111c2b" stroke-width="1.2"/>
-                  <text x="10" y="12" font-size="8" font-family="monospace" font-weight="bold" text-anchor="middle" fill="#0a101d">1</text>
-                  <circle cx="10" cy="9" r="7" fill="none" stroke="#ffb020" stroke-width="1" stroke-dasharray="2 2"/>
-                </svg>
-                <div class="legend-card-text">
-                  <strong>Estaciones Numeradas [1] a [39] (Tradicional)</strong>
-                  <span>Geófonos en galerías con radio de escucha limitado a 300 m</span>
-                </div>
-              </div>
-
-              <div class="legend-card">
-                <svg width="34" height="18" viewBox="0 0 34 18">
-                  <line x1="6" y1="2" x2="6" y2="16" stroke="#00f0ff" stroke-width="2.5" stroke-linecap="round"/>
-                  <line x1="16" y1="2" x2="16" y2="16" stroke="#00ffa3" stroke-width="2.5" stroke-linecap="round"/>
-                  <line x1="26" y1="2" x2="26" y2="16" stroke="#00f0ff" stroke-width="2.5" stroke-linecap="round"/>
-                </svg>
-                <div class="legend-card-text">
-                  <strong>Cables DAS Arriba-Abajo + Rampa</strong>
-                  <span>Fibras ópticas continuas desde superficie hasta cota 9400</span>
-                </div>
-              </div>
-
-              <div class="legend-card">
-                <svg width="34" height="18" viewBox="0 0 34 18">
-                  <rect x="3" y="3" width="28" height="12" fill="rgba(255,32,32,0.3)" stroke="#ff4b55" stroke-width="1.2" stroke-dasharray="2 2"/>
-                </svg>
-                <div class="legend-card-text">
-                  <strong>Área Roja Ciega Superior (>300 m)</strong>
-                  <span>Columna de roca entre 9800 y 10300 sin sensores tradicionales</span>
-                </div>
+                <p>
+                  <strong>Imágenes de velocidad de corte (V<sub>s</sub> y V<sub>p</sub>):</strong> Aprovecha tanto fuentes activas (tronaduras, weight-drops) como ruido ambiental pasivo (maquinaria, tránsito) para realizar tomografía de ondas superficiales y de cuerpo. Permite mapear la redistribución de esfuerzos, relajación de pilares y controlar en 4D el avance de fracturas hidráulicas.
+                </p>
+                <span class="pillar-badge" style="background:var(--emerald-dim); color:var(--emerald); border:1px solid rgba(0, 255, 163, 0.35);">Modelos V<sub>s</sub> / V<sub>p</sub> en Tiempo Real</span>
               </div>
             </div>
           </div>
 
-          <!-- Side-by-side Comparative Cards -->
-          <div class="comp-grid">
-            <div class="comp-card discrete">
-              <span class="comp-badge">Red Sísmica Tradicional (Geófonos Triaxiales 3D)</span>
-              <h3>Geófonos en Boreholes de Túnel</h3>
-              <p>Instrumentación sísmica convencional en perforaciones cementadas (15 a 25 m en hastiales/techos) para superar la EDZ del túnel.</p>
-              <ul class="comp-list">
-                <li>
-                  <svg class="icon-x" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m15 9-6 6M9 9l6 6"/></svg>
-                  <span><strong>Fuerte Atenuación Inelástica (Q):</strong> Las altas frecuencias (&gt;150 Hz) de microsismos ($M_W &lt; 0$) se disipan en el macizo rocoso fracturado. A &gt;350 m del Cave-Back en ascenso, la señal cae bajo el piso de ruido ambiental antes de alcanzar los boreholes inferiores.</span>
-                </li>
-                <li>
-                  <svg class="icon-x" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m15 9-6 6M9 9l6 6"/></svg>
-                  <span><strong>Vacío Superior en Cota (Pérdida de Apertura 3D):</strong> Al progresar el caving hacia arriba, no existen galerías accesibles sobre la corona para perforar boreholes, generando un cono ciego superior sin cobertura vertical.</span>
-                </li>
-                <li>
-                  <svg class="icon-x" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m15 9-6 6M9 9l6 6"/></svg>
-                  <span><strong>Malla Puntual Discreta (±15 a ±25 m):</strong> Decenas de estaciones versus decenas de miles de canales continuos de fibra óptica distribuida.</span>
-                </li>
-                <li>
-                  <svg class="icon-x" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m15 9-6 6M9 9l6 6"/></svg>
-                  <span><strong>Cero Medición de Deformación Lenta (Slow-Strain, 0 Hz):</strong> Sensores inerciales dinámicos que no pueden medir la sobrecarga cuasi-estática y microdeformación lenta previa al estallido de roca (*rockburst*).</span>
-                </li>
-              </ul>
+          <!-- 02. Ductos & Tuberías (Pipelines) -->
+          <div class="app-card">
+            <div class="app-card-top">
+              <div class="app-icon-badge" aria-hidden="true">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--cyan)" stroke-width="1.8">
+                  <!-- Pipeline Conduits & Wave Leak -->
+                  <path d="M2 7h20M2 13h20M2 19h20" stroke-linecap="round"/>
+                  <rect x="7" y="5" width="4" height="16" rx="1" fill="rgba(0, 240, 255, 0.2)" stroke="var(--cyan)"/>
+                  <circle cx="16" cy="13" r="3" fill="#ff4b55" stroke="#fff" stroke-width="1.2"/>
+                  <path d="M16 8v-2M16 20v-2" stroke="#ff4b55" stroke-width="1.5"/>
+                </svg>
+              </div>
+              <span class="app-sector-pill">Oil &amp; Gas · Concentraductos</span>
             </div>
-
-            <div class="comp-card dfos">
-              <span class="comp-badge">Revolución FiberAndes (DFOS)</span>
-              <h3>Distributed Fiber Optic Sensing</h3>
-              <p>El cable de fibra óptica completo ES el sensor: un único hilo equivale a más de 50.000 sensores continuos.</p>
-              <ul class="comp-list">
-                <li>
-                  <svg class="icon-check" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
-                  <span><strong>100% Cobertura Continua:</strong> Muestreo ininterrumpido cada 1 metro a lo largo de toda la extensión.</span>
-                </li>
-                <li>
-                  <svg class="icon-check" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
-                  <span><strong>100% Pasivo en Terreno:</strong> Solo viaja luz. Sin electricidad ni baterías en faena. Inmune a rayos, EMI y polvo.</span>
-                </li>
-                <li>
-                  <svg class="icon-check" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
-                  <span><strong>Costo marginal mínimo:</strong> Monitorear 10 km adicionales solo requiere extender fibra estándar o blindada.</span>
-                </li>
-                <li>
-                  <svg class="icon-check" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
-                  <span><strong>Multimodalidad simultánea:</strong> Combina sismicidad acústica (DAS), deformación (DSS) y filtraciones térmicas (DTS).</span>
-                </li>
-              </ul>
+            <div class="app-card-body">
+              <h3>Ductos &amp; Tuberías de Transporte</h3>
+              <p>
+                Detección instantánea y métrica de fugas de hidrocarburos, concentrado de cobre o agua mediante firmas acústicas de flujo turbulento. Alerta perimetral 24/7 contra excavación no autorizada o interferencia de terceros (TPI).
+              </p>
+            </div>
+            <div class="app-card-footer">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+              <span>Alcance continuo &gt;50 km por canal · DAS + DTS</span>
             </div>
           </div>
+
+          <!-- 03. Estabilidad de Taludes (Landslides & Geohazards) -->
+          <div class="app-card">
+            <div class="app-card-top">
+              <div class="app-icon-badge" aria-hidden="true">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--amber)" stroke-width="1.8">
+                  <!-- Stepped Slope & Slip Surface -->
+                  <path d="M2 20h20" stroke-linecap="round"/>
+                  <path d="M2 20l4-6h4l4-5h4l4-5" stroke-width="2"/>
+                  <path d="M8 17c3-3 7-5 12-6" stroke="#ff4b55" stroke-dasharray="2 2" stroke-width="1.6"/>
+                  <circle cx="14" cy="13" r="2.5" fill="var(--amber)"/>
+                </svg>
+              </div>
+              <span class="app-sector-pill">Geotecnia · Rajos · Relaves</span>
+            </div>
+            <div class="app-card-body">
+              <h3>Estabilidad de Taludes &amp; Laderas</h3>
+              <p>
+                Detección acústica de microfracturas precursoras y aceleración de creep en paredes de rajos abiertos, tranques de relaves y laderas montañosas. Alerta temprana de inestabilidad antes de que ocurra el colapso gravitacional.
+              </p>
+            </div>
+            <div class="app-card-footer" style="color:var(--amber);">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+              <span>Alerta pre-falla sin exponer personal en terreno</span>
+            </div>
+          </div>
+
+          <!-- 04. Ferrocarriles (Railways) -->
+          <div class="app-card">
+            <div class="app-card-top">
+              <div class="app-icon-badge" aria-hidden="true">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--emerald)" stroke-width="1.8">
+                  <!-- Converging Rail Tracks with Cross Ties & Telemetry Pulse -->
+                  <path d="M7 21L11 3M17 21L13 3" stroke-width="2"/>
+                  <path d="M6 18h12M7.5 14h9M9 10h6M10.5 6h3" stroke-linecap="round"/>
+                  <circle cx="15" cy="10" r="2.5" fill="var(--emerald)"/>
+                </svg>
+              </div>
+              <span class="app-sector-pill">Transporte Ferroviario &amp; Metro</span>
+            </div>
+            <div class="app-card-body">
+              <h3>Ferrocarriles &amp; Vías Férreas</h3>
+              <p>
+                Seguimiento continuo de convoyes en tiempo real y detección automatizada de anomalías en rieles: fatiga de contacto por rodadura, pernos sueltos, fisuras y rieles rotos mediante el análisis acústico del rodado en marcha.
+              </p>
+            </div>
+            <div class="app-card-footer" style="color:var(--emerald);">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+              <span>Monitoreo 100% pasivo sin corte de tráfico</span>
+            </div>
+          </div>
+
+          <!-- 05. Túneles (Tunnels & Underground Civils) -->
+          <div class="app-card">
+            <div class="app-card-top">
+              <div class="app-icon-badge" aria-hidden="true">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--purple)" stroke-width="1.8">
+                  <!-- Horseshoe Tunnel with Circumferential Ring -->
+                  <path d="M4 21V12a8 8 0 0 1 16 0v9" stroke-width="2"/>
+                  <path d="M2 21h20"/>
+                  <path d="M8 21v-8a4 4 0 0 1 8 0v8" stroke-dasharray="2 2"/>
+                  <circle cx="12" cy="7" r="2" fill="var(--purple)"/>
+                </svg>
+              </div>
+              <span class="app-sector-pill">Obras Subterráneas · Civiles</span>
+            </div>
+            <div class="app-card-body">
+              <h3>Túneles &amp; Obras Subterráneas</h3>
+              <p>
+                Monitoreo de desprendimiento de roca en bóvedas y hastiales, convergencia milimétrica de galerías, agrietamiento del revestimiento estructural (shotcrete y dovelas) e ingreso imprevisto de agua en faena subterránea.
+              </p>
+            </div>
+            <div class="app-card-footer" style="color:var(--purple);">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+              <span>Inmunidad total a interferencia electromagnética (EMI)</span>
+            </div>
+          </div>
+
+          <!-- 06. Puentes & Viaductos (Bridges & Structural Health) -->
+          <div class="app-card">
+            <div class="app-card-top">
+              <div class="app-icon-badge" aria-hidden="true">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--cyan)" stroke-width="1.8">
+                  <!-- Cable-stayed Suspension Bridge -->
+                  <path d="M3 19h18M8 5v14M16 5v14" stroke-width="1.8"/>
+                  <path d="M8 6L3 19M8 6l8 13M16 6L8 19M16 6l5 13" stroke-width="1.2" stroke-linecap="round"/>
+                  <circle cx="12" cy="12.5" r="2" fill="var(--cyan)"/>
+                </svg>
+              </div>
+              <span class="app-sector-pill">Salud Estructural (SHM)</span>
+            </div>
+            <div class="app-card-body">
+              <h3>Puentes &amp; Viaductos Críticos</h3>
+              <p>
+                Monitoreo de salud estructural (SHM) en tiempo real, medición de frecuencias naturales de vibración, respuesta dinámica ante ráfagas de viento y sobrecargas de tráfico, sustituyendo costosos enjambres de acelerómetros discretos.
+              </p>
+            </div>
+            <div class="app-card-footer">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+              <span>Estimación modal y respuesta dinámica continua</span>
+            </div>
+          </div>
+
+          <!-- 07. Carreteras & Tráfico (Roads & Smart Highways) -->
+          <div class="app-card">
+            <div class="app-card-top">
+              <div class="app-icon-badge" aria-hidden="true">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--amber)" stroke-width="1.8">
+                  <!-- Highway with Perspective Lanes & Pulse Nodes -->
+                  <path d="M5 21L9 3M19 21L15 3" stroke-width="2"/>
+                  <line x1="12" y1="5" x2="12" y2="8" stroke-width="1.5" stroke-linecap="round"/>
+                  <line x1="12" y1="12" x2="12" y2="15" stroke-width="1.5" stroke-linecap="round"/>
+                  <line x1="12" y1="18" x2="12" y2="21" stroke-width="1.5" stroke-linecap="round"/>
+                  <circle cx="10" cy="14" r="2.5" fill="var(--amber)"/>
+                </svg>
+              </div>
+              <span class="app-sector-pill">Smart Highways · Infraestructura</span>
+            </div>
+            <div class="app-card-body">
+              <h3>Carreteras &amp; Tráfico Inteligente</h3>
+              <p>
+                Pesaje dinámico en movimiento (WIM), conteo y clasificación vehicular automática mediante fibra enterrada al borde de calzadas. Detección instantánea de accidentes, congestión y evaluación de la fatiga del pavimento.
+              </p>
+            </div>
+            <div class="app-card-footer" style="color:var(--amber);">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+              <span>Aprovecha ductos de fibra existentes en autopistas</span>
+            </div>
+          </div>
+
+          <!-- 08. Sismología & Alerta Temprana (Earthquake Seismology) -->
+          <div class="app-card">
+            <div class="app-card-top">
+              <div class="app-icon-badge" aria-hidden="true">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#ff4b55" stroke-width="1.8">
+                  <!-- Tectonic Fault & Concentric Seismic Waves -->
+                  <path d="M2 12l5-3 4 5 4-4 7 2" stroke="#ff4b55" stroke-width="2" stroke-linecap="round"/>
+                  <circle cx="11" cy="14" r="2.5" fill="#ff4b55"/>
+                  <path d="M7 14a5 5 0 0 1 8 0" stroke="var(--cyan)" stroke-width="1.4" stroke-dasharray="2 2"/>
+                  <path d="M4 14a9 9 0 0 1 14 0" stroke="var(--emerald)" stroke-width="1.2" stroke-dasharray="2 2"/>
+                </svg>
+              </div>
+              <span class="app-sector-pill">Geofísica &amp; Alerta Sísmica</span>
+            </div>
+            <div class="app-card-body">
+              <h3>Sismología &amp; Alerta Temprana</h3>
+              <p>
+                Reutilización de fibra oscura (dark fiber) en telecomunicaciones urbanas y cables submarinos para densificar redes sismológicas a gran escala. Detección inmediata de ondas P y S para activación de protocolos sísmicos en segundos.
+              </p>
+            </div>
+            <div class="app-card-footer" style="color:#ff6b6b;">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+              <span>Monitoreo masivo en zonas de subducción y fallas</span>
+            </div>
+          </div>
+
+        </div>
+
 
           <!-- Comparative Science Matrix Table -->
           <div class="science-table-wrap reveal" style="margin-top: 32px;">
@@ -784,7 +706,7 @@
           <div class="footer-col">
             <h5>Navegación</h5>
             <a href="#inicio">Inicio &amp; Equipo Fundador</a>
-            <a href="#simulador">Simulador Geomecánico 2D</a>
+            <a href="#aplicaciones">Aplicaciones Industriales DAS</a>
             <a href="#contacto">Contacto &amp; Cotización</a>
           </div>
 
@@ -865,10 +787,6 @@
   <script src="js/drawer-data.js"></script>
   <script src="js/i18n.js"></script>
   <script src="js/hero-canvas.js"></script>
-
-  <!-- 2D Mine Geomechanics Technical Blueprint Simulator (Corte Transversal Chuquicamata & DFOS) -->
-  <script src="js/mine-2d-blueprint.js?v=20261001_07"></script>
-
   <script src="js/configurator.js"></script>
   <script src="js/app.js"></script>
 </body>
