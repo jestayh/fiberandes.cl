@@ -152,6 +152,9 @@ h1, h2, h3, h4, h5 {
   font-size: clamp(32px, 4.4vw, 54px);
   margin-top: 14px;
   text-wrap: balance;
+  color: #ffffff;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
 }
 
 .lead {
@@ -462,20 +465,26 @@ h1, h2, h3, h4, h5 {
 .telemetry-cell {
   background: rgba(13, 22, 39, 0.75);
   padding: 18px 22px;
-  transition: background .2s ease;
+  transition: background .25s ease, transform .25s ease, border-color .25s ease;
+  border-radius: 6px;
+  border: 1px solid transparent;
 }
 .telemetry-cell:hover {
-  background: rgba(19, 32, 56, 0.9);
+  background: rgba(19, 32, 56, 0.95);
+  transform: translateY(-2px);
+  border-color: rgba(0, 240, 255, 0.2);
+  box-shadow: 0 4px 16px rgba(0, 240, 255, 0.1);
 }
 .telemetry-label {
   font-family: var(--font-mono);
-  font-size: 11px;
-  letter-spacing: 0.14em;
+  font-size: 10.5px;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: var(--fg-2);
+  color: var(--cyan);
   display: flex;
   align-items: center;
   gap: 6px;
+  font-weight: 600;
 }
 .telemetry-value {
   font-family: var(--font-display);
