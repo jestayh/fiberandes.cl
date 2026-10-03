@@ -1406,9 +1406,13 @@ h1, h2, h3, h4, h5 {
   color: var(--fg-1);
   font-size: 14.5px;
   padding: 5px 0;
-  transition: color .15s;
+  transition: color .15s ease;
+  border-bottom: 1px solid transparent;
 }
-.footer-col a:hover { color: #fff; }
+.footer-col a:hover {
+  color: #fff;
+  border-bottom-color: var(--cyan);
+}
 
 .footer-bot {
   display: flex;
