@@ -28,6 +28,7 @@
       "Ir a Hoja de ruta": "Go to Roadmap",
       "Ir a Contacto": "Go to Contact",
       "PIONEROS": "PIONEERS",
+    "INTERROGADOR": "INTERROGATOR",
     "Pulsos de luz infrarroja (1550 nm), invisibles al ojo, recorren la fibra.": "Infrared light pulses (1550 nm), invisible to the eye, travel along the fiber.",
     "· DAS en Chile": "· DAS in Chile",
       "Detección Acústica Distribuida (DAS) en Chile": "Distributed Acoustic Sensing (DAS) in Chile",

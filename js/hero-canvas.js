@@ -286,6 +286,33 @@
     ui.font = '600 9px "IBM Plex Mono", monospace';
     ui.fillStyle = 'rgba(0, 240, 255, 0.75)';
     ui.fillText('KM 0', x, y - 6);
+
+    // curved arrow + label pointing at the box, so it reads as the interrogator
+    const label = window.faI18n ? window.faI18n.t('INTERROGADOR') : 'INTERROGADOR';
+    // below the box when there is room underneath, above it on narrow screens
+    const below = fiberLane().height > 110;
+    const tipX = x + bw / 2 + 4;
+    const tipY = below ? y + bh + 3 : y - 3;
+    const endX = tipX + (below ? 42 : 34);
+    const endY = tipY + (below ? 26 : -26);
+    ui.strokeStyle = 'rgba(0, 240, 255, 0.55)';
+    ui.lineWidth = 1.2;
+    const dir = below ? 1 : -1;
+    ui.beginPath();
+    ui.moveTo(endX, endY);
+    ui.quadraticCurveTo(endX - 24, endY, tipX + 3, tipY + 5 * dir);
+    ui.stroke();
+    ui.fillStyle = 'rgba(0, 240, 255, 0.55)';
+    ui.beginPath();
+    ui.moveTo(tipX, tipY);
+    ui.lineTo(tipX + 8.5, tipY + 3.2 * dir);
+    ui.lineTo(tipX + 4.2, tipY + 8.4 * dir);
+    ui.closePath();
+    ui.fill();
+    ui.font = '600 9px "IBM Plex Mono", monospace';
+    ui.fillStyle = 'rgba(0, 240, 255, 0.8)';
+    ui.textBaseline = 'middle';
+    ui.fillText(label, endX + 4, endY);
     ui.restore();
   }
 
