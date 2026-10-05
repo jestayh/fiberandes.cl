@@ -35,7 +35,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700;800&display=swap" rel="stylesheet">
 
-  <link rel="stylesheet" href="css/styles.css?v=20261003_04">
+  <link rel="stylesheet" href="css/styles.css?v=20261005_08">
 
   <!-- Structured Data JSON-LD -->
   <script type="application/ld+json">
@@ -79,7 +79,7 @@
   <header class="nav" role="banner">
     <div class="wrap">
       <a class="brand" href="index.html" aria-label="FiberAndes Inicio">
-        <img class="logo-svg" src="assets/logo.svg" alt="FiberAndes &mdash; Distributed Sensing Chile">
+        <img class="logo-svg" src="assets/logo.svg?v=20261005_01" alt="FiberAndes &mdash; Distributed Sensing Chile">
       </a>
 
       <nav class="nav-links" role="navigation" aria-label="Men&uacute; principal">
@@ -118,26 +118,23 @@
   </div>
 
   <!-- Optical Telemetry Progress Ribbon (Mobile & Tablet) -->
-  <div class="optical-telemetry-bar" aria-hidden="true">
+  <div class="optical-telemetry-bar hidden" id="optical-telemetry-bar" aria-hidden="true">
     <div class="otdr-status">
       <span class="otdr-pulse-dot"></span>
       <span>PULSO &Oacute;PTICO:</span>
-      <span class="otdr-section" id="mobile-otdr-section">00 &middot; INICIO</span>
+      <span class="otdr-section" id="mobile-otdr-section">01 &middot; CORD&Oacute;N CAULLE</span>
     </div>
-    <div class="otdr-km" id="mobile-otdr-km">KM 0.0 / 60 KM</div>
+    <div class="otdr-km" id="mobile-otdr-km">KM 1.5 / 60 KM</div>
     <div class="telemetry-progress-line" id="mobile-telemetry-line"></div>
   </div>
 
   <!-- Vertical Continuous Optical Fiber Backbone (Desktop) -->
-  <aside class="optical-backbone" id="optical-backbone" aria-label="Navegaci&oacute;n &oacute;ptica continua por el cable">
+  <aside class="optical-backbone hidden" id="optical-backbone" aria-label="Navegaci&oacute;n &oacute;ptica continua por el cable">
     <div class="backbone-fiber-line"></div>
+    <div class="backbone-fiber-lit" id="backbone-fiber-lit"></div>
     <div class="backbone-laser-pulse" id="backbone-laser-pulse" title="Pulso l&aacute;ser OTDR en tiempo real"></div>
     <div class="backbone-nodes">
-      <a class="backbone-node active" href="#inicio" data-section="inicio" data-km="0.0" aria-label="Ir a Inicio">
-        <span class="node-dot"></span>
-        <span class="node-tooltip"><span class="km">KM 0.0</span>Interrogador &middot; Inicio</span>
-      </a>
-      <a class="backbone-node" href="#evidencia" data-section="evidencia" data-km="1.5" aria-label="Ir a Evidencia en Terreno">
+      <a class="backbone-node active" href="#evidencia" data-section="evidencia" data-km="1.5" aria-label="Ir a Evidencia en Terreno">
         <span class="node-dot"></span>
         <span class="node-tooltip"><span class="km">KM 1.5</span>Volc&aacute;n Cord&oacute;n Caulle</span>
       </a>
@@ -165,11 +162,12 @@
     <section class="hero" id="inicio">
       <canvas id="hero-canvas" aria-hidden="true"></canvas>
       <div class="hero-veil"></div>
+      <canvas id="hero-canvas-ui" aria-hidden="true"></canvas>
 
       <div class="wrap">
         <div class="hero-content">
           <div class="hero-pill-row reveal">
-            <span class="eyebrow"><span class="idx">PIONEROS</span> <span>Sensoramiento Ac&uacute;stico Distribuido (DAS) en Chile</span></span>
+            <span class="eyebrow"><span class="idx">PIONEROS</span> <span>Detecci&oacute;n Ac&uacute;stica Distribuida (DAS) en Chile</span></span>
           </div>
 
           <h1 class="hero-tag reveal">
@@ -178,8 +176,17 @@
           </h1>
 
           <p class="hero-sub reveal">
-            Transformamos cualquier cable de fibra &oacute;ptica en miles de sensores en tiempo real. Sin puntos ciegos, sin electr&oacute;nica en terreno, sin mantenimiento. Llevamos tecnolog&iacute;a de frontera &mdash;validada en volcanes, mineroductos y sismoLog&iacute;a&mdash; hacia la miner&iacute;a e infraestructura andina.
+            Transformamos cualquier cable de fibra &oacute;ptica en miles de sensores en tiempo real. Sin puntos ciegos, sin electr&oacute;nica en terreno, sin mantenimiento. Ya probamos esta tecnolog&iacute;a en un volc&aacute;n activo y en m&aacute;s de 60 km de mineroducto en operaci&oacute;n. Ahora la llevamos a la infraestructura cr&iacute;tica de Chile.
           </p>
+
+          <!-- Lane where hero-canvas.js draws the live fiber demo -->
+          <div class="hero-demo-stage" aria-hidden="true">
+            <p class="hero-demo-hint">
+              <span class="hint-dot"></span>
+              <span class="hint-pointer">Mueve el cursor cerca de la fibra: detecta la vibraci&oacute;n y te dice en qu&eacute; kil&oacute;metro ocurri&oacute;.</span>
+              <span class="hint-touch">Toca cerca de la fibra: detecta la vibraci&oacute;n y te dice en qu&eacute; kil&oacute;metro ocurri&oacute;.</span>
+            </p>
+          </div>
 
           <div class="hero-cta reveal">
             <a href="#contacto" class="btn btn-primary" title="Describe tu caso de uso y recibe propuesta técnica">
@@ -194,7 +201,7 @@
           <div class="hero-telemetry reveal">
             <div class="telemetry-cell">
               <span class="telemetry-label">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12h20"/><circle cx="5" cy="12" r="1.6" fill="currentColor"/><circle cx="10" cy="12" r="1.6" fill="currentColor"/><circle cx="14" cy="12" r="1.6" fill="currentColor"/><circle cx="19" cy="12" r="1.6" fill="currentColor"/></svg>
                 <span>COBERTURA</span>
               </span>
               <div class="telemetry-value">100%<span class="unit">CONTINUA</span></div>
@@ -203,25 +210,25 @@
 
             <div class="telemetry-cell">
               <span class="telemetry-label">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3h18v18H3zM9 9h6v6H9z"/></svg>
-                <span>DENSIDAD</span>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 17h20M4 17v-5M8 17v-3M12 17v-5M16 17v-3M20 17v-5"/></svg>
+                <span>MUESTREO</span>
               </span>
-              <div class="telemetry-value">50K+<span class="unit">SENSORES</span></div>
-              <p class="telemetry-desc">Más de 50.000 puntos de medición por km</p>
+              <div class="telemetry-value">&le;10 m<span class="unit">ESPACIAL</span></div>
+              <p class="telemetry-desc">Un sensor virtual cada pocos metros: cientos o miles por cable</p>
             </div>
 
             <div class="telemetry-cell">
               <span class="telemetry-label">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m4.93 4.93 14.14 14.14"/></svg>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 7v10M21 7v10M3 12h18M7 9l-3 3 3 3M17 9l3 3-3 3"/></svg>
                 <span>ALCANCE</span>
               </span>
-              <div class="telemetry-value">50+<span class="unit">KM</span></div>
-              <p class="telemetry-desc">Un interrogador cubre hasta 50 km</p>
+              <div class="telemetry-value">130<span class="unit">KM</span></div>
+              <p class="telemetry-desc">Hasta 130 km por interrogador, en dos fibras de 65 km</p>
             </div>
 
             <div class="telemetry-cell">
               <span class="telemetry-label">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2 4 14h7l-1 8 9-12h-7l1-8z"/><path d="M3 3l18 18"/></svg>
                 <span>EN TERRENO</span>
               </span>
               <div class="telemetry-value">0<span class="unit">ELECTR&Oacute;NICA</span></div>
@@ -239,18 +246,18 @@
               <div class="founder-card" style="background: rgba(11, 20, 36, 0.75); border: 1px solid rgba(0, 240, 255, 0.25); border-radius: var(--r-md); padding: 20px 24px; backdrop-filter: blur(8px);">
                 <div style="font-family: var(--font-mono); font-size: 11px; color: var(--cyan); text-transform: uppercase; margin-bottom: 4px;">CO-FUNDADORA &middot; CHIEF SCIENTIST</div>
                 <h3 style="font-size: 18px; color: #fff; margin-bottom: 6px;">Ver&oacute;nica Gaete Elgueta</h3>
-                <div style="font-family: var(--font-mono); font-size: 12px; color: var(--cyan); margin-bottom: 10px;">PhD(c) Earth &amp; Space Sciences &middot; University of Washington</div>
+                <div style="font-family: var(--font-mono); font-size: 12px; color: var(--cyan); margin-bottom: 10px;">PhD(c) &middot; University of Washington</div>
                 <p style="font-size: 13px; color: var(--fg-1); line-height: 1.5; margin: 0;">
-                  Licenciada en F&iacute;sica (PUCV) y Mag&iacute;ster en F&iacute;sica (U. de Chile). Especialista en Geof&iacute;sica, <strong>Distributed Acoustic Sensing (DAS)</strong>, sismolog&iacute;a volc&aacute;nica y de subducci&oacute;n. Dise&ntilde;o y despliegue de experimentos en terreno, modelamiento s&iacute;smico y procesamiento &oacute;ptico.
+                  Licenciada en F&iacute;sica (PUCV), Mag&iacute;ster en F&iacute;sica (Universidad de Chile) y candidata a doctora en Earth and Space Sciences (University of Washington, EE.UU.). Se especializa en geof&iacute;sica y <strong>Detecci&oacute;n Ac&uacute;stica Distribuida (DAS)</strong>, con foco en sismolog&iacute;a volc&aacute;nica y de subducci&oacute;n. Ha liderado experimentos DAS en Chile y est&aacute; a cargo del procesamiento y modelamiento de los datos s&iacute;smicos.
                 </p>
               </div>
 
               <div class="founder-card" style="background: rgba(11, 20, 36, 0.75); border: 1px solid rgba(255, 140, 40, 0.25); border-radius: var(--r-md); padding: 20px 24px; backdrop-filter: blur(8px);">
                 <div style="font-family: var(--font-mono); font-size: 11px; color: var(--amber); text-transform: uppercase; margin-bottom: 4px;">CO-FUNDADOR &middot; GEOLOGICAL OPERATIONS</div>
                 <h3 style="font-size: 18px; color: #fff; margin-bottom: 6px;">Jos&eacute; Estay Herrera</h3>
-                <div style="font-family: var(--font-mono); font-size: 12px; color: var(--amber); margin-bottom: 10px;">Ge&oacute;logo, MSc. &middot; Universidad de Chile</div>
+                <div style="font-family: var(--font-mono); font-size: 12px; color: var(--amber); margin-bottom: 10px;">MSc &middot; Universidad de Chile</div>
                 <p style="font-size: 13px; color: var(--fg-1); line-height: 1.5; margin: 0;">
-                  Especialista en peligros geol&oacute;gicos, riesgo s&iacute;smico andino y estabilidad de taludes. Formulaci&oacute;n de pilotos en terreno, arquitectura geol&oacute;gica de tendido y vinculaci&oacute;n estrat&eacute;gica con la gran miner&iacute;a e infraestructura.
+                  Ge&oacute;logo y Mag&iacute;ster en Ciencias menci&oacute;n Geolog&iacute;a (Universidad de Chile). Especialista en peligros geol&oacute;gicos, riesgo s&iacute;smico andino y modelaci&oacute;n num&eacute;rica. M&aacute;s de 7 a&ntilde;os de experiencia en consultor&iacute;a geol&oacute;gica. Define d&oacute;nde y c&oacute;mo instalar la fibra seg&uacute;n la geolog&iacute;a de cada sitio, y lidera el dise&ntilde;o de pilotos junto a cada empresa.
                 </p>
               </div>
             </div>
@@ -266,7 +273,7 @@
           <span class="eyebrow"><span class="idx">01</span> <span>Validaci&oacute;n Experimental &middot; Datos Reales</span></span>
           <h2 class="h-section">Lo que ya hemos medido: Ciencia de frontera llevada al terreno</h2>
           <p class="lead">
-            Antes de prometer despliegues comerciales masivos, nuestro equipo ha probado y validado la f&iacute;sica del sensoramiento &oacute;ptico distribuido en algunos de los entornos geol&oacute;gicos e industriales m&aacute;s exigentes del pa&iacute;s:
+            Antes de prometer despliegues comerciales masivos, nuestro equipo ha probado y validado la f&iacute;sica de la detecci&oacute;n &oacute;ptica distribuida en algunos de los entornos geol&oacute;gicos e industriales m&aacute;s exigentes del pa&iacute;s:
           </p>
         </div>
 
@@ -279,12 +286,12 @@
             </div>
             <h3 class="evidence-title">Volc&aacute;n Cord&oacute;n Caulle</h3>
             <p class="evidence-desc">
-              Tendido experimental de 1,5 km de cable de fibra &oacute;ptica enterrado manualmente en superficie. Mediante tomograf&iacute;a de ruido s&iacute;smico ambiental, logramos caracterizar el subsuelo volc&aacute;nico activo sin fuentes artificiales de energ&iacute;a.
+              Tendido experimental de ~2 km de cable de fibra &oacute;ptica enterrado manualmente en superficie. Mediante tomograf&iacute;a de ruido s&iacute;smico ambiental, logramos caracterizar el subsuelo volc&aacute;nico activo sin fuentes artificiales de energ&iacute;a.
             </p>
             <ul class="evidence-highlights">
               <li><span><strong>Perfil 2D continuo</strong> de velocidades del subsuelo alcanzando hasta 700 metros de profundidad efectiva.</span></li>
               <li><span><strong>Detecci&oacute;n multievento</strong> de microsismicidad volc&aacute;nica local de baja y media frecuencia.</span></li>
-              <li><span><strong>Firmas hidrotermales:</strong> registro de eventos micr&oacute;nicos asociados a procesos de desgasificaci&oacute;n activa.</span></li>
+              <li><span><strong>Firmas hidrotermales:</strong> registro de eventos micros&iacute;smicos asociados a procesos de desgasificaci&oacute;n activa.</span></li>
             </ul>
             <div class="evidence-metric-box">
               <span class="metric-num">700 m</span>
@@ -298,58 +305,45 @@
                   <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
                   <span>Registro Fotogr&aacute;fico de Terreno</span>
                 </span>
-                <span style="font-size: 10px; color: var(--fg-2);">Click para ampliar</span>
+                <button type="button" class="fan-toggle" aria-controls="caulle-photo-fan" aria-expanded="false">Click para desplegar</button>
               </div>
-              <div class="field-photos-grid">
-                <div class="field-photo-card" data-photo="caulle-scientist" data-title="Operaci&oacute;n DAS en Terreno &middot; Volc&aacute;n Cord&oacute;n Caulle" data-desc="Ver&oacute;nica Gaete junto al interrogador DAS Sintela operando en estaci&oacute;n de campa&ntilde;a sobre dep&oacute;sitos volc&aacute;nicos activos en el Cord&oacute;n Caulle." data-tags="Sintela DAS, University of Washington, Cord&oacute;n Caulle" data-img="images/cordon-caulle-veronica-gaete-das.jpg">
-                  <img src="images/cordon-caulle-veronica-gaete-das.jpg" alt="Ver&oacute;nica Gaete operando interrogador DAS Sintela en Volc&aacute;n Cord&oacute;n Caulle" loading="lazy">
+              <div class="photo-fan" id="caulle-photo-fan" role="button" tabindex="0" aria-label="Desplegar fotos de terreno del Cord&oacute;n Caulle">
+                <div class="field-photo-card" data-title="Vista a&eacute;rea del complejo volc&aacute;nico Puyehue&ndash;Cord&oacute;n Caulle" data-desc="Complejo volc&aacute;nico Puyehue&ndash;Cord&oacute;n Caulle, sur de Chile." data-tags="Cord&oacute;n Caulle, Enero 2026" data-img="images/caulle/cordon-caulle-aerial.jpg">
+                  <img src="images/caulle/cordon-caulle-aerial.jpg" alt="Vista a&eacute;rea del complejo volc&aacute;nico Puyehue&ndash;Cord&oacute;n Caulle" loading="lazy">
+                  <div class="photo-caption-bar">Vista a&eacute;rea</div>
+                </div>
+                <div class="field-photo-card" data-title="Operaci&oacute;n DAS en Terreno &middot; Volc&aacute;n Cord&oacute;n Caulle" data-desc="Ver&oacute;nica Gaete junto al interrogador DAS Sintela operando en estaci&oacute;n de campa&ntilde;a sobre dep&oacute;sitos volc&aacute;nicos activos en el Cord&oacute;n Caulle." data-tags="Sintela DAS, University of Washington, Cord&oacute;n Caulle" data-img="images/caulle/cordon-caulle-veronica-gaete-das.jpg">
+                  <img src="images/caulle/cordon-caulle-veronica-gaete-das.jpg" alt="Ver&oacute;nica Gaete operando interrogador DAS Sintela en Volc&aacute;n Cord&oacute;n Caulle" loading="lazy">
                   <div class="photo-caption-bar">Dra(c) V. Gaete &middot; Sintela DAS</div>
                 </div>
-                <div class="field-photo-card" data-photo="caulle-trench" data-title="Tendido &Oacute;ptico en Trinchera Superficial" data-desc="Cable de fibra &oacute;ptica monomodo enterrado manualmente a lo largo de 1,5 km en ceniza volc&aacute;nica y piroclastos para &oacute;ptimo acoplamiento el&aacute;stico." data-tags="1.5 km fibra, Acoplamiento directo, Tomograf&iacute;a pasiva" data-img="images/cordon-caulle-fiber-trench.jpg">
-                  <img src="images/cordon-caulle-fiber-trench.jpg" alt="Tendido manual de fibra &oacute;ptica en ceniza volc&aacute;nica Cord&oacute;n Caulle" loading="lazy">
-                  <div class="photo-caption-bar">Tendido 1.5 km en ceniza</div>
+                <div class="field-photo-card" data-title="Preparaci&oacute;n del tendido: carrete de fibra &oacute;ptica en terreno" data-desc="Campa&ntilde;a de terreno en el Cord&oacute;n Caulle, enero 2026." data-tags="Cord&oacute;n Caulle, Enero 2026" data-img="images/caulle/cordon-caulle-fieldwork-team.jpg">
+                  <img src="images/caulle/cordon-caulle-fieldwork-team.jpg" alt="Carrete de fibra &oacute;ptica en terreno, Cord&oacute;n Caulle" loading="lazy">
+                  <div class="photo-caption-bar">Carrete de fibra</div>
                 </div>
-                <div class="field-photo-card" data-photo="caulle-interrogator" data-title="Estaci&oacute;n de Interrogaci&oacute;n &Oacute;ptica Continua" data-desc="Interrogador optoelectr&oacute;nico Sintela protegido en carcasas Pelican de alta resistencia provistas por University of Washington (ESS Dept)." data-tags="Optoelectr&oacute;nica, Registro continuo, Sismolog&iacute;a volc&aacute;nica" data-img="images/cordon-caulle-interrogator-sintela.jpg">
-                  <img src="images/cordon-caulle-interrogator-sintela.jpg" alt="Interrogador DAS Sintela en refugio de campa&ntilde;a Cord&oacute;n Caulle" loading="lazy">
-                  <div class="photo-caption-bar">Interrogador Sintela &middot; UW</div>
+                <div class="field-photo-card" data-title="Fibra &oacute;ptica enterrada en zanja sobre dep&oacute;sitos volc&aacute;nicos" data-desc="Campa&ntilde;a de terreno en el Cord&oacute;n Caulle, enero 2026." data-tags="Cord&oacute;n Caulle, Enero 2026" data-img="images/caulle/cordon-caulle-fiber-line.jpg">
+                  <img src="images/caulle/cordon-caulle-fiber-line.jpg" alt="Fibra &oacute;ptica enterrada en zanja sobre dep&oacute;sitos volc&aacute;nicos" loading="lazy">
+                  <div class="photo-caption-bar">Fibra en zanja</div>
+                </div>
+                <div class="field-photo-card" data-title="Campo de fumarolas activas en el &aacute;rea de estudio" data-desc="Campa&ntilde;a de terreno en el Cord&oacute;n Caulle, enero 2026." data-tags="Cord&oacute;n Caulle, Enero 2026" data-img="images/caulle/cordon-caulle-steaming-ground.jpg">
+                  <img src="images/caulle/cordon-caulle-steaming-ground.jpg" alt="Campo de fumarolas activas en el Cord&oacute;n Caulle" loading="lazy">
+                  <div class="photo-caption-bar">Fumarolas activas</div>
+                </div>
+                <div class="field-photo-card" data-title="Interrogador DAS Sintela ONYX operando en terreno" data-desc="Campa&ntilde;a de terreno en el Cord&oacute;n Caulle, enero 2026." data-tags="Sintela ONYX, Cord&oacute;n Caulle, Enero 2026" data-img="images/caulle/cordon-caulle-das-instrument.jpg">
+                  <img src="images/caulle/cordon-caulle-das-instrument.jpg" alt="Interrogador DAS Sintela ONYX en terreno, Cord&oacute;n Caulle" loading="lazy">
+                  <div class="photo-caption-bar">Sintela ONYX</div>
                 </div>
               </div>
             </div>
 
-            <!-- Mini Data Visualizer: Perfil Tomográfico 2D -->
+            <!-- Real DAS record: gas emission event, Cordón Caulle -->
             <div class="evidence-viz-strip">
               <div class="evidence-viz-header">
-                <span>PERFIL TOMOGR&Aacute;FICO 2D &middot; MODELO Vs (0 - 700 m)</span>
-                <span style="color: var(--emerald);">DATOS REALES &middot; RUIDO AMBIENTAL</span>
+                <span>REGISTRO DAS REAL &middot; EMANACI&Oacute;N DE GASES &middot; CORD&Oacute;N CAULLE</span>
               </div>
-              <div class="viz-svg-box">
-                <svg viewBox="0 0 500 130" style="width: 100%; height: auto; display: block;" xmlns="http://www.w3.org/2000/svg">
-                  <defs>
-                    <linearGradient id="vsGradient" x1="0" y1="0" x2="0" y2="100%">
-                      <stop offset="0%" stop-color="#1e3a5f" stop-opacity="0.8"/>
-                      <stop offset="35%" stop-color="#006b76" stop-opacity="0.8"/>
-                      <stop offset="65%" stop-color="#0d4b38" stop-opacity="0.85"/>
-                      <stop offset="100%" stop-color="#08182b" stop-opacity="0.95"/>
-                    </linearGradient>
-                  </defs>
-                  <rect x="0" y="0" width="500" height="130" fill="url(#vsGradient)"/>
-                  <path d="M0 25 Q120 22 250 32 T500 20" stroke="#00FFA3" stroke-width="2.5" fill="none"/>
-                  <path d="M40 28 Q150 26 270 34 T460 23" stroke="#00F0FF" stroke-width="2" stroke-dasharray="4 2" fill="none"/>
-                  <ellipse cx="260" cy="78" rx="65" ry="24" fill="rgba(255, 140, 40, 0.25)" stroke="rgba(255, 140, 40, 0.6)" stroke-width="1.2" stroke-dasharray="3 3"/>
-                  <text x="260" y="82" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-size="8" fill="#FFB020" font-weight="700">ANOMAL&Iacute;A HIDROTERMAL (Vs &lt; 650 m/s)</text>
-                  <circle cx="230" cy="72" r="3.5" fill="#FF4B55"/>
-                  <circle cx="285" cy="84" r="3" fill="#FF4B55"/>
-                  <circle cx="250" cy="90" r="2.5" fill="#FF4B55"/>
-                  <circle cx="160" cy="62" r="3" fill="#00FFA3"/>
-                  <line x1="0" y1="50" x2="500" y2="50" stroke="rgba(255,255,255,0.08)" stroke-dasharray="2 3"/>
-                  <line x1="0" y1="90" x2="500" y2="90" stroke="rgba(255,255,255,0.08)" stroke-dasharray="2 3"/>
-                  <text x="8" y="22" font-family="'JetBrains Mono', monospace" font-size="7" fill="#00FFA3">0 m (Superficie &middot; Fibra 1,5 km)</text>
-                  <text x="8" y="54" font-family="'JetBrains Mono', monospace" font-size="7" fill="rgba(255,255,255,0.4)">-250 m (Piroclastos / Vs ~800 m/s)</text>
-                  <text x="8" y="94" font-family="'JetBrains Mono', monospace" font-size="7" fill="rgba(255,255,255,0.4)">-500 m (Lavas andes&iacute;ticas / Vs ~1400 m/s)</text>
-                  <text x="8" y="124" font-family="'JetBrains Mono', monospace" font-size="7" fill="#00F0FF">-700 m (Basamento volcano-tect&oacute;nico)</text>
-                  <text x="492" y="124" text-anchor="end" font-family="'JetBrains Mono', monospace" font-size="7" fill="#00FFA3">&Delta;t 15 d&iacute;as &middot; Cross-correlation pasiva</text>
-                </svg>
+              <div class="field-photo-card das-record" data-title="Registro DAS real &middot; Emanaci&oacute;n de gases &middot; Cord&oacute;n Caulle" data-desc="Evento de emanaci&oacute;n de gases registrado por la fibra enterrada. La se&ntilde;al aparece primero en el tramo m&aacute;s cercano a la fuente, cerca del metro 1.000 del cable, y luego se extiende a lo largo de la fibra." data-tags="Cord&oacute;n Caulle, Emanaci&oacute;n de gases, DAS" data-img="images/caulle/caulle-das-gas-emission.jpg">
+                <img src="images/caulle/caulle-das-gas-emission.jpg" alt="Registro DAS de un evento de emanaci&oacute;n de gases en el Cord&oacute;n Caulle, 60 segundos a lo largo de unos 2 km de cable" loading="lazy">
               </div>
+              <p class="das-record-caption">Evento de emanaci&oacute;n de gases registrado por la fibra enterrada. La se&ntilde;al aparece primero en el tramo m&aacute;s cercano a la fuente, cerca del metro 1.000 del cable, y luego se extiende a lo largo de la fibra.</p>
             </div>
           </div>
 
@@ -373,59 +367,57 @@
               <span class="metric-label">Trazado Continuo Analizado</span>
             </div>
 
-            <!-- Mini Data Visualizer: Mineroducto Waterfall DAS Plot -->
+            <div class="field-photos-wrap">
+              <div class="field-photos-header">
+                <span>
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+                  <span>Registro Fotogr&aacute;fico de Terreno</span>
+                </span>
+                <span style="font-size: 10px; color: var(--fg-2);">Click para ampliar</span>
+              </div>
+              <div class="field-photos-grid single">
+                <div class="field-photo-card" data-title="Instalaci&oacute;n del sistema DAS en la sala de comunicaciones de Patache" data-desc="Conexi&oacute;n del interrogador a la fibra del mineroducto, septiembre 2026." data-tags="Patache, Septiembre 2026" data-img="images/patache/northern-chile-das-installation.jpeg">
+                  <img src="images/patache/northern-chile-das-installation.jpeg" alt="Instalaci&oacute;n del sistema DAS en la sala de comunicaciones de Patache" loading="lazy">
+                  <div class="photo-caption-bar">Instalaci&oacute;n DAS &middot; Patache</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Real DAS record: Mw 4.6 earthquake on the pipeline fiber at Patache -->
             <div class="evidence-viz-strip">
               <div class="evidence-viz-header">
-                <span>REGISTRO DAS TIEMPO-DISTANCIA &middot; TRASPASO EN VIVO (&gt;60 km)</span>
-                <span style="color: var(--cyan);">&gt;60.000 SENSORES AC&Uacute;STICOS</span>
+                <span>REGISTRO DAS REAL &middot; SISMO Mw 4.6 &middot; 13 SEP 2026</span>
               </div>
-              <div class="viz-svg-box">
-                <svg viewBox="0 0 500 130" style="width: 100%; height: auto; display: block;" xmlns="http://www.w3.org/2000/svg">
-                  <defs>
-                    <pattern id="acousticNoisePattern" width="40" height="20" patternUnits="userSpaceOnUse">
-                      <line x1="0" y1="10" x2="40" y2="10" stroke="rgba(0,240,255,0.06)" stroke-width="1"/>
-                      <circle cx="10" cy="5" r="1" fill="rgba(0,240,255,0.1)"/>
-                      <circle cx="30" cy="15" r="1" fill="rgba(0,255,163,0.1)"/>
-                    </pattern>
-                  </defs>
-                  <rect x="0" y="0" width="500" height="130" fill="#060c18"/>
-                  <rect x="0" y="0" width="500" height="130" fill="url(#acousticNoisePattern)"/>
-                  <rect x="80" y="0" width="370" height="130" fill="rgba(0, 240, 255, 0.08)"/>
-                  <text x="260" y="20" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-size="8" fill="#00F0FF" font-weight="700">FIRMA AC&Uacute;STICA DE FLUJO DE PULPA (REGIMEN TURBULENTO CONTINUO)</text>
-                  <line x1="180" y1="0" x2="180" y2="130" stroke="#FFB020" stroke-width="1.8" stroke-dasharray="4 3"/>
-                  <text x="184" y="60" font-family="'JetBrains Mono', monospace" font-size="7" fill="#FFB020">KM 24.2: ESTACI&Oacute;N V&Aacute;LVULAS</text>
-                  <line x1="370" y1="0" x2="370" y2="130" stroke="#FFB020" stroke-width="1.8" stroke-dasharray="4 3"/>
-                  <text x="374" y="95" font-family="'JetBrains Mono', monospace" font-size="7" fill="#FFB020">KM 47.8: CAMBIO PENDIENTE</text>
-                  <path d="M40 120 Q200 60 480 15" stroke="#FF4B55" stroke-width="2.2" fill="none"/>
-                  <path d="M55 125 Q215 65 495 20" stroke="rgba(255,75,85,0.4)" stroke-width="1.2" fill="none"/>
-                  <text x="310" y="44" font-family="'JetBrains Mono', monospace" font-size="7.5" fill="#FF4B55" font-weight="700">ONDA S&Iacute;SMICA REGIONAL (P-WAVE VEL. ~5.8 km/s)</text>
-                  <line x1="40" y1="110" x2="480" y2="110" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
-                  <text x="40" y="124" font-family="'JetBrains Mono', monospace" font-size="7" fill="rgba(255,255,255,0.5)">KM 0 (Faena)</text>
-                  <text x="250" y="124" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-size="7" fill="rgba(255,255,255,0.5)">DISTANCIA &Oacute;PTICA (&gt;60 km continuos)</text>
-                  <text x="480" y="124" text-anchor="end" font-family="'JetBrains Mono', monospace" font-size="7" fill="rgba(255,255,255,0.5)">KM 60+ (Puerto / Acopio)</text>
-                </svg>
+              <div class="field-photo-card das-record" data-title="Registro DAS real &middot; Sismo Mw 4.6 &middot; 13 sep 2026" data-desc="Ondas P y S de un sismo registradas por la fibra del mineroducto, en sus primeros 30 km desde Patache. Las curvas marcan la llegada de cada onda, detectada autom&aacute;ticamente con PhaseNet." data-tags="Patache, Fibra del mineroducto, PhaseNet" data-img="images/patache/patache-das-mw46-p-s-picks-web.jpg">
+                <img src="images/patache/patache-das-mw46-p-s-picks-web.jpg" alt="Registro DAS de un sismo Mw 4.6 con llegadas de ondas P y S a lo largo de 30 km de fibra desde Patache" loading="lazy">
               </div>
+              <p class="das-record-caption">Ondas P y S de un sismo registradas por la fibra del mineroducto, en sus primeros 30 km desde Patache. Las curvas marcan la llegada de cada onda, detectada autom&aacute;ticamente con PhaseNet.</p>
             </div>
           </div>
+        </div>
 
-          <!-- Card 3: Subducción & Dark Fiber -->
-          <div class="evidence-card">
+        <!-- International team experience (not a FiberAndes deployment) -->
+        <div class="intl-experience reveal">
+          <div class="intl-head">
             <div class="evidence-tag">
               <span class="dot"></span>
-              <span>GEOF&Iacute;SICA &middot; SISMOLOG&Iacute;A MARINA</span>
+              <span>EXPERIENCIA INTERNACIONAL DEL EQUIPO</span>
             </div>
-            <h3 class="evidence-title">Cables Submarinos &amp; Dark Fiber</h3>
-            <p class="evidence-desc">
-              Reutilizaci&oacute;n de infraestructura de telecomunicaciones preexistente (fibra oscura terrestre y cables submarinos) para la detecci&oacute;n de alta resoluci&oacute;n de terremotos de subducci&oacute;n interplaca.
-            </p>
-            <ul class="evidence-highlights">
-              <li><span><strong>Detecci&oacute;n en alta mar:</strong> registro de ondas P y S a kil&oacute;metros mar adentro sin fondear instrumental submarino de alto costo.</span></li>
-              <li><span><strong>Alerta temprana (&lt;2 s):</strong> transmisi&oacute;n instant&aacute;nea de arribos para protocolos preventivos en faenas e infraestructura cr&iacute;tica.</span></li>
-              <li><span><strong>Aprovechamiento de red:</strong> cero instalaci&oacute;n de sensores f&iacute;sicos adicionales; el cable de comunicaci&oacute;n ya existente se convierte en sism&oacute;grafo.</span></li>
-            </ul>
-            <div class="evidence-metric-box">
-              <span class="metric-num">&lt;2.0 s</span>
-              <span class="metric-label">Latencia Alerta Onda-P</span>
+            <h3 class="intl-title">Yellowstone, EE.UU.</h3>
+            <p class="intl-desc">Participaci&oacute;n en un despliegue DAS en ambiente volc&aacute;nico e hidrotermal junto a la University of Washington (abril 2026).</p>
+          </div>
+          <div class="field-photos-grid">
+            <div class="field-photo-card" data-title="Yellowstone, EE.UU. &middot; Registro DAS" data-desc="Participaci&oacute;n en un despliegue DAS en ambiente volc&aacute;nico e hidrotermal junto a la University of Washington (abril 2026)." data-tags="Yellowstone, University of Washington, Abril 2026" data-img="images/yellowstone/yellowstone-das-record-web.jpg">
+              <img src="images/yellowstone/yellowstone-das-record-web.jpg" alt="Registro DAS del despliegue en Yellowstone" loading="lazy">
+              <div class="photo-caption-bar">Registro DAS</div>
+            </div>
+            <div class="field-photo-card" data-title="Yellowstone, EE.UU. &middot; Aguas termales" data-desc="Participaci&oacute;n en un despliegue DAS en ambiente volc&aacute;nico e hidrotermal junto a la University of Washington (abril 2026)." data-tags="Yellowstone, University of Washington, Abril 2026" data-img="images/yellowstone/yellowstone-hot-spring.jpg">
+              <img src="images/yellowstone/yellowstone-hot-spring.jpg" alt="Aguas termales en Yellowstone" loading="lazy">
+              <div class="photo-caption-bar">Aguas termales</div>
+            </div>
+            <div class="field-photo-card" data-title="Yellowstone, EE.UU. &middot; R&iacute;o nevado" data-desc="Participaci&oacute;n en un despliegue DAS en ambiente volc&aacute;nico e hidrotermal junto a la University of Washington (abril 2026)." data-tags="Yellowstone, University of Washington, Abril 2026" data-img="images/yellowstone/yellowstone-snowy-river.jpg">
+              <img src="images/yellowstone/yellowstone-snowy-river.jpg" alt="R&iacute;o con nieve en Yellowstone" loading="lazy">
+              <div class="photo-caption-bar">R&iacute;o nevado</div>
             </div>
           </div>
         </div>
@@ -439,7 +431,7 @@
           <span class="eyebrow"><span class="idx">02</span> <span>Programa de Pilotos &middot; Co-Dise&ntilde;o en Faena</span></span>
           <h2 class="h-section">Casos de Aplicaci&oacute;n: Co-dise&ntilde;amos pilotos industriales</h2>
           <p class="lead">
-            Buscamos compa&ntilde;&iacute;as mineras, operadores de infraestructura y superintendencias de innovaci&oacute;n para desplegar pruebas de concepto de sensoramiento distribuido adaptadas a la geolog&iacute;a y geometr&iacute;a de cada operaci&oacute;n:
+            Buscamos compa&ntilde;&iacute;as mineras, operadores de infraestructura y superintendencias de innovaci&oacute;n para desplegar pruebas de concepto de detecci&oacute;n distribuida adaptadas a la geolog&iacute;a y geometr&iacute;a de cada operaci&oacute;n:
           </p>
         </div>
 
@@ -645,7 +637,7 @@
                     <li><span class="feat-dot"></span><span><strong>V&iacute;as f&eacute;rreas mineras:</strong> detecci&oacute;n de fisuras de riel, deformaci&oacute;n de balasto y seguimiento ac&uacute;stico de convoyes.</span></li>
                   </ul>
                   <div class="tab-metrics-row">
-                    <div class="tab-metric"><span class="tab-metric-val">50 km</span><span class="tab-metric-lbl">Por canal &oacute;ptico</span></div>
+                    <div class="tab-metric"><span class="tab-metric-val">65 km</span><span class="tab-metric-lbl">Por fibra</span></div>
                     <div class="tab-metric"><span class="tab-metric-val">&lt;1 s</span><span class="tab-metric-lbl">Alerta ac&uacute;stica</span></div>
                     <div class="tab-metric"><span class="tab-metric-val">0</span><span class="tab-metric-lbl">Sensores en terreno</span></div>
                   </div>
@@ -902,7 +894,7 @@
           </div>
 
           <!-- Contact Form -->
-          <form class="contact-form" id="contact-form" action="https://formsubmit.co/ajax/contacto@fiberandes.cl" method="POST">
+          <form class="contact-form" id="contact-form" action="https://formsubmit.co/ajax/76744616a2c4ba54c035645dc650d381" method="POST">
             <input type="hidden" name="_subject" value="Postulaci&oacute;n a Piloto desde FiberAndes.cl">
             <input type="hidden" name="_template" value="table">
             <input type="hidden" name="_captcha" value="false">
@@ -995,7 +987,7 @@
                 WhatsApp Directo
               </a>
             </div>
-            <div id="contact-feedback" style="display:none; margin-top:14px; padding:12px; border-radius:6px; font-size:13px;"></div>
+            <div id="contact-feedback" class="form-feedback" role="status" aria-live="polite" style="display:none;"></div>
           </form>
         </div>
       </div>
@@ -1008,7 +1000,7 @@
       <div class="footer-top">
         <div class="footer-brand">
           <a class="brand" href="index.html" aria-label="FiberAndes Inicio">
-            <img class="logo-svg" src="assets/logo.svg" alt="FiberAndes Logo">
+            <img class="logo-svg" src="assets/logo.svg?v=20261005_01" alt="FiberAndes Logo">
           </a>
           <p>
             Primera startup chilena de Distributed Fiber Optic Sensing (DFOS / DAS). Monitoreo continuo, en tiempo real y sin puntos ciegos para la gran miner&iacute;a e infraestructura cr&iacute;tica andina.
@@ -1098,7 +1090,7 @@
   </script>
 
   <!-- Scripts -->
-  <script src="js/hero-canvas.js"></script>
-  <script src="js/app.js"></script>
+  <script src="js/hero-canvas.js?v=20261005_05"></script>
+  <script src="js/app.js?v=20261005_06"></script>
 </body>
 </html>

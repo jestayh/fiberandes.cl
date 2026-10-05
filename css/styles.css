@@ -388,12 +388,17 @@ h1, h2, h3, h4, h5 {
   padding-bottom: 60px;
   overflow: hidden;
 }
-#hero-canvas {
+#hero-canvas,
+#hero-canvas-ui {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
   z-index: 0;
+}
+#hero-canvas-ui {
+  z-index: 1;
+  pointer-events: none;
 }
 .hero-veil {
   position: absolute;
@@ -448,6 +453,34 @@ h1, h2, h3, h4, h5 {
   gap: 16px;
   flex-wrap: wrap;
   align-items: center;
+}
+
+.hero-demo-stage {
+  margin-top: 28px;
+  height: clamp(170px, 17vw, 220px);
+}
+.hero-demo-hint {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.02em;
+  color: var(--fg-2);
+}
+.hero-demo-hint .hint-dot {
+  width: 8px;
+  height: 8px;
+  flex: none;
+  border-radius: 50%;
+  background: var(--amber);
+  box-shadow: 0 0 8px var(--amber);
+  animation: pulse-dot 2s ease-in-out infinite;
+}
+.hero-demo-hint .hint-touch { display: none; }
+@media (hover: none) {
+  .hero-demo-hint .hint-pointer { display: none; }
+  .hero-demo-hint .hint-touch { display: inline; }
 }
 
 /* Hero Telemetry & Metrics Ribbon */
@@ -1317,7 +1350,8 @@ h1, h2, h3, h4, h5 {
   flex-direction: column;
   gap: 8px;
 }
-.form-field.full { grid-column: 1 / -1; }
+.form-field.full,
+.feasibility-box.full { grid-column: 1 / -1; }
 .form-field label {
   font-family: var(--font-mono);
   font-size: 11px;
@@ -1354,6 +1388,27 @@ h1, h2, h3, h4, h5 {
   gap: 16px;
   flex-wrap: wrap;
   margin-top: 10px;
+}
+.form-feedback {
+  grid-column: 1 / -1;
+  padding: 12px 14px;
+  border-radius: var(--r-sm);
+  font-size: 14px;
+  line-height: 1.5;
+}
+.form-feedback.ok {
+  background: var(--emerald-dim);
+  border: 1px solid rgba(0, 255, 163, 0.4);
+  color: var(--emerald);
+}
+.form-feedback.err {
+  background: var(--danger-dim);
+  border: 1px solid rgba(255, 75, 85, 0.5);
+  color: #FFB3B8;
+}
+.form-feedback a {
+  color: #fff;
+  text-decoration: underline;
 }
 .form-success-box {
   display: none;
@@ -1614,7 +1669,8 @@ h1, h2, h3, h4, h5 {
 
 @media (max-width: 600px) {
   .brand .logo-svg { height: 42px; }
-  .nav-right .btn-primary { display: flex; padding: 10px 16px; font-size: 12px; }
+  .nav-right .btn-primary { display: none; }
+  .brand .logo-svg { height: clamp(28px, 9vw, 42px); }
   .hero-telemetry { grid-template-columns: 1fr; }
   .hero-cta { flex-direction: column; align-items: stretch; gap: 12px; }
   .hero-cta .btn { width: 100%; padding: 14px 16px; font-size: 14px; }
@@ -2573,7 +2629,7 @@ h1, h2, h3, h4, h5 {
 /* --- Evidencia en Terreno (Resultados Reales) --- */
 .evidence-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(2, 1fr);
   gap: 24px;
   margin-top: 36px;
 }
@@ -2642,7 +2698,6 @@ h1, h2, h3, h4, h5 {
   color: var(--fg-1);
   line-height: 1.6;
   margin-bottom: 20px;
-  flex-grow: 1;
 }
 
 .evidence-highlights {
@@ -2898,10 +2953,15 @@ h1, h2, h3, h4, h5 {
   align-items: center;
   pointer-events: none;
   opacity: 0.85;
-  transition: opacity 0.3s ease;
+  transition: opacity 0.4s ease, transform 0.4s ease;
 }
 .optical-backbone.hidden {
   opacity: 0;
+  transform: translateX(-16px);
+  pointer-events: none;
+}
+.optical-backbone.hidden .backbone-node,
+.optical-backbone.hidden .backbone-laser-pulse {
   pointer-events: none;
 }
 .backbone-fiber-line {
@@ -2912,6 +2972,25 @@ h1, h2, h3, h4, h5 {
   background: rgba(0, 240, 255, 0.2);
   box-shadow: 0 0 8px rgba(0, 240, 255, 0.15);
   border-radius: 2px;
+}
+.backbone-fiber-lit {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 3px;
+  height: 0;
+  border-radius: 2px;
+  background: linear-gradient(to bottom, var(--emerald), var(--cyan));
+  box-shadow: 0 0 8px var(--cyan), 0 0 18px rgba(0, 240, 255, 0.45);
+  transition: height 0.08s linear;
+}
+.backbone-node.passed {
+  border-color: var(--cyan);
+  box-shadow: 0 0 6px rgba(0, 240, 255, 0.45);
+}
+.backbone-node.passed .node-dot {
+  background: var(--emerald);
 }
 .backbone-laser-pulse {
   position: absolute;
@@ -2962,7 +3041,7 @@ h1, h2, h3, h4, h5 {
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  background: var(--fg-3);
+  background: var(--fg-muted);
   transition: all 0.25s ease;
 }
 .backbone-node:hover,
@@ -3022,11 +3101,31 @@ h1, h2, h3, h4, h5 {
   font-family: var(--font-mono);
   font-size: 11px;
   color: var(--fg-2);
+  transition: opacity 0.35s ease, transform 0.35s ease;
+}
+.optical-telemetry-bar.hidden {
+  opacity: 0;
+  transform: translateY(-100%);
+  pointer-events: none;
 }
 .optical-telemetry-bar .otdr-status {
   display: flex;
   align-items: center;
   gap: 6px;
+  min-width: 0;
+  white-space: nowrap;
+}
+.optical-telemetry-bar .otdr-section {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.optical-telemetry-bar .otdr-km {
+  white-space: nowrap;
+  flex-shrink: 0;
+  margin-left: 12px;
+}
+@media (max-width: 480px) {
+  .optical-telemetry-bar .otdr-status > span:nth-child(2) { display: none; }
 }
 .optical-telemetry-bar .otdr-pulse-dot {
   width: 6px;
@@ -3034,7 +3133,7 @@ h1, h2, h3, h4, h5 {
   border-radius: 50%;
   background: var(--cyan);
   box-shadow: 0 0 6px var(--cyan);
-  animation: svgPulse 1.8s infinite;
+  animation: pulse-dot 1.8s ease-in-out infinite;
 }
 .optical-telemetry-bar .otdr-section {
   color: var(--cyan);
@@ -3057,6 +3156,7 @@ h1, h2, h3, h4, h5 {
 @media (max-width: 1220px) {
   .optical-backbone { display: none !important; }
   .optical-telemetry-bar { display: flex; }
+  html { scroll-padding-top: calc(var(--nav-h) + 46px); }
 }
 
 /* ============================================================
@@ -3064,6 +3164,7 @@ h1, h2, h3, h4, h5 {
    ============================================================ */
 .field-photos-wrap {
   margin-top: 18px;
+  margin-bottom: 14px;
   background: rgba(4, 9, 18, 0.7);
   border: 1px solid rgba(0, 240, 255, 0.2);
   border-radius: var(--r-sm);
@@ -3129,6 +3230,99 @@ h1, h2, h3, h4, h5 {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+/* Stacked "fan" of field photos that deals out into a grid (layout set in app.js) */
+.photo-fan {
+  position: relative;
+  transition: height 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.photo-fan:not(.expanded) {
+  cursor: pointer;
+}
+.photo-fan:focus-visible {
+  outline: 2px solid var(--cyan);
+  outline-offset: 4px;
+  border-radius: 6px;
+}
+.photo-fan .field-photo-card {
+  position: absolute;
+  aspect-ratio: auto;
+  transform-origin: 50% 100%;
+  transition: left 0.5s cubic-bezier(0.16, 1, 0.3, 1), top 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+              width 0.5s cubic-bezier(0.16, 1, 0.3, 1), height 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.55);
+}
+.photo-fan:not(.expanded) .photo-caption-bar {
+  opacity: 0;
+}
+.photo-fan:not(.expanded) .field-photo-card:first-child .photo-caption-bar {
+  opacity: 1;
+}
+.fan-toggle {
+  background: none;
+  border: none;
+  padding: 0;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--fg-2);
+}
+.fan-toggle:hover {
+  color: var(--cyan);
+}
+
+.field-photos-grid.single {
+  grid-template-columns: 1fr;
+}
+.field-photos-grid.single .field-photo-card {
+  aspect-ratio: 16 / 9;
+}
+.field-photo-card.das-record {
+  aspect-ratio: auto;
+  background: #fff;
+}
+.field-photo-card.das-record img {
+  height: auto;
+  object-fit: contain;
+}
+.field-photo-card.das-record:hover img {
+  transform: none;
+}
+.das-record-caption {
+  margin: 10px 0 0;
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: var(--fg-2);
+}
+
+/* International team experience strip (section 01) */
+.intl-experience {
+  margin-top: 24px;
+  display: grid;
+  grid-template-columns: 1fr 1.6fr;
+  gap: 28px;
+  align-items: center;
+  background: rgba(13, 22, 39, 0.7);
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  padding: 24px 26px;
+}
+.intl-title {
+  font-size: 20px;
+  color: #fff;
+  margin: 2px 0 8px;
+}
+.intl-desc {
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--fg-1);
+  margin: 0;
+}
+@media (max-width: 1080px) {
+  .intl-experience { grid-template-columns: 1fr; }
 }
 
 /* Lightbox Modal */
@@ -3225,7 +3419,7 @@ h1, h2, h3, h4, h5 {
    DATA VISUALIZERS (TOMOGRAPHY & WATERFALL)
    ============================================================ */
 .evidence-viz-strip {
-  margin-top: 14px;
+  margin-top: auto;
   border-radius: var(--r-sm);
   background: rgba(3, 7, 15, 0.7);
   border: 1px solid rgba(0, 240, 255, 0.2);
