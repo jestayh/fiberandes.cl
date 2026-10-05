@@ -98,4 +98,4 @@ http://localhost:8080/index.html
 ---
 
 © 2026 FiberAndes SpA. Todos los derechos reservados.
-Santiago · Antofagasta · Rancagua · Calama, Chile.
+San Felipe, Chile.

@@ -158,7 +158,7 @@ document.addEventListener('DOMContentLoaded', () => {
           throw new Error(data.message || `HTTP ${res.status}`);
         }
         contactForm.reset();
-        showFeedback(true, '¡Recibimos tu postulación! Nuestro equipo te contactará pronto.');
+        showFeedback(true, '¡Recibimos tu solicitud! Nuestro equipo te contactará pronto.');
       } catch (err) {
         console.error('Contact form submission failed:', err);
         showFeedback(false, 'No pudimos enviar tu mensaje.');
