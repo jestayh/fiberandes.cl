@@ -368,93 +368,71 @@ document.addEventListener('DOMContentLoaded', () => {
     if (e.key === 'Escape') closeLightbox();
   });
 
-  // 8. Pilot Feasibility Qualifier
-  let selectedAsset = 'subterranea';
-  let selectedFiber = 'monomodo';
-  let selectedDistance = 'd1';
+  // 8. "Cuéntanos tu caso": builds an honest preliminary summary, not a feasibility verdict.
+  const SECTORS = {
+    mineria: { label: 'Minería', select: 'Minería' },
+    energia: { label: 'Energía', select: 'Energía' },
+    agua: { label: 'Agua', select: 'Agua' },
+    transporte: { label: 'Transporte', select: 'Transporte' },
+    geo: { label: 'Peligros geológicos', select: 'Peligros geológicos' }
+  };
+  const FIBERS = {
+    instalada: 'Fibra óptica instalada',
+    comunicaciones: 'Cable de comunicaciones con fibra',
+    ninguna: 'No hay fibra',
+    nose: 'No lo sé'
+  };
+  const EXTENTS = { e1: '< 5 km', e2: '5–65 km', e3: '65–130 km', e4: '> 130 km' };
 
-  const assetChips = document.querySelectorAll('#chip-group-asset .feasibility-chip');
-  const fiberChips = document.querySelectorAll('#chip-group-fiber .feasibility-chip');
-  const distanceChips = document.querySelectorAll('#chip-group-distance .feasibility-chip');
+  const caseState = { sector: 'mineria', fiber: 'instalada', extent: 'e1' };
   const resultText = document.getElementById('feasibility-text');
-  const resultBadge = document.getElementById('feasibility-status-badge');
   const applyBtn = document.getElementById('btn-apply-feasibility');
   const selectApp = document.getElementById('contact-interest');
   const messageArea = document.getElementById('contact-message');
 
-  function updateFeasibility() {
-    if (!resultText) return;
-
-    let level = 'ALTA';
-    let badgeColor = 'var(--emerald)';
-    let recommendation = '';
-
-    if (selectedFiber === 'nueva') {
-      level = 'MEDIA-ALTA';
-      recommendation = 'Requiere despliegue de trinchera o cableado de fibra monomodo previo. Nuestro equipo diseña la arquitectura física de tendido para asegurar óptimo acoplamiento elástico.';
-    } else {
-      level = 'ALTA Y DIRECTA';
-      recommendation = 'Compatible de inmediato con interrogador φ-OTDR continuo (1 canal óptico). Sin necesidad de sensores discretos ni cableado de cobre en la zona de riesgo.';
+  function fiberSentence(fiber) {
+    if (fiber === 'instalada' || fiber === 'comunicaciones') {
+      return 'Con fibra existente, un piloto puede partir sin obras: basta acceder a un hilo libre en un extremo para conectar el interrogador.';
     }
-
-    const assetNames = {
-      subterranea: 'Minería Subterránea / Cavidades',
-      taludes: 'Rajo Abierto / Taludes',
-      relaves: 'Tranque de Relaves',
-      ducto: 'Mineroducto / Tubería',
-      ferro: 'Vía Férrea / Lineal'
-    };
-
-    resultText.innerHTML = `<strong>Factibilidad Técnica: ${level}</strong> &middot; Para <em>${assetNames[selectedAsset]}</em>: ${recommendation}`;
-    if (resultBadge) {
-      resultBadge.textContent = `FACTIBILIDAD: ${level}`;
-      resultBadge.style.color = badgeColor;
+    if (fiber === 'ninguna') {
+      return 'Requiere instalar fibra; diseñamos el trazado según la geología del sitio.';
     }
+    return 'Revisamos contigo la fibra disponible en la primera reunión.';
   }
 
-  function setupChipGroup(chips, onSelect) {
+  function updateCaseSummary() {
+    if (!resultText) return;
+    const parts = [fiberSentence(caseState.fiber)];
+    if (caseState.extent === 'e4') {
+      parts.push('Se necesitaría más de un interrogador o un despliegue por etapas.');
+    }
+    resultText.replaceChildren();
+    const strong = document.createElement('strong');
+    strong.textContent = `${SECTORS[caseState.sector].label} · ${EXTENTS[caseState.extent]}: `;
+    resultText.append(strong, parts.join(' '));
+  }
+
+  [['chip-group-asset', 'sector'], ['chip-group-fiber', 'fiber'], ['chip-group-distance', 'extent']].forEach(([groupId, key]) => {
+    const chips = document.querySelectorAll(`#${groupId} .feasibility-chip`);
     chips.forEach(chip => {
+      chip.setAttribute('aria-pressed', String(chip.classList.contains('active')));
       chip.addEventListener('click', () => {
-        chips.forEach(c => c.classList.remove('active'));
-        chip.classList.add('active');
-        onSelect(chip.getAttribute('data-val'));
-        updateFeasibility();
+        chips.forEach(c => {
+          c.classList.toggle('active', c === chip);
+          c.setAttribute('aria-pressed', String(c === chip));
+        });
+        caseState[key] = chip.dataset.val;
+        updateCaseSummary();
       });
     });
-  }
-
-  setupChipGroup(assetChips, val => selectedAsset = val);
-  setupChipGroup(fiberChips, val => selectedFiber = val);
-  setupChipGroup(distanceChips, val => selectedDistance = val);
+  });
+  updateCaseSummary();
 
   if (applyBtn) {
     applyBtn.addEventListener('click', () => {
-      const assetMapToSelect = {
-        subterranea: 'cavidades',
-        taludes: 'relaves',
-        relaves: 'relaves',
-        ducto: 'mineroductos',
-        ferro: 'ferrocarril'
-      };
-
-      if (selectApp && assetMapToSelect[selectedAsset]) {
-        selectApp.value = assetMapToSelect[selectedAsset];
-      }
-
-      const fiberDescriptions = {
-        monomodo: 'Disponemos de fibra monomodo instalada en faena.',
-        control: 'Contamos con cable de control/comunicaciones con hilos ópticos disponibles.',
-        nueva: 'Requeriríamos evaluar tendido de fibra óptica nuevo.'
-      };
-
-      const distDescriptions = {
-        d1: 'Menor a 5 km',
-        d2: 'Entre 5 y 25 km',
-        d3: 'Más de 25 km (hasta 60+ km)'
-      };
-
+      if (selectApp) selectApp.value = SECTORS[caseState.sector].select;
       if (messageArea) {
-        messageArea.value = `Hola equipo FiberAndes, nos interesa evaluar la factibilidad de un piloto de detección acústica distribuida (DAS):\n- Activo objetivo: ${selectedAsset.toUpperCase()}\n- Infraestructura de fibra: ${fiberDescriptions[selectedFiber]}\n- Extensión estimada: ${distDescriptions[selectedDistance]}\n\nNos gustaría coordinar una reunión técnica preliminar para revisar condiciones operacionales.`;
+        messageArea.value = `Hola equipo FiberAndes, nos interesa evaluar un piloto de detección acústica distribuida (DAS):\n- Sector: ${SECTORS[caseState.sector].label}\n- Fibra: ${FIBERS[caseState.fiber]}\n- Extensión: ${EXTENTS[caseState.extent]}\n\nNos gustaría coordinar una reunión técnica preliminar para revisar condiciones operacionales.`;
         messageArea.focus();
         messageArea.scrollIntoView({ behavior: 'smooth', block: 'center' });
       }

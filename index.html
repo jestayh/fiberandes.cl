@@ -35,7 +35,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700;800&display=swap" rel="stylesheet">
 
-  <link rel="stylesheet" href="css/styles.css?v=20261005_08">
+  <link rel="stylesheet" href="css/styles.css?v=20261005_15">
 
   <!-- Structured Data JSON-LD -->
   <script type="application/ld+json">
@@ -140,7 +140,7 @@
       </a>
       <a class="backbone-node" href="#pilotos" data-section="pilotos" data-km="15.0" aria-label="Ir a Casos de Aplicación">
         <span class="node-dot"></span>
-        <span class="node-tooltip"><span class="km">KM 15.0</span>Sondajes &amp; Rajo Inca</span>
+        <span class="node-tooltip"><span class="km">KM 15.0</span>Pilotos Industriales</span>
       </a>
       <a class="backbone-node" href="#alianzas" data-section="alianzas" data-km="40.0" aria-label="Ir a Alianzas y Respaldo">
         <span class="node-dot"></span>
@@ -273,12 +273,61 @@
           <span class="eyebrow"><span class="idx">01</span> <span>Validaci&oacute;n Experimental &middot; Datos Reales</span></span>
           <h2 class="h-section">Lo que ya hemos medido: Ciencia de frontera llevada al terreno</h2>
           <p class="lead">
-            Antes de prometer despliegues comerciales masivos, nuestro equipo ha probado y validado la f&iacute;sica de la detecci&oacute;n &oacute;ptica distribuida en algunos de los entornos geol&oacute;gicos e industriales m&aacute;s exigentes del pa&iacute;s:
+            Antes de prometer despliegues comerciales masivos, nuestro equipo ha probado y validado la f&iacute;sica de la detecci&oacute;n &oacute;ptica distribuida en algunos de los entornos geol&oacute;gicos e industriales m&aacute;s exigentes del pa&iacute;s y del mundo:
           </p>
         </div>
 
         <div class="evidence-grid reveal">
-          <!-- Card 1: Volcán Cordón Caulle -->
+          <!-- Card 1: Mineroducto Industrial -->
+          <div class="evidence-card">
+            <div class="evidence-tag">
+              <span class="dot"></span>
+              <span>MINER&Iacute;A &middot; TRANSPORTE LINEAL</span>
+            </div>
+            <h3 class="evidence-title">Mineroducto Industrial</h3>
+            <p class="evidence-desc">
+              An&aacute;lisis ac&uacute;stico continuo sobre m&aacute;s de 60 km de fibra &oacute;ptica a lo largo del trazado de un mineroducto industrial en operaci&oacute;n. Captura simult&aacute;nea de variables din&aacute;micas internas y externas.
+            </p>
+            <ul class="evidence-highlights">
+              <li><span><strong>Sismicidad natural regional:</strong> registro de eventos s&iacute;smicos a lo largo del trazado sin sensores discretos dedicados.</span></li>
+              <li><span><strong>Reflexiones estructurales:</strong> identificaci&oacute;n de puntos cr&iacute;ticos y singularidades geom&eacute;tricas en el ducto.</span></li>
+              <li><span><strong>Monitoreo de flujo de pulpa:</strong> caracterizaci&oacute;n ac&uacute;stica del ruido interno generado por el transporte continuo de mineral.</span></li>
+            </ul>
+            <div class="evidence-metric-box">
+              <span class="metric-num">&gt;60 km</span>
+              <span class="metric-label">Trazado Continuo Analizado</span>
+            </div>
+
+            <div class="field-photos-wrap">
+              <div class="field-photos-header">
+                <span>
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+                  <span>Registro Fotogr&aacute;fico de Terreno</span>
+                </span>
+                <span style="font-size: 10px; color: var(--fg-2);">Click para ampliar</span>
+              </div>
+              <div class="field-photos-grid single">
+                <div class="field-photo-card station-photo" data-title="Instalaci&oacute;n de estaci&oacute;n s&iacute;smica temporal &middot; Patache" data-desc="Ver&oacute;nica instalando una de las dos estaciones s&iacute;smicas temporales que complementan el arreglo DAS en Patache, para observar en alta resoluci&oacute;n la sismicidad superficial en una zona de subducci&oacute;n." data-tags="Patache, Estaci&oacute;n s&iacute;smica temporal, Septiembre 2026" data-img="images/patache/patache-seismic-station-install.jpg">
+                  <img src="images/patache/patache-seismic-station-install.jpg" alt="Ver&oacute;nica instalando una estaci&oacute;n s&iacute;smica temporal en el desierto cerca de Patache" loading="lazy">
+                  <div class="photo-caption-bar">Estaci&oacute;n s&iacute;smica temporal</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Real DAS record: Mw 4.6 earthquake on the pipeline fiber at Patache -->
+            <div class="evidence-viz-strip">
+              <div class="evidence-viz-header">
+                <span>REGISTRO DAS REAL &middot; SISMO Mw 4.6 &middot; 13 SEP 2026</span>
+              </div>
+              <div class="field-photo-card das-record" data-title="Registro DAS real &middot; Sismo Mw 4.6 &middot; 13 sep 2026" data-desc="Ondas P y S de un sismo registradas por la fibra del mineroducto, en sus primeros 30 km desde Patache. Las curvas marcan la llegada de cada onda, detectada autom&aacute;ticamente con PhaseNet." data-tags="Patache, Fibra del mineroducto, PhaseNet" data-img="images/patache/patache-das-mw46-p-s-picks-web.jpg">
+                <img src="images/patache/patache-das-mw46-p-s-picks-web.jpg" alt="Registro DAS de un sismo Mw 4.6 con llegadas de ondas P y S a lo largo de 30 km de fibra desde Patache" loading="lazy">
+              </div>
+              <p class="das-record-caption">Ondas P y S de un sismo registradas por la fibra del mineroducto, en sus primeros 30 km desde Patache. Las curvas marcan la llegada de cada onda, detectada autom&aacute;ticamente con PhaseNet.</p>
+              <p class="das-record-source">Hipocentro seg&uacute;n el CSN: 8 km al NO de Patache, 39 km de profundidad. <a href="https://www.sismologia.cl/sismicidad/informes/2026/09/382878.html" target="_blank" rel="noopener">Ver informe oficial &rarr;</a></p>
+            </div>
+          </div>
+
+          <!-- Card 2: Volcán Cordón Caulle -->
           <div class="evidence-card">
             <div class="evidence-tag">
               <span class="dot"></span>
@@ -312,9 +361,9 @@
                   <img src="images/caulle/cordon-caulle-aerial.jpg" alt="Vista a&eacute;rea del complejo volc&aacute;nico Puyehue&ndash;Cord&oacute;n Caulle" loading="lazy">
                   <div class="photo-caption-bar">Vista a&eacute;rea</div>
                 </div>
-                <div class="field-photo-card" data-title="Operaci&oacute;n DAS en Terreno &middot; Volc&aacute;n Cord&oacute;n Caulle" data-desc="Ver&oacute;nica Gaete junto al interrogador DAS Sintela operando en estaci&oacute;n de campa&ntilde;a sobre dep&oacute;sitos volc&aacute;nicos activos en el Cord&oacute;n Caulle." data-tags="Sintela DAS, University of Washington, Cord&oacute;n Caulle" data-img="images/caulle/cordon-caulle-veronica-gaete-das.jpg">
-                  <img src="images/caulle/cordon-caulle-veronica-gaete-das.jpg" alt="Ver&oacute;nica Gaete operando interrogador DAS Sintela en Volc&aacute;n Cord&oacute;n Caulle" loading="lazy">
-                  <div class="photo-caption-bar">Dra(c) V. Gaete &middot; Sintela DAS</div>
+                <div class="field-photo-card" data-title="Operaci&oacute;n DAS en Terreno &middot; Volc&aacute;n Cord&oacute;n Caulle" data-desc="Ver&oacute;nica junto al interrogador DAS Sintela operando en estaci&oacute;n de campa&ntilde;a sobre dep&oacute;sitos volc&aacute;nicos activos en el Cord&oacute;n Caulle." data-tags="Sintela DAS, University of Washington, Cord&oacute;n Caulle" data-img="images/caulle/cordon-caulle-veronica-gaete-das.jpg">
+                  <img src="images/caulle/cordon-caulle-veronica-gaete-das.jpg" alt="Ver&oacute;nica operando interrogador DAS Sintela en Volc&aacute;n Cord&oacute;n Caulle" loading="lazy">
+                  <div class="photo-caption-bar">Ver&oacute;nica &middot; Sintela DAS</div>
                 </div>
                 <div class="field-photo-card" data-title="Preparaci&oacute;n del tendido: carrete de fibra &oacute;ptica en terreno" data-desc="Campa&ntilde;a de terreno en el Cord&oacute;n Caulle, enero 2026." data-tags="Cord&oacute;n Caulle, Enero 2026" data-img="images/caulle/cordon-caulle-fieldwork-team.jpg">
                   <img src="images/caulle/cordon-caulle-fieldwork-team.jpg" alt="Carrete de fibra &oacute;ptica en terreno, Cord&oacute;n Caulle" loading="lazy">
@@ -346,54 +395,6 @@
               <p class="das-record-caption">Evento de emanaci&oacute;n de gases registrado por la fibra enterrada. La se&ntilde;al aparece primero en el tramo m&aacute;s cercano a la fuente, cerca del metro 1.000 del cable, y luego se extiende a lo largo de la fibra.</p>
             </div>
           </div>
-
-          <!-- Card 2: Mineroducto Industrial -->
-          <div class="evidence-card">
-            <div class="evidence-tag">
-              <span class="dot"></span>
-              <span>MINER&Iacute;A &middot; TRANSPORTE LINEAL</span>
-            </div>
-            <h3 class="evidence-title">Mineroducto Industrial</h3>
-            <p class="evidence-desc">
-              An&aacute;lisis ac&uacute;stico continuo sobre m&aacute;s de 60 km de fibra &oacute;ptica a lo largo del trazado de un mineroducto industrial en operaci&oacute;n. Captura simult&aacute;nea de variables din&aacute;micas internas y externas.
-            </p>
-            <ul class="evidence-highlights">
-              <li><span><strong>Sismicidad natural regional:</strong> registro de eventos s&iacute;smicos a lo largo del trazado sin sensores discretos dedicados.</span></li>
-              <li><span><strong>Reflexiones estructurales:</strong> identificaci&oacute;n de puntos cr&iacute;ticos y singularidades geom&eacute;tricas en el ducto.</span></li>
-              <li><span><strong>Monitoreo de flujo de pulpa:</strong> caracterizaci&oacute;n ac&uacute;stica del ruido interno generado por el transporte continuo de mineral.</span></li>
-            </ul>
-            <div class="evidence-metric-box">
-              <span class="metric-num">&gt;60 km</span>
-              <span class="metric-label">Trazado Continuo Analizado</span>
-            </div>
-
-            <div class="field-photos-wrap">
-              <div class="field-photos-header">
-                <span>
-                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
-                  <span>Registro Fotogr&aacute;fico de Terreno</span>
-                </span>
-                <span style="font-size: 10px; color: var(--fg-2);">Click para ampliar</span>
-              </div>
-              <div class="field-photos-grid single">
-                <div class="field-photo-card" data-title="Instalaci&oacute;n del sistema DAS en la sala de comunicaciones de Patache" data-desc="Conexi&oacute;n del interrogador a la fibra del mineroducto, septiembre 2026." data-tags="Patache, Septiembre 2026" data-img="images/patache/northern-chile-das-installation.jpeg">
-                  <img src="images/patache/northern-chile-das-installation.jpeg" alt="Instalaci&oacute;n del sistema DAS en la sala de comunicaciones de Patache" loading="lazy">
-                  <div class="photo-caption-bar">Instalaci&oacute;n DAS &middot; Patache</div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Real DAS record: Mw 4.6 earthquake on the pipeline fiber at Patache -->
-            <div class="evidence-viz-strip">
-              <div class="evidence-viz-header">
-                <span>REGISTRO DAS REAL &middot; SISMO Mw 4.6 &middot; 13 SEP 2026</span>
-              </div>
-              <div class="field-photo-card das-record" data-title="Registro DAS real &middot; Sismo Mw 4.6 &middot; 13 sep 2026" data-desc="Ondas P y S de un sismo registradas por la fibra del mineroducto, en sus primeros 30 km desde Patache. Las curvas marcan la llegada de cada onda, detectada autom&aacute;ticamente con PhaseNet." data-tags="Patache, Fibra del mineroducto, PhaseNet" data-img="images/patache/patache-das-mw46-p-s-picks-web.jpg">
-                <img src="images/patache/patache-das-mw46-p-s-picks-web.jpg" alt="Registro DAS de un sismo Mw 4.6 con llegadas de ondas P y S a lo largo de 30 km de fibra desde Patache" loading="lazy">
-              </div>
-              <p class="das-record-caption">Ondas P y S de un sismo registradas por la fibra del mineroducto, en sus primeros 30 km desde Patache. Las curvas marcan la llegada de cada onda, detectada autom&aacute;ticamente con PhaseNet.</p>
-            </div>
-          </div>
         </div>
 
         <!-- International team experience (not a FiberAndes deployment) -->
@@ -410,6 +411,10 @@
             <div class="field-photo-card" data-title="Yellowstone, EE.UU. &middot; Registro DAS" data-desc="Participaci&oacute;n en un despliegue DAS en ambiente volc&aacute;nico e hidrotermal junto a la University of Washington (abril 2026)." data-tags="Yellowstone, University of Washington, Abril 2026" data-img="images/yellowstone/yellowstone-das-record-web.jpg">
               <img src="images/yellowstone/yellowstone-das-record-web.jpg" alt="Registro DAS del despliegue en Yellowstone" loading="lazy">
               <div class="photo-caption-bar">Registro DAS</div>
+            </div>
+            <div class="field-photo-card rack-photo" data-title="Yellowstone, EE.UU. &middot; Rack del interrogador DAS" data-desc="Participaci&oacute;n en un despliegue DAS en ambiente volc&aacute;nico e hidrotermal junto a la University of Washington (abril 2026)." data-tags="Yellowstone, Sintela, University of Washington, Abril 2026" data-img="images/yellowstone/yellowstone-das-rack.jpg">
+              <img src="images/yellowstone/yellowstone-das-rack.jpg" alt="Rack con el interrogador DAS Sintela en Yellowstone" loading="lazy">
+              <div class="photo-caption-bar">Rack DAS &middot; Sintela</div>
             </div>
             <div class="field-photo-card" data-title="Yellowstone, EE.UU. &middot; Aguas termales" data-desc="Participaci&oacute;n en un despliegue DAS en ambiente volc&aacute;nico e hidrotermal junto a la University of Washington (abril 2026)." data-tags="Yellowstone, University of Washington, Abril 2026" data-img="images/yellowstone/yellowstone-hot-spring.jpg">
               <img src="images/yellowstone/yellowstone-hot-spring.jpg" alt="Aguas termales en Yellowstone" loading="lazy">
@@ -431,30 +436,38 @@
           <span class="eyebrow"><span class="idx">02</span> <span>Programa de Pilotos &middot; Co-Dise&ntilde;o en Faena</span></span>
           <h2 class="h-section">Casos de Aplicaci&oacute;n: Co-dise&ntilde;amos pilotos industriales</h2>
           <p class="lead">
-            Buscamos compa&ntilde;&iacute;as mineras, operadores de infraestructura y superintendencias de innovaci&oacute;n para desplegar pruebas de concepto de detecci&oacute;n distribuida adaptadas a la geolog&iacute;a y geometr&iacute;a de cada operaci&oacute;n:
+            Buscamos empresas mineras, de energ&iacute;a, sanitarias y de transporte, junto a sus gerencias de innovaci&oacute;n, para desplegar pruebas de concepto de detecci&oacute;n distribuida que resuelvan sus necesidades de vigilancia, monitoreo y alerta temprana, adapt&aacute;ndonos a la geometr&iacute;a y geolog&iacute;a de cada sitio:
           </p>
         </div>
 
         <!-- Applications Tabs -->
         <div class="apps-tabs-wrap reveal">
-          <!-- Tab Nav -->
-          <nav class="apps-tab-nav" role="tablist" aria-label="Industrias DAS">
+          <nav class="apps-tab-nav" role="tablist" aria-label="Aplicaciones DAS por sector">
             <button class="apps-tab-btn active" data-tab="mining" role="tab" aria-selected="true" aria-controls="tab-mining" id="btn-mining">
               <span class="tab-icon" aria-hidden="true">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12,2 20,7 20,17 12,22 4,17 4,7"/><line x1="12" y1="2" x2="12" y2="22" stroke-dasharray="2 2"/></svg>
               </span>
               <span class="tab-label">
-                <strong>Miner&iacute;a</strong>
-                <span>Cavidades &middot; Fracturamiento</span>
+                <strong>Minería</strong>
+                <span>Microsismicidad · Taludes · Relaves</span>
               </span>
             </button>
-            <button class="apps-tab-btn" data-tab="infra" role="tab" aria-selected="false" aria-controls="tab-infra" id="btn-infra">
+            <button class="apps-tab-btn" data-tab="energy" role="tab" aria-selected="false" aria-controls="tab-energy" id="btn-energy">
               <span class="tab-icon" aria-hidden="true">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21V8l9-5 9 5v13"/><path d="M9 21V12h6v9"/></svg>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M13 2 4 14h7l-1 8 9-12h-7l1-8z"/></svg>
               </span>
               <span class="tab-label">
-                <strong>Infraestructura</strong>
-                <span>Taludes &middot; Relaves &middot; T&uacute;neles</span>
+                <strong>Energía</strong>
+                <span>Cables · Gasoductos · Presas</span>
+              </span>
+            </button>
+            <button class="apps-tab-btn" data-tab="water" role="tab" aria-selected="false" aria-controls="tab-water" id="btn-water">
+              <span class="tab-icon" aria-hidden="true">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2.5s-6 6.5-6 11a6 6 0 0 0 12 0c0-4.5-6-11-6-11z"/></svg>
+              </span>
+              <span class="tab-label">
+                <strong>Agua</strong>
+                <span>Acueductos · Embalses</span>
               </span>
             </button>
             <button class="apps-tab-btn" data-tab="transport" role="tab" aria-selected="false" aria-controls="tab-transport" id="btn-transport">
@@ -463,21 +476,20 @@
               </span>
               <span class="tab-label">
                 <strong>Transporte</strong>
-                <span>Mineroductos &middot; V&iacute;as &middot; Flujo</span>
+                <span>Mineroductos · Ferrocarriles · Túneles</span>
               </span>
             </button>
             <button class="apps-tab-btn" data-tab="geo" role="tab" aria-selected="false" aria-controls="tab-geo" id="btn-geo">
               <span class="tab-icon" aria-hidden="true">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 0 1 0 20M12 2a15 15 0 0 0 0 20"/></svg>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M2 12h4l2-6 4 12 3-9 2 3h5"/></svg>
               </span>
               <span class="tab-label">
-                <strong>Geof&iacute;sica</strong>
-                <span>Sismolog&iacute;a &middot; Redes Urbanas</span>
+                <strong>Peligros geológicos</strong>
+                <span>Sismos · Volcanes · Deslizamientos</span>
               </span>
             </button>
           </nav>
 
-          <!-- Tab Panels -->
           <div class="apps-tab-panels">
 
             <!-- ===== TAB 1: MINERÍA ===== -->
@@ -486,209 +498,256 @@
                 <div class="tab-panel-visual">
                   <svg viewBox="0 0 320 280" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <rect x="0" y="0" width="320" height="280" fill="rgba(4,9,17,0.5)" rx="4"/>
-                    <path d="M0 60 Q80 55 160 62 Q240 68 320 58" stroke="rgba(255,255,255,0.06)" stroke-width="1" fill="none"/>
-                    <path d="M0 100 Q90 95 160 102 Q230 108 320 98" stroke="rgba(255,255,255,0.06)" stroke-width="1" fill="none"/>
-                    <path d="M0 145 Q80 140 160 147 Q240 154 320 144" stroke="rgba(255,255,255,0.07)" stroke-width="1" fill="none"/>
-                    <path d="M0 190 Q90 185 160 192 Q230 198 320 188" stroke="rgba(255,255,255,0.06)" stroke-width="1" fill="none"/>
-                    <path d="M0 230 Q80 225 160 232 Q240 238 320 228" stroke="rgba(255,255,255,0.06)" stroke-width="1" fill="none"/>
-                    <rect x="40" y="245" width="240" height="6" rx="2" fill="rgba(0,255,163,0.15)" stroke="rgba(0,255,163,0.3)" stroke-width="1"/>
-                    <path d="M80 251 Q80 240 90 240 L230 240 Q240 240 240 251" fill="rgba(0,0,0,0.4)" stroke="rgba(0,255,163,0.2)" stroke-width="1"/>
-                    <line x1="90" y1="10" x2="90" y2="245" stroke="rgba(0,255,163,0.5)" stroke-width="2" stroke-dasharray="4 3"/>
-                    <line x1="160" y1="10" x2="160" y2="245" stroke="rgba(0,240,255,0.6)" stroke-width="2.5" stroke-dasharray="5 3"/>
-                    <line x1="230" y1="10" x2="230" y2="245" stroke="rgba(0,255,163,0.5)" stroke-width="2" stroke-dasharray="4 3"/>
-                    <rect x="82" y="6" width="16" height="8" rx="3" fill="rgba(0,255,163,0.25)" stroke="rgba(0,255,163,0.6)" stroke-width="1.2"/>
-                    <rect x="152" y="6" width="16" height="8" rx="3" fill="rgba(0,240,255,0.3)" stroke="rgba(0,240,255,0.7)" stroke-width="1.5"/>
-                    <rect x="222" y="6" width="16" height="8" rx="3" fill="rgba(0,255,163,0.25)" stroke="rgba(0,255,163,0.6)" stroke-width="1.2"/>
-                    <circle cx="160" cy="160" r="6" fill="#ff4b55" opacity="0.9"/>
-                    <circle class="svg-pulse-ring" cx="160" cy="160" r="8" stroke="#ff4b55" stroke-width="1.5" fill="none" opacity="0.7"/>
-                    <circle cx="160" cy="160" r="22" stroke="rgba(255,75,85,0.4)" stroke-width="1" fill="none" stroke-dasharray="3 3"/>
-                    <circle cx="160" cy="160" r="38" stroke="rgba(0,255,163,0.25)" stroke-width="1" fill="none" stroke-dasharray="2 4"/>
-                    <circle cx="160" cy="160" r="55" stroke="rgba(0,240,255,0.15)" stroke-width="1" fill="none"/>
-                    <circle class="svg-blink" cx="90" cy="80" r="4" fill="rgba(0,255,163,0.9)" style="animation-delay:0s"/>
-                    <circle class="svg-blink" cx="90" cy="130" r="4" fill="rgba(0,255,163,0.9)" style="animation-delay:0.3s"/>
-                    <circle class="svg-blink" cx="90" cy="175" r="4" fill="rgba(0,255,163,0.9)" style="animation-delay:0.6s"/>
-                    <circle class="svg-blink" cx="160" cy="65" r="4.5" fill="rgba(0,240,255,1)" style="animation-delay:0.1s"/>
-                    <circle class="svg-blink" cx="160" cy="115" r="4.5" fill="rgba(0,240,255,1)" style="animation-delay:0.4s"/>
-                    <circle class="svg-blink" cx="160" cy="210" r="4.5" fill="rgba(0,240,255,1)" style="animation-delay:0.7s"/>
-                    <circle class="svg-blink" cx="230" cy="90" r="4" fill="rgba(0,255,163,0.9)" style="animation-delay:0.2s"/>
-                    <circle class="svg-blink" cx="230" cy="140" r="4" fill="rgba(0,255,163,0.9)" style="animation-delay:0.5s"/>
-                    <circle class="svg-blink" cx="230" cy="190" r="4" fill="rgba(0,255,163,0.9)" style="animation-delay:0.8s"/>
-                    <line x1="90" y1="175" x2="154" y2="162" stroke="rgba(0,255,163,0.35)" stroke-width="1" stroke-dasharray="2 3"/>
-                    <line x1="160" y1="115" x2="160" y2="154" stroke="rgba(0,240,255,0.4)" stroke-width="1" stroke-dasharray="2 3"/>
-                    <line x1="230" y1="140" x2="166" y2="162" stroke="rgba(0,255,163,0.35)" stroke-width="1" stroke-dasharray="2 3"/>
-                    <rect x="134" y="0" width="52" height="12" rx="3" fill="rgba(0,240,255,0.12)" stroke="rgba(0,240,255,0.5)" stroke-width="1.5"/>
-                    <text x="160" y="9" text-anchor="middle" font-family="monospace" font-size="5" fill="rgba(0,240,255,0.9)">&phi;-OTDR</text>
+                    <path d="M0 60 L40 60 L40 75 L58 75 L58 90 L76 90 L76 105 L94 105 L94 120 L150 120 L150 105 L168 105 L168 90 L186 90 L186 75 L204 75 L204 60 L320 60 L320 280 L0 280 Z" fill="rgba(25,40,38,0.4)"/>
+                    <path d="M0 60 L40 60 L40 75 L58 75 L58 90 L76 90 L76 105 L94 105 L94 120 L150 120 L150 105 L168 105 L168 90 L186 90 L186 75 L204 75 L204 60 L320 60" stroke="rgba(255,255,255,0.14)" stroke-width="1.4"/>
+                    <path d="M40 73 L58 73 L58 88 L76 88 L76 103 L94 103 L94 118 L150 118 L150 103 L168 103 L168 88 L186 88 L186 73 L204 73" stroke="rgba(0,240,255,0.7)" stroke-width="1.6" stroke-dasharray="5 3"/>
+                    <path d="M236 60 L252 40 L288 40 L304 60 Z" fill="rgba(0,255,163,0.12)" stroke="rgba(0,255,163,0.55)" stroke-width="1.3"/>
+                    <path d="M252 40 L288 40" stroke="rgba(0,240,255,0.7)" stroke-width="1.6" stroke-dasharray="5 3"/>
+                    <line x1="122" y1="120" x2="122" y2="252" stroke="rgba(0,255,163,0.35)" stroke-width="6" stroke-linecap="round"/>
+                    <line x1="122" y1="122" x2="122" y2="250" stroke="rgba(0,240,255,0.8)" stroke-width="1.8" stroke-dasharray="5 3"/>
+                    <rect x="150" y="206" width="160" height="18" rx="9" fill="rgba(0,0,0,0.45)" stroke="rgba(0,255,163,0.45)" stroke-width="1.3"/>
+                    <line x1="156" y1="215" x2="304" y2="215" stroke="rgba(0,240,255,0.8)" stroke-width="1.8" stroke-dasharray="5 3"/>
+                    <circle cx="214" cy="166" r="18" stroke="rgba(255,75,85,0.4)" stroke-width="1" stroke-dasharray="3 3"/>
+                    <circle cx="214" cy="166" r="34" stroke="rgba(0,255,163,0.25)" stroke-width="1" stroke-dasharray="2 4"/>
+                    <line x1="214" y1="166" x2="122" y2="190" stroke="rgba(255,176,32,0.55)" stroke-width="1" stroke-dasharray="3 3"/>
+                    <line x1="214" y1="166" x2="250" y2="215" stroke="rgba(255,176,32,0.55)" stroke-width="1" stroke-dasharray="3 3"/>
+                    <line x1="214" y1="166" x2="168" y2="103" stroke="rgba(255,176,32,0.55)" stroke-width="1" stroke-dasharray="3 3"/>
+                    <circle cx="214" cy="166" r="5.5" fill="#ff4b55"/>
+                    <circle class="svg-pulse-ring" cx="214" cy="166" r="8" stroke="#ff4b55" stroke-width="1.5" fill="none"/>
+                    <circle class="svg-blink" cx="122" cy="190" r="3.5" fill="rgba(0,240,255,1)" style="animation-delay:0s"/>
+                    <circle class="svg-blink" cx="250" cy="215" r="3.5" fill="rgba(0,240,255,1)" style="animation-delay:0.3s"/>
+                    <circle class="svg-blink" cx="168" cy="103" r="3.5" fill="rgba(0,240,255,1)" style="animation-delay:0.6s"/>
+                    <text x="96" y="52" text-anchor="middle" font-family="monospace" font-size="6.5" fill="rgba(0,255,163,0.8)">RAJO + FIBRA EN BANCOS</text>
+                    <text x="270" y="34" text-anchor="middle" font-family="monospace" font-size="6" fill="rgba(0,255,163,0.8)">MURO DE RELAVES</text>
+                    <text x="128" y="266" font-family="monospace" font-size="6.5" fill="rgba(0,240,255,0.75)">SONDAJE + FIBRA</text>
+                    <text x="160" y="238" font-family="monospace" font-size="6.5" fill="rgba(0,240,255,0.75)">GALER&Iacute;A + FIBRA</text>
+                    <text x="226" y="150" font-family="monospace" font-size="6.5" fill="rgba(255,75,85,0.9)">HIPOCENTRO LOCALIZADO</text>
+                    <text x="160" y="16" text-anchor="middle" font-family="monospace" font-size="7.5" fill="rgba(0,255,163,0.75)" letter-spacing="1">MICROSISMICIDAD &middot; DAS</text>
                   </svg>
                 </div>
                 <div class="tab-panel-content">
-                  <div class="tab-content-eyebrow">Miner&iacute;a Subterr&aacute;nea &middot; Desaf&iacute;os Geomec&aacute;nicos &middot; Expande-CODELCO</div>
-                  <h3 class="tab-content-title">Detecci&oacute;n de Socavones, Cavidades y Fracturamiento</h3>
-                  <p class="tab-content-sub">
-                    Postulaci&oacute;n seleccionada para fase de prospecci&oacute;n en el Desaf&iacute;o de Innovaci&oacute;n Abierta de CODELCO. Proponemos identificar cavidades y zonas de debilidad mediante interrogaci&oacute;n ac&uacute;stica continua en sondajes y galer&iacute;as.
-                  </p>
+                  <div class="tab-content-eyebrow">Minería Subterránea y a Rajo Abierto · Geomecánica</div>
+                  <h3 class="tab-content-title">Microsismicidad mejor detectada y localizada, en toda la faena</h3>
+                  <p class="tab-content-sub">Las redes de geófonos tienen pocos puntos de medición y dejan zonas sin cubrir. Una fibra agrega cientos o miles de canales a lo largo de galerías, sondajes o bermas, incluso en zonas extensas o de difícil acceso, sin electrónica en terreno.</p>
                   <ul class="tab-feature-list">
-                    <li><span class="feat-dot"></span><span><strong>Detecci&oacute;n precursora de cavidades:</strong> mapeo de contrastes el&aacute;sticos antes de que los vac&iacute;os alcancen niveles cr&iacute;ticos de colapso.</span></li>
-                    <li><span class="feat-dot"></span><span><strong>Monitoreo continuo de fractura:</strong> miles de puntos virtuales por sondaje sin arriesgar personal en zonas inestables.</span></li>
-                    <li><span class="feat-dot"></span><span><strong>Tomograf&iacute;a pasiva 4D:</strong> uso de fuentes ambientales y tronaduras de producci&oacute;n para actualizar modelos de velocidad del macizo.</span></li>
+                    <li><span class="feat-dot"></span><span><strong>Detección más fina:</strong> más canales cerca de la fuente ayudan a registrar eventos de menor magnitud que hoy pasan inadvertidos.</span></li>
+                    <li><span class="feat-dot"></span><span><strong>Mejor localización de hipocentros:</strong> una geometría de medición densa y extensa reduce la incertidumbre en la ubicación de cada evento.</span></li>
+                    <li><span class="feat-dot"></span><span><strong>Despliegue donde no llegan los sensores:</strong> zonas extensas, remotas o de riesgo, como muros de relaves, laderas o labores antiguas, cubiertas con un solo cable pasivo.</span></li>
+                    <li><span class="feat-dot"></span><span><strong>Cavidades y huecos (estudios de detalle):</strong> tomografía sísmica con DAS para detectar zonas de baja velocidad o huecos en el subsuelo, como muestran <a class="ref-link" href="https://doi.org/10.1190/GEO2020-0400.1" target="_blank" rel="noopener">Abukrat y Reshef (2021)</a> y <a class="ref-link" href="https://doi.org/10.1029/2024JB030659" target="_blank" rel="noopener">Liu et al. (2025)</a>.</span></li>
                   </ul>
                   <div class="tab-metrics-row">
-                    <div class="tab-metric"><span class="tab-metric-val">Expande</span><span class="tab-metric-lbl">Fase Prospecci&oacute;n</span></div>
-                    <div class="tab-metric"><span class="tab-metric-val">0</span><span class="tab-metric-lbl">Personal en zona de riesgo</span></div>
-                    <div class="tab-metric"><span class="tab-metric-val">1 m</span><span class="tab-metric-lbl">Resoluci&oacute;n en sondaje</span></div>
+                    <div class="tab-metric"><span class="tab-metric-val">65 km</span><span class="tab-metric-lbl">Por fibra</span></div>
+                    <div class="tab-metric"><span class="tab-metric-val">0</span><span class="tab-metric-lbl">Electrónica en zona de riesgo</span></div>
+                    <div class="tab-metric"><span class="tab-metric-val">24/7</span><span class="tab-metric-lbl">Monitoreo continuo</span></div>
                   </div>
                 </div>
               </div>
             </div>
 
-            <!-- ===== TAB 2: INFRAESTRUCTURA ===== -->
-            <div class="apps-tab-panel" data-tab="infra" id="tab-infra" role="tabpanel" aria-labelledby="btn-infra">
+            <!-- ===== TAB 2: ENERGÍA ===== -->
+            <div class="apps-tab-panel" data-tab="energy" id="tab-energy" role="tabpanel" aria-labelledby="btn-energy">
               <div class="tab-panel-inner">
                 <div class="tab-panel-visual">
                   <svg viewBox="0 0 320 280" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <rect x="0" y="0" width="320" height="280" fill="rgba(4,9,17,0.5)" rx="4"/>
-                    <path d="M0 240 L0 160 L80 90 L180 70 L320 50 L320 280 Z" fill="rgba(60,45,20,0.25)" stroke="rgba(255,176,32,0.15)" stroke-width="1"/>
-                    <path d="M0 190 Q60 175 120 168 Q200 160 280 140" stroke="rgba(255,255,255,0.06)" stroke-width="1" fill="none"/>
-                    <path d="M0 220 Q70 210 140 208 Q220 205 300 195" stroke="rgba(255,255,255,0.05)" stroke-width="1" fill="none"/>
-                    <path d="M30 220 Q90 185 160 160 Q220 140 290 120" stroke="rgba(255,75,85,0.5)" stroke-width="1.8" fill="none" stroke-dasharray="5 4"/>
-                    <path d="M20 240 Q80 210 160 185 Q240 162 310 145" stroke="rgba(255,176,32,0.7)" stroke-width="2.5" fill="none" stroke-dasharray="6 4"/>
-                    <circle class="svg-blink" cx="80" cy="210" r="5" fill="rgba(255,176,32,0.9)" style="animation-delay:0s"/>
-                    <circle class="svg-blink" cx="160" cy="185" r="6" fill="#ff4b55" style="animation-delay:0.4s"/>
-                    <circle class="svg-blink" cx="240" cy="162" r="5" fill="rgba(255,176,32,0.9)" style="animation-delay:0.8s"/>
-                    <circle cx="160" cy="185" r="14" stroke="rgba(255,75,85,0.4)" stroke-width="1.2" fill="none"/>
-                    <circle class="svg-pulse-ring" cx="160" cy="185" r="8" stroke="#ff4b55" stroke-width="1.5" fill="none"/>
-                    <path d="M215 260 Q215 230 230 225 Q245 220 260 225 Q275 230 275 260" fill="rgba(0,0,0,0.5)" stroke="rgba(176,102,255,0.4)" stroke-width="1.5"/>
-                    <path d="M218 255 Q218 233 231 229 Q245 225 259 229 Q272 233 272 255" stroke="rgba(176,102,255,0.7)" stroke-width="1.8" fill="none"/>
-                    <rect x="20" y="50" width="8" height="80" rx="2" fill="rgba(0,240,255,0.2)" stroke="rgba(0,240,255,0.5)" stroke-width="1"/>
-                    <rect x="55" y="50" width="8" height="80" rx="2" fill="rgba(0,240,255,0.2)" stroke="rgba(0,240,255,0.5)" stroke-width="1"/>
-                    <rect x="12" y="126" width="58" height="5" rx="1" fill="rgba(0,240,255,0.15)" stroke="rgba(0,240,255,0.4)" stroke-width="1"/>
-                    <line x1="24" y1="56" x2="14" y2="128" stroke="rgba(0,240,255,0.35)" stroke-width="1"/>
-                    <line x1="24" y1="56" x2="40" y2="128" stroke="rgba(0,240,255,0.35)" stroke-width="1"/>
-                    <line x1="63" y1="56" x2="50" y2="128" stroke="rgba(0,240,255,0.35)" stroke-width="1"/>
-                    <line x1="63" y1="56" x2="67" y2="128" stroke="rgba(0,240,255,0.35)" stroke-width="1"/>
-                    <line x1="12" y1="131" x2="70" y2="131" stroke="rgba(0,240,255,0.6)" stroke-width="1.8"/>
-                    <text x="160" y="22" text-anchor="middle" font-family="monospace" font-size="7.5" fill="rgba(255,176,32,0.7)" letter-spacing="1">SLOPE STABILITY</text>
-                    <text x="245" y="220" text-anchor="middle" font-family="monospace" font-size="6.5" fill="rgba(176,102,255,0.7)">TUNNEL SHM</text>
-                    <text x="41" y="46" text-anchor="middle" font-family="monospace" font-size="6.5" fill="rgba(0,240,255,0.7)">BRIDGE</text>
+                    <rect x="0" y="150" width="320" height="130" fill="rgba(40,30,15,0.3)"/>
+                    <line x1="0" y1="150" x2="320" y2="150" stroke="rgba(255,255,255,0.12)" stroke-width="1.5"/>
+                    <path d="M58 150 L70 40 L82 150 M62 112 L78 112 M65 80 L75 80 M50 55 L90 55 M70 40 L70 30" stroke="rgba(255,176,32,0.55)" stroke-width="1.6"/>
+                    <path d="M90 55 Q190 75 320 58" stroke="rgba(255,176,32,0.35)" stroke-width="1.2"/>
+                    <path d="M0 62 Q25 58 50 55" stroke="rgba(255,176,32,0.35)" stroke-width="1.2"/>
+                    <rect x="0" y="191" width="320" height="10" rx="5" fill="rgba(255,176,32,0.12)" stroke="rgba(255,176,32,0.55)" stroke-width="1.4"/>
+                    <line x1="0" y1="196" x2="320" y2="196" stroke="rgba(0,240,255,0.75)" stroke-width="1.8" stroke-dasharray="6 4"/>
+                    <rect x="0" y="232" width="320" height="14" rx="7" fill="rgba(176,102,255,0.1)" stroke="rgba(176,102,255,0.5)" stroke-width="1.4"/>
+                    <line x1="0" y1="239" x2="320" y2="239" stroke="rgba(0,240,255,0.5)" stroke-width="1.4" stroke-dasharray="4 4"/>
+                    <rect x="214" y="128" width="34" height="16" rx="3" fill="rgba(255,176,32,0.25)" stroke="rgba(255,176,32,0.8)" stroke-width="1.3"/>
+                    <rect x="208" y="144" width="46" height="6" rx="3" fill="rgba(255,176,32,0.4)"/>
+                    <path d="M246 132 L272 112 L286 150 L278 172" stroke="rgba(255,176,32,0.8)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M272 168 L286 176 L278 182 Z" fill="rgba(255,176,32,0.8)"/>
+                    <circle cx="280" cy="196" r="5" fill="#ff4b55"/>
+                    <circle class="svg-pulse-ring" cx="280" cy="196" r="8" stroke="#ff4b55" stroke-width="1.5" fill="none"/>
+                    <circle cx="120" cy="239" r="4.5" fill="#ff4b55"/>
+                    <circle class="svg-pulse-ring" cx="120" cy="239" r="8" stroke="#ff4b55" stroke-width="1.5" fill="none"/>
+                    <path d="M116 229 q-4 -8 0 -14 M124 229 q4 -8 0 -14" stroke="rgba(176,102,255,0.6)" stroke-width="1.2"/>
+                    <circle class="svg-blink" cx="40" cy="196" r="3.5" fill="rgba(0,240,255,0.9)" style="animation-delay:0s"/>
+                    <circle class="svg-blink" cx="160" cy="196" r="3.5" fill="rgba(0,240,255,0.9)" style="animation-delay:0.4s"/>
+                    <circle class="svg-blink" cx="60" cy="239" r="3" fill="rgba(0,240,255,0.8)" style="animation-delay:0.2s"/>
+                    <circle class="svg-blink" cx="220" cy="239" r="3" fill="rgba(0,240,255,0.8)" style="animation-delay:0.6s"/>
+                    <text x="8" y="186" font-family="monospace" font-size="6.5" fill="rgba(255,176,32,0.8)">CABLE DE PODER + FIBRA</text>
+                    <text x="8" y="262" font-family="monospace" font-size="6.5" fill="rgba(176,102,255,0.8)">GASODUCTO</text>
+                    <text x="231" y="120" text-anchor="middle" font-family="monospace" font-size="6" fill="rgba(255,176,32,0.8)">EXCAVACI&Oacute;N</text>
+                    <text x="160" y="18" text-anchor="middle" font-family="monospace" font-size="7.5" fill="rgba(255,176,32,0.7)" letter-spacing="1">TRANSMISI&Oacute;N &middot; GAS &middot; DAS</text>
                   </svg>
                 </div>
                 <div class="tab-panel-content">
-                  <div class="tab-content-eyebrow">Geotecnia &middot; Estabilidad Geomec&aacute;nica &middot; Presas &middot; Obras Civiles</div>
-                  <h3 class="tab-content-title">Monitoreo de Taludes, Tranques de Relaves y T&uacute;neles</h3>
-                  <p class="tab-content-sub">
-                    Un &uacute;nico cable de fibra cementado o zanjeado monitorea kil&oacute;metros de talud o muro de presa sin cables de cobre expuestos a cortes o corrosi&oacute;n.
-                  </p>
+                  <div class="tab-content-eyebrow">Transmisión Eléctrica · Gas · Generación</div>
+                  <h3 class="tab-content-title">Vigilancia continua de cables eléctricos, gasoductos y presas</h3>
+                  <p class="tab-content-sub">La fibra que acompaña a un cable de poder o a un ducto se convierte en un sensor a lo largo de todo su trazado, sin instalar equipos en terreno.</p>
                   <ul class="tab-feature-list">
-                    <li><span class="feat-dot"></span><span><strong>Taludes y bermas:</strong> detecci&oacute;n de microfracturamiento previo y aceleraci&oacute;n de deformaci&oacute;n antes de deslizamientos.</span></li>
-                    <li><span class="feat-dot"></span><span><strong>Muros de relaves:</strong> detecci&oacute;n de filtraciones t&eacute;rmicas (DTS) y deformaci&oacute;n interna a lo largo de todo el coronamiento.</span></li>
-                    <li><span class="feat-dot"></span><span><strong>T&uacute;neles y cavernas:</strong> medici&oacute;n de convergencia estructural y desprendimiento de revestimientos en tiempo real.</span></li>
+                    <li><span class="feat-dot"></span><span><strong>Cables eléctricos:</strong> localización de fallas y alerta ante excavaciones o intervención de terceros cerca del trazado.</span></li>
+                    <li><span class="feat-dot"></span><span><strong>Gasoductos y oleoductos:</strong> detección y localización de fugas, intervención de terceros y seguimiento del PIG durante la limpieza o inspección.</span></li>
+                    <li><span class="feat-dot"></span><span><strong>Presas hidroeléctricas:</strong> vigilancia sísmica continua de la estructura y su entorno.</span></li>
                   </ul>
                   <div class="tab-metrics-row">
-                    <div class="tab-metric"><span class="tab-metric-val">24/7</span><span class="tab-metric-lbl">Monitoreo Continuo</span></div>
-                    <div class="tab-metric"><span class="tab-metric-val">Inmune</span><span class="tab-metric-lbl">Sin corrosi&oacute;n el&eacute;ctrica</span></div>
-                    <div class="tab-metric"><span class="tab-metric-val">100%</span><span class="tab-metric-lbl">Cobertura lineal</span></div>
+                    <div class="tab-metric"><span class="tab-metric-val">65 km</span><span class="tab-metric-lbl">Por fibra</span></div>
+                    <div class="tab-metric"><span class="tab-metric-val">0</span><span class="tab-metric-lbl">Electrónica en terreno</span></div>
+                    <div class="tab-metric"><span class="tab-metric-val">24/7</span><span class="tab-metric-lbl">Vigilancia continua</span></div>
                   </div>
                 </div>
               </div>
             </div>
 
-            <!-- ===== TAB 3: TRANSPORTE ===== -->
+            <!-- ===== TAB 3: AGUA ===== -->
+            <div class="apps-tab-panel" data-tab="water" id="tab-water" role="tabpanel" aria-labelledby="btn-water">
+              <div class="tab-panel-inner">
+                <div class="tab-panel-visual">
+                  <svg viewBox="0 0 320 280" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="0" y="0" width="320" height="280" fill="rgba(4,9,17,0.5)" rx="4"/>
+                    <path d="M0 72 L72 72 L72 150 L0 150 Z" fill="rgba(77,163,255,0.18)"/>
+                    <path d="M0 72 Q36 67 72 72" stroke="rgba(77,163,255,0.6)" stroke-width="1.2"/>
+                    <path d="M70 50 L92 50 L114 150 L70 150 Z" fill="rgba(120,130,150,0.25)" stroke="rgba(77,163,255,0.55)" stroke-width="1.4"/>
+                    <path d="M70 50 L92 50 L114 150" stroke="rgba(0,240,255,0.7)" stroke-width="1.6" stroke-dasharray="5 3"/>
+                    <rect x="0" y="150" width="320" height="130" fill="rgba(20,30,45,0.35)"/>
+                    <line x1="0" y1="150" x2="320" y2="150" stroke="rgba(255,255,255,0.12)" stroke-width="1.5"/>
+                    <path d="M104 204 L88 204 L88 150" stroke="rgba(77,163,255,0.5)" stroke-width="3"/>
+                    <rect x="100" y="196" width="220" height="16" rx="8" fill="rgba(77,163,255,0.12)" stroke="rgba(77,163,255,0.6)" stroke-width="1.5"/>
+                    <line x1="100" y1="224" x2="320" y2="224" stroke="rgba(0,240,255,0.75)" stroke-width="1.8" stroke-dasharray="6 4"/>
+                    <circle cx="220" cy="204" r="5" fill="#ff4b55"/>
+                    <circle class="svg-pulse-ring" cx="220" cy="204" r="8" stroke="#ff4b55" stroke-width="1.5" fill="none"/>
+                    <path d="M214 194 q-3 -10 2 -16 M226 194 q3 -10 -2 -16" stroke="rgba(77,163,255,0.7)" stroke-width="1.3"/>
+                    <circle cx="220" cy="172" r="2" fill="rgba(77,163,255,0.8)"/>
+                    <line x1="220" y1="212" x2="220" y2="224" stroke="rgba(255,75,85,0.6)" stroke-dasharray="2 2"/>
+                    <circle cx="220" cy="224" r="3.5" fill="#ff4b55"/>
+                    <circle class="svg-blink" cx="130" cy="224" r="3.5" fill="rgba(0,240,255,0.9)" style="animation-delay:0s"/>
+                    <circle class="svg-blink" cx="280" cy="224" r="3.5" fill="rgba(0,240,255,0.9)" style="animation-delay:0.5s"/>
+                    <circle class="svg-blink" cx="81" cy="100" r="3" fill="rgba(0,240,255,0.8)" style="animation-delay:0.3s"/>
+                    <text x="8" y="64" font-family="monospace" font-size="6.5" fill="rgba(77,163,255,0.85)">EMBALSE</text>
+                    <text x="104" y="190" font-family="monospace" font-size="6.5" fill="rgba(77,163,255,0.85)">ACUEDUCTO</text>
+                    <text x="104" y="242" font-family="monospace" font-size="6.5" fill="rgba(0,240,255,0.75)">FIBRA &Oacute;PTICA &middot; DAS</text>
+                    <text x="232" y="176" font-family="monospace" font-size="6" fill="rgba(255,75,85,0.85)">FUGA LOCALIZADA</text>
+                    <text x="160" y="18" text-anchor="middle" font-family="monospace" font-size="7.5" fill="rgba(77,163,255,0.75)" letter-spacing="1">AGUA &middot; DAS</text>
+                  </svg>
+                </div>
+                <div class="tab-panel-content">
+                  <div class="tab-content-eyebrow">Servicios Sanitarios · Recursos Hídricos</div>
+                  <h3 class="tab-content-title">Detección de fugas e intervenciones en redes de agua</h3>
+                  <p class="tab-content-sub">En un país con escasez hídrica, cada fuga cuenta. DAS escucha la tubería completa y ubica el punto donde algo cambió.</p>
+                  <ul class="tab-feature-list">
+                    <li><span class="feat-dot"></span><span><strong>Acueductos y tuberías:</strong> detección y localización de fugas a lo largo del trazado.</span></li>
+                    <li><span class="feat-dot"></span><span><strong>Intervención de terceros:</strong> alerta ante excavaciones o maquinaria cerca de la red.</span></li>
+                    <li><span class="feat-dot"></span><span><strong>Embalses y presas:</strong> vigilancia sísmica continua de muros y laderas.</span></li>
+                  </ul>
+                  <div class="tab-metrics-row">
+                    <div class="tab-metric"><span class="tab-metric-val">65 km</span><span class="tab-metric-lbl">Por fibra</span></div>
+                    <div class="tab-metric"><span class="tab-metric-val">≤10 m</span><span class="tab-metric-lbl">Muestreo espacial</span></div>
+                    <div class="tab-metric"><span class="tab-metric-val">24/7</span><span class="tab-metric-lbl">Vigilancia continua</span></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- ===== TAB 4: TRANSPORTE ===== -->
             <div class="apps-tab-panel" data-tab="transport" id="tab-transport" role="tabpanel" aria-labelledby="btn-transport">
               <div class="tab-panel-inner">
                 <div class="tab-panel-visual">
                   <svg viewBox="0 0 320 280" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <rect x="0" y="0" width="320" height="280" fill="rgba(4,9,17,0.5)" rx="4"/>
-                    <path d="M0 135 Q80 128 160 132 Q240 136 320 130" stroke="rgba(255,255,255,0.12)" stroke-width="1.5" fill="none"/>
-                    <rect x="0" y="132" width="320" height="148" fill="rgba(20,15,40,0.35)"/>
-                    <ellipse cx="160" cy="180" rx="130" ry="14" fill="rgba(176,102,255,0.08)" stroke="rgba(176,102,255,0.2)" stroke-width="1"/>
-                    <rect x="30" y="168" width="260" height="24" rx="12" fill="rgba(30,20,60,0.6)" stroke="rgba(176,102,255,0.4)" stroke-width="1.5"/>
-                    <line x1="30" y1="180" x2="290" y2="180" stroke="rgba(176,102,255,0.8)" stroke-width="2" stroke-dasharray="6 4"/>
-                    <circle cx="155" cy="180" r="7" fill="rgba(255,75,85,0.9)"/>
-                    <circle class="svg-pulse-ring" cx="155" cy="180" r="8" stroke="#ff4b55" stroke-width="1.5" fill="none"/>
-                    <circle cx="155" cy="180" r="20" stroke="rgba(255,75,85,0.3)" stroke-width="1" fill="none"/>
-                    <line x1="20" y1="75" x2="300" y2="105" stroke="rgba(176,102,255,0.6)" stroke-width="2.5"/>
-                    <line x1="20" y1="95" x2="300" y2="125" stroke="rgba(176,102,255,0.6)" stroke-width="2.5"/>
-                    <line x1="40" y1="72" x2="40" y2="98" stroke="rgba(176,102,255,0.25)" stroke-width="4" stroke-linecap="round"/>
-                    <line x1="90" y1="78" x2="90" y2="104" stroke="rgba(176,102,255,0.25)" stroke-width="4" stroke-linecap="round"/>
-                    <line x1="140" y1="84" x2="140" y2="110" stroke="rgba(176,102,255,0.25)" stroke-width="4" stroke-linecap="round"/>
-                    <line x1="190" y1="90" x2="190" y2="116" stroke="rgba(176,102,255,0.25)" stroke-width="4" stroke-linecap="round"/>
-                    <line x1="240" y1="96" x2="240" y2="122" stroke="rgba(176,102,255,0.25)" stroke-width="4" stroke-linecap="round"/>
-                    <line x1="285" y1="102" x2="285" y2="128" stroke="rgba(176,102,255,0.25)" stroke-width="4" stroke-linecap="round"/>
-                    <line x1="20" y1="86" x2="300" y2="116" stroke="rgba(0,240,255,0.55)" stroke-width="1.8" stroke-dasharray="5 3"/>
-                    <circle class="svg-blink" cx="100" cy="82" r="5" fill="rgba(0,240,255,0.9)" style="animation-delay:0s"/>
-                    <circle class="svg-blink" cx="200" cy="92" r="5" fill="rgba(0,240,255,0.9)" style="animation-delay:0.5s"/>
-                    <path d="M10 45 Q160 35 310 42" stroke="rgba(255,176,32,0.2)" stroke-width="16" stroke-linecap="round" fill="none"/>
-                    <path d="M10 45 Q160 35 310 42" stroke="rgba(0,0,0,0.5)" stroke-width="14" fill="none"/>
-                    <path d="M10 45 Q160 35 310 42" stroke="rgba(255,176,32,0.5)" stroke-width="1.5" fill="none" stroke-dasharray="8 5"/>
-                    <path d="M10 50 Q160 40 310 47" stroke="rgba(255,176,32,0.7)" stroke-width="1.5" fill="none" stroke-dasharray="4 3"/>
-                    <text x="160" y="200" text-anchor="middle" font-family="monospace" font-size="7" fill="rgba(176,102,255,0.7)" letter-spacing="1">PIPELINE LEAK DETECTION</text>
-                    <text x="160" y="72" text-anchor="middle" font-family="monospace" font-size="7" fill="rgba(176,102,255,0.6)" letter-spacing="1">RAILWAY MONITORING</text>
-                    <text x="160" y="22" text-anchor="middle" font-family="monospace" font-size="7" fill="rgba(255,176,32,0.65)" letter-spacing="1">SMART HIGHWAY &middot; DAS</text>
+                    <path d="M170 150 Q215 62 320 66 L320 150 Z" fill="rgba(40,32,55,0.45)" stroke="rgba(176,102,255,0.3)" stroke-width="1.2"/>
+                    <rect x="0" y="150" width="320" height="130" fill="rgba(20,15,40,0.35)"/>
+                    <line x1="0" y1="150" x2="320" y2="150" stroke="rgba(255,255,255,0.14)" stroke-width="1.5"/>
+                    <path d="M246 150 L246 126 Q266 108 286 126 L286 150 Z" fill="rgba(0,0,0,0.65)" stroke="rgba(176,102,255,0.6)" stroke-width="1.4"/>
+                    <line x1="0" y1="140" x2="246" y2="140" stroke="rgba(176,102,255,0.7)" stroke-width="1.6"/>
+                    <line x1="0" y1="146" x2="246" y2="146" stroke="rgba(176,102,255,0.7)" stroke-width="1.6"/>
+                    <g stroke="rgba(176,102,255,0.3)" stroke-width="3">
+                      <line x1="12" y1="138" x2="12" y2="148"/><line x1="36" y1="138" x2="36" y2="148"/><line x1="60" y1="138" x2="60" y2="148"/><line x1="84" y1="138" x2="84" y2="148"/><line x1="108" y1="138" x2="108" y2="148"/><line x1="132" y1="138" x2="132" y2="148"/><line x1="156" y1="138" x2="156" y2="148"/><line x1="180" y1="138" x2="180" y2="148"/><line x1="204" y1="138" x2="204" y2="148"/><line x1="228" y1="138" x2="228" y2="148"/>
+                    </g>
+                    <rect x="38" y="114" width="78" height="22" rx="4" fill="rgba(176,102,255,0.22)" stroke="rgba(176,102,255,0.85)" stroke-width="1.3"/>
+                    <rect x="46" y="119" width="12" height="7" rx="1" fill="rgba(0,240,255,0.45)"/><rect x="64" y="119" width="12" height="7" rx="1" fill="rgba(0,240,255,0.45)"/><rect x="82" y="119" width="12" height="7" rx="1" fill="rgba(0,240,255,0.45)"/><rect x="100" y="119" width="10" height="7" rx="1" fill="rgba(0,240,255,0.45)"/>
+                    <circle cx="52" cy="138" r="3" fill="rgba(176,102,255,0.9)"/><circle cx="102" cy="138" r="3" fill="rgba(176,102,255,0.9)"/>
+                    <line x1="0" y1="157" x2="320" y2="157" stroke="rgba(0,240,255,0.75)" stroke-width="1.8" stroke-dasharray="6 4"/>
+                    <path d="M232 92 l6 -3 l4 5 l-5 4 z M222 110 l5 -2 l3 4 l-4 3 z M236 122 l4 -2 l3 3 l-3 3 z" fill="rgba(255,176,32,0.75)"/>
+                    <path d="M226 96 L232 120" stroke="rgba(255,176,32,0.5)" stroke-width="1" stroke-dasharray="2 2"/>
+                    <circle cx="236" cy="157" r="4.5" fill="#ffb020"/>
+                    <circle class="svg-pulse-ring" cx="236" cy="157" r="8" stroke="#ffb020" stroke-width="1.5" fill="none"/>
+                    <circle class="svg-blink" cx="77" cy="157" r="4" fill="rgba(0,240,255,1)" style="animation-delay:0s"/>
+                    <rect x="0" y="206" width="320" height="16" rx="8" fill="rgba(176,102,255,0.1)" stroke="rgba(176,102,255,0.55)" stroke-width="1.4"/>
+                    <line x1="0" y1="232" x2="320" y2="232" stroke="rgba(0,240,255,0.7)" stroke-width="1.6" stroke-dasharray="6 4"/>
+                    <circle cx="190" cy="214" r="5" fill="#ff4b55"/>
+                    <circle class="svg-pulse-ring" cx="190" cy="214" r="8" stroke="#ff4b55" stroke-width="1.5" fill="none"/>
+                    <line x1="190" y1="222" x2="190" y2="232" stroke="rgba(255,75,85,0.6)" stroke-dasharray="2 2"/>
+                    <circle class="svg-blink" cx="60" cy="232" r="3" fill="rgba(0,240,255,0.85)" style="animation-delay:0.3s"/>
+                    <circle class="svg-blink" cx="290" cy="232" r="3" fill="rgba(0,240,255,0.85)" style="animation-delay:0.7s"/>
+                    <text x="8" y="174" font-family="monospace" font-size="6.5" fill="rgba(0,240,255,0.75)">V&Iacute;A F&Eacute;RREA + FIBRA</text>
+                    <text x="77" y="106" text-anchor="middle" font-family="monospace" font-size="6" fill="rgba(0,240,255,0.85)">TREN DETECTADO</text>
+                    <text x="266" y="100" text-anchor="middle" font-family="monospace" font-size="6" fill="rgba(176,102,255,0.85)">T&Uacute;NEL</text>
+                    <text x="214" y="82" text-anchor="middle" font-family="monospace" font-size="6" fill="rgba(255,176,32,0.9)">DESPRENDIMIENTO</text>
+                    <text x="8" y="200" font-family="monospace" font-size="6.5" fill="rgba(176,102,255,0.8)">MINERODUCTO</text>
+                    <text x="200" y="250" font-family="monospace" font-size="6" fill="rgba(255,75,85,0.9)">ANOMAL&Iacute;A EN EL DUCTO</text>
+                    <text x="160" y="16" text-anchor="middle" font-family="monospace" font-size="7.5" fill="rgba(176,102,255,0.75)" letter-spacing="1">DUCTOS &middot; V&Iacute;AS &middot; T&Uacute;NELES &middot; DAS</text>
                   </svg>
                 </div>
                 <div class="tab-panel-content">
-                  <div class="tab-content-eyebrow">Mineroductos &middot; Ferrocarril &middot; Tuber&iacute;as</div>
-                  <h3 class="tab-content-title">Integridad de Ductos, Din&aacute;mica de Flujo y V&iacute;as</h3>
-                  <p class="tab-content-sub">
-                    Transformamos los cables de comunicaciones existentes a lo largo de redes de transporte en un sensor continuo capaz de auditar flujos e integridad sin suspender el tr&aacute;fico.
-                  </p>
+                  <div class="tab-content-eyebrow">Ductos · Ferrocarriles · Vialidad</div>
+                  <h3 class="tab-content-title">Mineroductos, vías férreas y túneles bajo vigilancia continua</h3>
+                  <p class="tab-content-sub">Los cables de comunicaciones que ya recorren ductos, vías y carreteras pueden convertirse en sensores sin detener la operación.</p>
                   <ul class="tab-feature-list">
-                    <li><span class="feat-dot"></span><span><strong>Mineroductos de concentrado:</strong> detecci&oacute;n de perturbaciones de flujo, sedimentaci&oacute;n y vibraciones hidr&aacute;ulicas an&oacute;malas.</span></li>
-                    <li><span class="feat-dot"></span><span><strong>Integridad y fugas:</strong> localizaci&oacute;n m&eacute;trica de p&eacute;rdidas de presi&oacute;n o intentos de excavaci&oacute;n no autorizada (TPI).</span></li>
-                    <li><span class="feat-dot"></span><span><strong>V&iacute;as f&eacute;rreas mineras:</strong> detecci&oacute;n de fisuras de riel, deformaci&oacute;n de balasto y seguimiento ac&uacute;stico de convoyes.</span></li>
+                    <li><span class="feat-dot"></span><span><strong>Mineroductos:</strong> caracterización acústica del flujo de pulpa y detección de anomalías a lo largo del trazado.</span></li>
+                    <li><span class="feat-dot"></span><span><strong>Ferrocarriles:</strong> seguimiento de trenes, detección de anomalías en la vía e intrusión de personas o vehículos.</span></li>
+                    <li><span class="feat-dot"></span><span><strong>Túneles y carreteras:</strong> detección de desprendimientos y monitoreo de tráfico.</span></li>
                   </ul>
                   <div class="tab-metrics-row">
+                    <div class="tab-metric"><span class="tab-metric-val">>60 km</span><span class="tab-metric-lbl">Mineroducto analizado</span></div>
                     <div class="tab-metric"><span class="tab-metric-val">65 km</span><span class="tab-metric-lbl">Por fibra</span></div>
-                    <div class="tab-metric"><span class="tab-metric-val">&lt;1 s</span><span class="tab-metric-lbl">Alerta ac&uacute;stica</span></div>
-                    <div class="tab-metric"><span class="tab-metric-val">0</span><span class="tab-metric-lbl">Sensores en terreno</span></div>
+                    <div class="tab-metric"><span class="tab-metric-val">24/7</span><span class="tab-metric-lbl">Vigilancia continua</span></div>
                   </div>
                 </div>
               </div>
             </div>
 
-            <!-- ===== TAB 4: GEOFÍSICA ===== -->
+            <!-- ===== TAB 5: PELIGROS GEOLÓGICOS ===== -->
             <div class="apps-tab-panel" data-tab="geo" id="tab-geo" role="tabpanel" aria-labelledby="btn-geo">
               <div class="tab-panel-inner">
                 <div class="tab-panel-visual">
                   <svg viewBox="0 0 320 280" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <rect x="0" y="0" width="320" height="280" fill="rgba(4,9,17,0.5)" rx="4"/>
-                    <path d="M0 80 Q60 70 120 75 Q190 82 260 68 Q290 62 320 70 L320 120 Q290 112 260 118 Q190 132 120 125 Q60 120 0 130 Z" fill="rgba(20,30,60,0.5)" stroke="rgba(0,240,255,0.12)" stroke-width="1"/>
-                    <path d="M0 130 Q60 120 120 125 Q190 132 260 118 Q290 112 320 120 L320 180 Q290 175 255 185 Q180 200 110 188 Q55 178 0 185 Z" fill="rgba(15,20,50,0.6)" stroke="rgba(0,240,255,0.1)" stroke-width="1"/>
-                    <path d="M0 185 Q55 178 110 188 Q180 200 255 185 Q290 175 320 180 L320 280 L0 280 Z" fill="rgba(40,20,15,0.5)" stroke="rgba(255,75,85,0.1)" stroke-width="1"/>
-                    <path d="M145 0 Q148 60 152 100 Q156 145 150 200 Q148 240 145 280" stroke="rgba(255,75,85,0.5)" stroke-width="2" fill="none" stroke-dasharray="5 4"/>
-                    <circle cx="150" cy="195" r="8" fill="rgba(255,75,85,0.9)"/>
-                    <circle class="svg-pulse-ring" cx="150" cy="195" r="8" stroke="#ff4b55" stroke-width="2" fill="none"/>
-                    <circle cx="150" cy="195" r="30" stroke="rgba(255,75,85,0.3)" stroke-width="1.2" fill="none"/>
-                    <circle cx="150" cy="195" r="55" stroke="rgba(0,240,255,0.2)" stroke-width="1" fill="none"/>
-                    <circle cx="150" cy="195" r="80" stroke="rgba(0,240,255,0.1)" stroke-width="1" fill="none" stroke-dasharray="3 5"/>
-                    <line x1="0" y1="62" x2="320" y2="62" stroke="rgba(0,240,255,0.6)" stroke-width="2" stroke-dasharray="7 4"/>
-                    <line x1="0" y1="52" x2="320" y2="52" stroke="rgba(0,240,255,0.35)" stroke-width="1.2" stroke-dasharray="5 5"/>
-                    <rect x="8" y="44" width="68" height="12" rx="3" fill="rgba(0,240,255,0.08)" stroke="rgba(0,240,255,0.3)" stroke-width="1"/>
-                    <text x="42" y="53" text-anchor="middle" font-family="monospace" font-size="5.5" fill="rgba(0,240,255,0.9)">DARK FIBER</text>
-                    <path d="M155 62 Q158 55 162 62 Q166 70 170 62 Q174 53 178 62 Q182 71 186 62 Q190 52 194 62" stroke="rgba(0,240,255,0.7)" stroke-width="1.5" fill="none"/>
-                    <circle class="svg-blink" cx="60" cy="62" r="4" fill="rgba(0,240,255,0.9)" style="animation-delay:0.1s"/>
-                    <circle class="svg-blink" cx="130" cy="62" r="4" fill="rgba(0,240,255,0.9)" style="animation-delay:0.3s"/>
-                    <circle class="svg-blink" cx="200" cy="62" r="5" fill="rgba(0,240,255,1)" style="animation-delay:0s"/>
-                    <circle class="svg-blink" cx="270" cy="62" r="4" fill="rgba(0,240,255,0.9)" style="animation-delay:0.5s"/>
-                    <path d="M0 120 Q40 115 80 118 Q120 121 160 116 Q200 111 240 114 Q280 117 320 112" stroke="rgba(0,255,163,0.4)" stroke-width="1.8" fill="none" stroke-dasharray="4 4"/>
-                    <text x="160" y="110" text-anchor="middle" font-family="monospace" font-size="6" fill="rgba(0,255,163,0.6)">CABLE SUBMARINO</text>
-                    <text x="160" y="18" text-anchor="middle" font-family="monospace" font-size="7.5" fill="rgba(0,240,255,0.65)" letter-spacing="1">SEISMOLOGICAL NETWORK &middot; DAS</text>
+                    <path d="M0 150 L22 150 L72 62 L80 60 L88 62 L138 150 L190 150 Q250 114 320 92 L320 280 L0 280 Z" fill="rgba(30,30,45,0.45)"/>
+                    <path d="M0 150 L22 150 L72 62 L80 60 L88 62 L138 150 L190 150 Q250 114 320 92" stroke="rgba(255,255,255,0.16)" stroke-width="1.4"/>
+                    <path d="M76 56 q-4 -8 1 -14 q5 -6 0 -12 M84 56 q4 -8 -1 -14" stroke="rgba(200,210,225,0.45)" stroke-width="1.3"/>
+                    <path d="M238 112 L262 103 L270 116 L246 125 Z" fill="rgba(255,176,32,0.3)" stroke="rgba(255,176,32,0.85)" stroke-width="1.3"/>
+                    <path d="M248 104 L236 110 M236 110 l3 -4 M236 110 l4 1" stroke="rgba(255,176,32,0.85)" stroke-width="1.3"/>
+                    <path d="M0 157 L140 157 L190 157 Q250 121 320 99" stroke="rgba(0,240,255,0.75)" stroke-width="1.8" stroke-dasharray="6 4"/>
+                    <path d="M108 280 L178 172" stroke="rgba(255,75,85,0.45)" stroke-width="1.4" stroke-dasharray="6 3"/>
+                    <path d="M118 236 A36 36 0 0 1 190 236" stroke="rgba(255,75,85,0.45)" stroke-width="1.2"/>
+                    <path d="M96 236 A58 58 0 0 1 212 236" stroke="rgba(0,240,255,0.3)" stroke-width="1.2" stroke-dasharray="4 3"/>
+                    <path d="M74 236 A80 80 0 0 1 234 236" stroke="rgba(0,240,255,0.18)" stroke-width="1.2" stroke-dasharray="3 4"/>
+                    <circle cx="154" cy="236" r="6" fill="#ff4b55"/>
+                    <circle class="svg-pulse-ring" cx="154" cy="236" r="8" stroke="#ff4b55" stroke-width="1.5" fill="none"/>
+                    <circle cx="254" cy="129" r="4" fill="#ffb020"/>
+                    <circle class="svg-pulse-ring" cx="254" cy="129" r="8" stroke="#ffb020" stroke-width="1.5" fill="none"/>
+                    <circle class="svg-blink" cx="60" cy="157" r="3.5" fill="rgba(0,240,255,1)" style="animation-delay:0.2s"/>
+                    <circle class="svg-blink" cx="154" cy="157" r="4" fill="rgba(0,240,255,1)" style="animation-delay:0s"/>
+                    <circle class="svg-blink" cx="210" cy="148" r="3.5" fill="rgba(0,240,255,1)" style="animation-delay:0.4s"/>
+                    <circle class="svg-blink" cx="300" cy="105" r="3.5" fill="rgba(0,240,255,1)" style="animation-delay:0.6s"/>
+                    <text x="80" y="24" text-anchor="middle" font-family="monospace" font-size="6.5" fill="rgba(200,210,225,0.8)">VOLC&Aacute;N</text>
+                    <text x="262" y="92" text-anchor="middle" font-family="monospace" font-size="6" fill="rgba(255,176,32,0.9)">DESLIZAMIENTO</text>
+                    <text x="8" y="174" font-family="monospace" font-size="6.5" fill="rgba(0,240,255,0.75)">FIBRA EXISTENTE &middot; DAS</text>
+                    <text x="166" y="256" font-family="monospace" font-size="6.5" fill="rgba(255,75,85,0.9)">SISMO</text>
+                    <text x="182" y="186" font-family="monospace" font-size="6" fill="rgba(255,75,85,0.7)">FALLA</text>
+                    <text x="160" y="12" text-anchor="middle" font-family="monospace" font-size="7.5" fill="rgba(0,240,255,0.7)" letter-spacing="1">SISMOS &middot; VOLCANES &middot; DESLIZAMIENTOS</text>
                   </svg>
                 </div>
                 <div class="tab-panel-content">
-                  <div class="tab-content-eyebrow">Geof&iacute;sica &middot; Subducci&oacute;n &middot; Alerta Temprana</div>
-                  <h3 class="tab-content-title">Sismolog&iacute;a &amp; Alerta S&iacute;smica Nacional</h3>
-                  <p class="tab-content-sub">
-                    Chile concentra el 30% de la energ&iacute;a s&iacute;smica mundial. La fibra oscura en telecomunicaciones urbanas y cables submarinos densifica las redes de monitoreo a costo marginal.
-                  </p>
+                  <div class="tab-content-eyebrow">Geofísica · Alerta Temprana</div>
+                  <h3 class="tab-content-title">Sismos, volcanes y deslizamientos vigilados con fibra existente</h3>
+                  <p class="tab-content-sub">Chile es uno de los países más sísmicos y volcánicos del mundo. Con DAS, la fibra óptica que ya existe, incluida la fibra oscura de telecomunicaciones, se convierte en una red densa de sensores para vigilar peligros geológicos.</p>
                   <ul class="tab-feature-list">
-                    <li><span class="feat-dot"></span><span><strong>Dark Fiber urbana:</strong> conversi&oacute;n de l&iacute;neas de telecomunicaciones existentes en sism&oacute;grafos urbanos densos.</span></li>
-                    <li><span class="feat-dot"></span><span><strong>Cables submarinos:</strong> detecci&oacute;n marina directa en la fosa de subducci&oacute;n para maximizar el tiempo de alerta.</span></li>
-                    <li><span class="feat-dot"></span><span><strong>Alerta temprana (&lt;2 s):</strong> picado de ondas P para activaci&oacute;n autom&aacute;tica de protocolos de parada segura en faena.</span></li>
+                    <li><span class="feat-dot"></span><span><strong>Sismos:</strong> registro de ondas P y S a lo largo de decenas de kilómetros de fibra, como el sismo Mw 4.6 registrado en Patache.</span></li>
+                    <li><span class="feat-dot"></span><span><strong>Volcanes:</strong> registro de microsismicidad y emanación de gases, como en el Cordón Caulle.</span></li>
+                    <li><span class="feat-dot"></span><span><strong>Deslizamientos:</strong> alerta temprana de remociones en masa en laderas y taludes.</span></li>
                   </ul>
                   <div class="tab-metrics-row">
-                    <div class="tab-metric"><span class="tab-metric-val">~30%</span><span class="tab-metric-lbl">Sismicidad mundial en Chile</span></div>
-                    <div class="tab-metric"><span class="tab-metric-val">&lt;2s</span><span class="tab-metric-lbl">Latencia alerta P-wave</span></div>
-                    <div class="tab-metric"><span class="tab-metric-val">&infin;</span><span class="tab-metric-lbl">Km de fibra reutilizable</span></div>
+                    <div class="tab-metric"><span class="tab-metric-val">Mw 4.6</span><span class="tab-metric-lbl">Sismo registrado en Patache</span></div>
+                    <div class="tab-metric"><span class="tab-metric-val">Caulle</span><span class="tab-metric-lbl">Volcán activo monitoreado</span></div>
+                    <div class="tab-metric"><span class="tab-metric-val">0</span><span class="tab-metric-lbl">Sensores nuevos</span></div>
                   </div>
                 </div>
               </div>
@@ -716,7 +775,7 @@
             <span class="partner-type">ALIANZA CIENT&Iacute;FICA INTERNACIONAL</span>
             <h3 class="partner-name">Proyecto CHILCO (NSF-FRES)</h3>
             <p class="partner-desc">
-              Iniciativa internacional de investigaci&oacute;n financiada por la National Science Foundation (EE.UU.) sobre volcanismo y din&aacute;mica de la corteza andina. Ver&oacute;nica Gaete lidera experimentos DAS en volcanes activos chilenos dentro de esta red.
+              Iniciativa internacional de investigaci&oacute;n financiada por la National Science Foundation (EE.UU.) sobre volcanismo y din&aacute;mica de la corteza andina. Ver&oacute;nica lidera experimentos DAS en volcanes activos chilenos dentro de esta red.
             </p>
             <a class="partner-link" href="https://www.volcanology.info/nsf-fres-project---chilco.html" target="_blank" rel="noopener">
               <span>Conocer proyecto CHILCO</span> <span class="arr">&rarr;</span>
@@ -732,18 +791,6 @@
             </p>
             <a class="partner-link" href="https://www.environmentintel.com/#top" target="_blank" rel="noopener">
               <span>environmentintel.com</span> <span class="arr">&rarr;</span>
-            </a>
-          </div>
-
-          <!-- Partner 3: EXPANDE CODELCO -->
-          <div class="partner-card">
-            <span class="partner-type">INNOVACI&Oacute;N ABIERTA EN MINER&Iacute;A</span>
-            <h3 class="partner-name">EXPANDE &middot; CODELCO</h3>
-            <p class="partner-desc">
-              Participantes seleccionados para la fase de prospecci&oacute;n en el desaf&iacute;o &ldquo;Detecci&oacute;n de socavones, cavidades y laboreos subterr&aacute;neos en Mina Rajo Inca&rdquo;, siendo los &uacute;nicos oferentes proponiendo resolver la problem&aacute;tica con DFOS.
-            </p>
-            <a class="partner-link" href="https://expandemineria.cl/desafios/deteccion-de-socavones-cavidades-y-laboreos-subterraneos-en-mina-rajo-inca/" target="_blank" rel="noopener">
-              <span>Ver desaf&iacute;o Rajo Inca</span> <span class="arr">&rarr;</span>
             </a>
           </div>
 
@@ -806,7 +853,7 @@
             </div>
             <h4 class="roadmap-title">Primer Piloto Industrial en Miner&iacute;a</h4>
             <p class="roadmap-desc">
-              Despliegue de la primera prueba de concepto en faena minera para detecci&oacute;n de cavidades, socavones o microfracturamiento (caso Mina Rajo Inca / Expande).
+              Despliegue de la primera prueba de concepto en faena minera para detecci&oacute;n y localizaci&oacute;n de microsismicidad.
             </p>
           </div>
 
@@ -904,38 +951,38 @@
               <div class="feasibility-head">
                 <h4>
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-                  <span>Diagn&oacute;stico R&aacute;pido de Factibilidad de Piloto</span>
+                  <span>Cu&eacute;ntanos tu caso en 3 pasos</span>
                 </h4>
-                <span class="badge" id="feasibility-status-badge">EVALUACI&Oacute;N PRELIMINAR</span>
+                <span class="badge">RESUMEN PRELIMINAR</span>
               </div>
 
-              <div class="feasibility-step-label">1. Tipo de Activo o Faena</div>
+              <div class="feasibility-step-label">1. Sector</div>
               <div class="feasibility-chips" id="chip-group-asset">
-                <span class="feasibility-chip active" data-val="subterranea">Miner&iacute;a Subterr&aacute;nea / Cavidades</span>
-                <span class="feasibility-chip" data-val="taludes">Rajo Abierto / Taludes</span>
-                <span class="feasibility-chip" data-val="relaves">Tranque de Relaves</span>
-                <span class="feasibility-chip" data-val="ducto">Mineroducto / Tuber&iacute;a</span>
-                <span class="feasibility-chip" data-val="ferro">V&iacute;a F&eacute;rrea / Lineal</span>
+                <button type="button" class="feasibility-chip active" data-val="mineria">Miner&iacute;a</button>
+                <button type="button" class="feasibility-chip" data-val="energia">Energ&iacute;a</button>
+                <button type="button" class="feasibility-chip" data-val="agua">Agua</button>
+                <button type="button" class="feasibility-chip" data-val="transporte">Transporte</button>
+                <button type="button" class="feasibility-chip" data-val="geo">Peligros geol&oacute;gicos</button>
               </div>
 
-              <div class="feasibility-step-label">2. Estado de Fibra &Oacute;ptica en Operaci&oacute;n</div>
+              <div class="feasibility-step-label">2. Fibra &oacute;ptica disponible</div>
               <div class="feasibility-chips" id="chip-group-fiber">
-                <span class="feasibility-chip active" data-val="monomodo">Fibra monomodo instalada</span>
-                <span class="feasibility-chip" data-val="control">Cable de control/comunicaciones</span>
-                <span class="feasibility-chip" data-val="nueva">Requiere tendido nuevo</span>
+                <button type="button" class="feasibility-chip active" data-val="instalada">Fibra &oacute;ptica instalada</button>
+                <button type="button" class="feasibility-chip" data-val="comunicaciones">Cable de comunicaciones con fibra</button>
+                <button type="button" class="feasibility-chip" data-val="ninguna">No hay fibra</button>
+                <button type="button" class="feasibility-chip" data-val="nose">No lo s&eacute;</button>
               </div>
 
-              <div class="feasibility-step-label">3. Extensi&oacute;n Aproximada a Monitorear</div>
+              <div class="feasibility-step-label">3. Extensi&oacute;n a monitorear</div>
               <div class="feasibility-chips" id="chip-group-distance">
-                <span class="feasibility-chip active" data-val="d1">&lt; 5 km</span>
-                <span class="feasibility-chip" data-val="d2">5 a 25 km</span>
-                <span class="feasibility-chip" data-val="d3">25 a 60+ km</span>
+                <button type="button" class="feasibility-chip active" data-val="e1">&lt; 5 km</button>
+                <button type="button" class="feasibility-chip" data-val="e2">5&ndash;65 km</button>
+                <button type="button" class="feasibility-chip" data-val="e3">65&ndash;130 km</button>
+                <button type="button" class="feasibility-chip" data-val="e4">&gt; 130 km</button>
               </div>
 
               <div class="feasibility-result" id="feasibility-result-box">
-                <p class="feasibility-result-text" id="feasibility-text">
-                  <strong>Factibilidad T&eacute;cnica: ALTA</strong> &middot; Compatible con interrogador &phi;-OTDR continuo (1 canal &oacute;ptico). Mapeo de micro-deformaciones sin cables de cobre ni electr&oacute;nica en faena.
-                </p>
+                <p class="feasibility-result-text" id="feasibility-text" aria-live="polite"></p>
                 <button type="button" class="feasibility-apply-btn" id="btn-apply-feasibility">
                   Auto-completar Formulario &darr;
                 </button>
@@ -949,7 +996,7 @@
 
             <div class="form-field">
               <label for="contact-company">Empresa / Faena / Instituci&oacute;n *</label>
-              <input type="text" id="contact-company" name="company" required placeholder="Ej. Codelco / Minera Do&ntilde;a In&eacute;s / Pelambres">
+              <input type="text" id="contact-company" name="company" required placeholder="Ej. Minera, sanitaria, el&eacute;ctrica&hellip;">
             </div>
 
             <div class="form-field">
@@ -965,12 +1012,12 @@
             <div class="form-field full">
               <label for="contact-interest">&Aacute;rea de Inter&eacute;s para Piloto</label>
               <select id="contact-interest" name="application">
-                <option value="cavidades">Detecci&oacute;n de Socavones, Cavidades y Macizo Rocoso (DAS)</option>
-                <option value="relaves">Monitoreo de Muros de Relaves y Taludes (DAS + DTS)</option>
-                <option value="mineroductos">Monitoreo de Mineroductos, Flujo y Detecci&oacute;n de Fugas</option>
-                <option value="ferrocarril">Infraestructura Lineal / V&iacute;as F&eacute;rreas Mineras</option>
-                <option value="geofisica">Sismolog&iacute;a &amp; Alerta Temprana en Fibra Oscura</option>
-                <option value="otro">Otro Desaf&iacute;o de Monitoreo Ac&uacute;stico / Estructural</option>
+                <option value="Minería">Miner&iacute;a: microsismicidad, taludes y relaves</option>
+                <option value="Energía">Energ&iacute;a: cables el&eacute;ctricos, gasoductos y presas</option>
+                <option value="Agua">Agua: acueductos y embalses</option>
+                <option value="Transporte">Transporte: mineroductos, ferrocarriles y t&uacute;neles</option>
+                <option value="Peligros geológicos">Peligros geol&oacute;gicos: sismos, volcanes y deslizamientos</option>
+                <option value="Otro">Otro desaf&iacute;o de monitoreo</option>
               </select>
             </div>
 
@@ -1091,6 +1138,6 @@
 
   <!-- Scripts -->
   <script src="js/hero-canvas.js?v=20261005_05"></script>
-  <script src="js/app.js?v=20261005_06"></script>
+  <script src="js/app.js?v=20261005_07"></script>
 </body>
 </html>

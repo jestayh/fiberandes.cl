@@ -2014,7 +2014,7 @@ h1, h2, h3, h4, h5 {
 
 .apps-tab-btn {
   flex: 1;
-  min-width: 160px;
+  min-width: 0;
   display: flex;
   align-items: center;
   gap: 10px;
@@ -2050,6 +2050,8 @@ h1, h2, h3, h4, h5 {
   display: flex;
   flex-direction: column;
   gap: 2px;
+  min-width: 0;
+  white-space: normal;
 }
 
 .apps-tab-btn .tab-label strong {
@@ -2093,16 +2095,16 @@ h1, h2, h3, h4, h5 {
 }
 .apps-tab-btn.active[data-tab="mining"] .tab-label strong { color: var(--emerald); }
 
-.apps-tab-btn.active[data-tab="infra"] {
+.apps-tab-btn.active[data-tab="energy"] {
   background: rgba(255, 176, 32, 0.07);
   border: 1px solid rgba(255, 176, 32, 0.25);
 }
-.apps-tab-btn.active[data-tab="infra"] .tab-icon {
+.apps-tab-btn.active[data-tab="energy"] .tab-icon {
   background: rgba(255, 176, 32, 0.15);
   border-color: rgba(255, 176, 32, 0.45);
   box-shadow: 0 0 12px rgba(255, 176, 32, 0.3);
 }
-.apps-tab-btn.active[data-tab="infra"] .tab-label strong { color: var(--amber); }
+.apps-tab-btn.active[data-tab="energy"] .tab-label strong { color: var(--amber); }
 
 .apps-tab-btn.active[data-tab="transport"] {
   background: rgba(176, 102, 255, 0.07);
@@ -2171,7 +2173,7 @@ h1, h2, h3, h4, h5 {
 
 /* Per-industry gradient backgrounds for the visual pane */
 .apps-tab-panel[data-tab="mining"]    .tab-panel-visual { background: radial-gradient(ellipse at 50% 50%, rgba(0,255,163,0.12) 0%, rgba(0,240,255,0.05) 40%, transparent 70%); }
-.apps-tab-panel[data-tab="infra"]     .tab-panel-visual { background: radial-gradient(ellipse at 50% 50%, rgba(255,176,32,0.12) 0%, rgba(255,75,85,0.04) 40%, transparent 70%); }
+.apps-tab-panel[data-tab="energy"]     .tab-panel-visual { background: radial-gradient(ellipse at 50% 50%, rgba(255,176,32,0.12) 0%, rgba(255,75,85,0.04) 40%, transparent 70%); }
 .apps-tab-panel[data-tab="transport"] .tab-panel-visual { background: radial-gradient(ellipse at 50% 50%, rgba(176,102,255,0.12) 0%, rgba(0,240,255,0.04) 40%, transparent 70%); }
 .apps-tab-panel[data-tab="geo"]       .tab-panel-visual { background: radial-gradient(ellipse at 50% 50%, rgba(0,240,255,0.12) 0%, rgba(255,75,85,0.04) 40%, transparent 70%); }
 
@@ -2229,8 +2231,8 @@ h1, h2, h3, h4, h5 {
 /* Dot color per tab */
 .apps-tab-panel[data-tab="mining"]    .tab-content-eyebrow { color: var(--emerald); }
 .apps-tab-panel[data-tab="mining"]    .tab-content-eyebrow::before { background: var(--emerald); box-shadow: 0 0 8px var(--emerald); }
-.apps-tab-panel[data-tab="infra"]     .tab-content-eyebrow { color: var(--amber); }
-.apps-tab-panel[data-tab="infra"]     .tab-content-eyebrow::before { background: var(--amber); box-shadow: 0 0 8px var(--amber); }
+.apps-tab-panel[data-tab="energy"]     .tab-content-eyebrow { color: var(--amber); }
+.apps-tab-panel[data-tab="energy"]     .tab-content-eyebrow::before { background: var(--amber); box-shadow: 0 0 8px var(--amber); }
 .apps-tab-panel[data-tab="transport"] .tab-content-eyebrow { color: var(--purple); }
 .apps-tab-panel[data-tab="transport"] .tab-content-eyebrow::before { background: var(--purple); box-shadow: 0 0 8px var(--purple); }
 .apps-tab-panel[data-tab="geo"]       .tab-content-eyebrow { color: var(--cyan); }
@@ -2281,10 +2283,18 @@ h1, h2, h3, h4, h5 {
 .tab-feature-list li strong {
   color: var(--fg);
 }
+.tab-feature-list .ref-link {
+  color: var(--cyan);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.tab-feature-list .ref-link:hover {
+  color: #fff;
+}
 
 /* Accent color for feature dots per tab */
 .apps-tab-panel[data-tab="mining"]    .feat-dot { background: var(--emerald); box-shadow: 0 0 5px var(--emerald); }
-.apps-tab-panel[data-tab="infra"]     .feat-dot { background: var(--amber); box-shadow: 0 0 5px var(--amber); }
+.apps-tab-panel[data-tab="energy"]     .feat-dot { background: var(--amber); box-shadow: 0 0 5px var(--amber); }
 .apps-tab-panel[data-tab="transport"] .feat-dot { background: var(--purple); box-shadow: 0 0 5px var(--purple); }
 .apps-tab-panel[data-tab="geo"]       .feat-dot { background: var(--cyan); box-shadow: 0 0 5px var(--cyan); }
 
@@ -2323,9 +2333,26 @@ h1, h2, h3, h4, h5 {
 }
 
 .apps-tab-panel[data-tab="mining"]    .tab-metric-val { color: var(--emerald); }
-.apps-tab-panel[data-tab="infra"]     .tab-metric-val { color: var(--amber); }
+.apps-tab-panel[data-tab="energy"]     .tab-metric-val { color: var(--amber); }
 .apps-tab-panel[data-tab="transport"] .tab-metric-val { color: var(--purple); }
 .apps-tab-panel[data-tab="geo"]       .tab-metric-val { color: var(--cyan); }
+
+/* Water tab accent */
+.apps-tab-btn.active[data-tab="water"] {
+  background: rgba(77, 163, 255, 0.07);
+  border: 1px solid rgba(77, 163, 255, 0.28);
+}
+.apps-tab-btn.active[data-tab="water"] .tab-icon {
+  background: rgba(77, 163, 255, 0.15);
+  border-color: rgba(77, 163, 255, 0.45);
+  box-shadow: 0 0 12px rgba(77, 163, 255, 0.3);
+}
+.apps-tab-btn.active[data-tab="water"] .tab-label strong { color: #4DA3FF; }
+.apps-tab-panel[data-tab="water"] .tab-panel-visual { background: radial-gradient(ellipse at 50% 50%, rgba(77,163,255,0.12) 0%, rgba(0,240,255,0.04) 40%, transparent 70%); }
+.apps-tab-panel[data-tab="water"] .tab-content-eyebrow { color: #4DA3FF; }
+.apps-tab-panel[data-tab="water"] .tab-content-eyebrow::before { background: #4DA3FF; box-shadow: 0 0 8px #4DA3FF; }
+.apps-tab-panel[data-tab="water"] .feat-dot { background: #4DA3FF; box-shadow: 0 0 5px #4DA3FF; }
+.apps-tab-panel[data-tab="water"] .tab-metric-val { color: #4DA3FF; }
 
 /* SVG pulse animations */
 @keyframes pulse-ring {
@@ -3280,6 +3307,9 @@ h1, h2, h3, h4, h5 {
 .field-photos-grid.single .field-photo-card {
   aspect-ratio: 16 / 9;
 }
+.field-photo-card.station-photo img {
+  object-position: 50% 56%;
+}
 .field-photo-card.das-record {
   aspect-ratio: auto;
   background: #fff;
@@ -3296,6 +3326,23 @@ h1, h2, h3, h4, h5 {
   font-size: 12.5px;
   line-height: 1.5;
   color: var(--fg-2);
+}
+
+.das-record-source {
+  margin: 8px 0 0;
+  padding-top: 8px;
+  border-top: 1px solid var(--line-light);
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  line-height: 1.5;
+  color: var(--fg-1);
+}
+.das-record-source a {
+  color: var(--cyan);
+  white-space: nowrap;
+}
+.das-record-source a:hover {
+  text-decoration: underline;
 }
 
 /* International team experience strip (section 01) */
@@ -3321,8 +3368,17 @@ h1, h2, h3, h4, h5 {
   color: var(--fg-1);
   margin: 0;
 }
+.intl-experience .field-photos-grid {
+  grid-template-columns: repeat(4, 1fr);
+}
+.field-photo-card.rack-photo img {
+  object-position: 50% 72%;
+}
 @media (max-width: 1080px) {
   .intl-experience { grid-template-columns: 1fr; }
+}
+@media (max-width: 600px) {
+  .intl-experience .field-photos-grid { grid-template-columns: repeat(2, 1fr); }
 }
 
 /* Lightbox Modal */
@@ -3530,7 +3586,7 @@ h1, h2, h3, h4, h5 {
   color: #fff;
   line-height: 1.45;
   margin: 0;
-  flex: 1;
+  flex: 1 1 100%;
 }
 .feasibility-apply-btn {
   background: var(--cyan);
