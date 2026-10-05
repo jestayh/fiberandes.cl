@@ -4,8 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>FiberAndes &mdash; Distributed Fiber Optic Sensing (DFOS / DAS) en Chile</title>
-  <meta name="description" content="Primera startup en Chile de Distributed Acoustic Sensing (DAS). Llevamos f&iacute;sica &oacute;ptica de frontera validada en volcanes, mineroductos y sismolog&iacute;a hacia la gran miner&iacute;a e infraestructura andina.">
-  <meta name="author" content="FiberAndes SpA">
+  <meta name="description" content="Detecci&oacute;n ac&uacute;stica distribuida (DAS) hecha en Chile: convertimos la fibra &oacute;ptica en miles de sensores para monitorear miner&iacute;a, energ&iacute;a, agua, transporte y peligros geol&oacute;gicos.">
+  <meta name="author" content="FiberAndes">
   <meta name="robots" content="index, follow">
   <link rel="canonical" href="https://www.fiberandes.cl/">
 
@@ -27,15 +27,15 @@
   <meta name="theme-color" content="#060911">
 
   <!-- Favicon -->
-  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
-  <link rel="apple-touch-icon" href="assets/favicon.svg">
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg?v=20261005_03">
+  <link rel="apple-touch-icon" href="assets/app-icon.svg?v=20261005_03">
 
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=Sora:wght@500;600;700;800&display=swap" rel="stylesheet">
 
-  <link rel="stylesheet" href="css/styles.css?v=20261005_17">
+  <link rel="stylesheet" href="css/styles.css?v=20261005_24">
 
   <!-- Structured Data JSON-LD -->
   <script type="application/ld+json">
@@ -47,9 +47,8 @@
         "name": "FiberAndes",
         "alternateName": "FiberAndes Chile",
         "url": "https://www.fiberandes.cl",
-        "logo": "https://www.fiberandes.cl/assets/logo.svg",
-        "description": "Primera startup en Chile de Distributed Fiber Optic Sensing (DFOS / DAS). Monitoreo continuo de macizo rocoso, obras civiles e infraestructura con tecnolog&iacute;as &oacute;pticas distribuidas.",
-        "foundingDate": "2026",
+        "logo": "https://www.fiberandes.cl/assets/logo-static.svg",
+        "description": "Detecci&oacute;n ac&uacute;stica distribuida (DAS) hecha en Chile: convertimos la fibra &oacute;ptica en miles de sensores para monitorear miner&iacute;a, energ&iacute;a, agua, transporte y peligros geol&oacute;gicos.",
         "address": {
           "@type": "PostalAddress",
           "addressLocality": "San Felipe",
@@ -79,15 +78,15 @@
   <header class="nav" role="banner">
     <div class="wrap">
       <a class="brand" href="index.html" aria-label="FiberAndes Inicio">
-        <img class="logo-svg" src="assets/logo.svg?v=20261005_01" alt="FiberAndes &mdash; Distributed Sensing Chile">
+        <img class="logo-svg" src="assets/logo.svg?v=20261005_03" alt="FiberAndes &mdash; Distributed Sensing Chile">
       </a>
 
       <nav class="nav-links" role="navigation" aria-label="Men&uacute; principal">
-        <a href="#inicio">Inicio &amp; Equipo</a>
-        <a href="#evidencia">Evidencia en Terreno</a>
-        <a href="#pilotos">Pilotos Industriales</a>
+        <a href="#inicio">Inicio y equipo</a>
+        <a href="#evidencia">Evidencia en terreno</a>
+        <a href="#pilotos">Aplicaciones</a>
         <a href="#alianzas">Alianzas</a>
-        <a href="#roadmap">Roadmap</a>
+        <a href="#roadmap">Hoja de ruta</a>
         <a href="#contacto">Contacto</a>
       </nav>
 
@@ -108,11 +107,11 @@
 
   <!-- Mobile Navigation Dropdown -->
   <div class="mobile-nav" role="navigation" aria-label="Men&uacute; m&oacute;vil">
-    <a href="#inicio">Inicio &amp; Equipo</a>
-    <a href="#evidencia">Evidencia en Terreno</a>
-    <a href="#pilotos">Pilotos Industriales</a>
+    <a href="#inicio">Inicio y equipo</a>
+    <a href="#evidencia">Evidencia en terreno</a>
+    <a href="#pilotos">Aplicaciones</a>
     <a href="#alianzas">Alianzas</a>
-    <a href="#roadmap">Roadmap</a>
+    <a href="#roadmap">Hoja de ruta</a>
     <a href="#contacto">Contacto</a>
     <a href="#contacto" class="btn btn-primary" style="margin-top:20px;">Co-dise&ntilde;ar piloto</a>
   </div>
@@ -122,9 +121,9 @@
     <div class="otdr-status">
       <span class="otdr-pulse-dot"></span>
       <span>PULSO &Oacute;PTICO:</span>
-      <span class="otdr-section" id="mobile-otdr-section">01 &middot; CORD&Oacute;N CAULLE</span>
+      <span class="otdr-section" id="mobile-otdr-section" data-i18n-skip>01 &middot; EVIDENCIA EN TERRENO</span>
     </div>
-    <div class="otdr-km" id="mobile-otdr-km">KM 1.5 / 60 KM</div>
+    <div class="otdr-km" id="mobile-otdr-km" data-i18n-skip>KM 1.5 / 60 KM</div>
     <div class="telemetry-progress-line" id="mobile-telemetry-line"></div>
   </div>
 
@@ -134,25 +133,25 @@
     <div class="backbone-fiber-lit" id="backbone-fiber-lit"></div>
     <div class="backbone-laser-pulse" id="backbone-laser-pulse" title="Pulso l&aacute;ser OTDR en tiempo real"></div>
     <div class="backbone-nodes">
-      <a class="backbone-node active" href="#evidencia" data-section="evidencia" data-km="1.5" aria-label="Ir a Evidencia en Terreno">
+      <a class="backbone-node active" href="#evidencia" data-section="evidencia" data-km="1.5" aria-label="Ir a Evidencia en terreno">
         <span class="node-dot"></span>
-        <span class="node-tooltip"><span class="km">KM 1.5</span>Volc&aacute;n Cord&oacute;n Caulle</span>
+        <span class="node-tooltip"><span class="km">KM 1.5</span>Evidencia en terreno</span>
       </a>
-      <a class="backbone-node" href="#pilotos" data-section="pilotos" data-km="15.0" aria-label="Ir a Casos de Aplicación">
+      <a class="backbone-node" href="#pilotos" data-section="pilotos" data-km="15.0" aria-label="Ir a Aplicaciones">
         <span class="node-dot"></span>
-        <span class="node-tooltip"><span class="km">KM 15.0</span>Pilotos Industriales</span>
+        <span class="node-tooltip"><span class="km">KM 15.0</span>Aplicaciones</span>
       </a>
-      <a class="backbone-node" href="#alianzas" data-section="alianzas" data-km="40.0" aria-label="Ir a Alianzas y Respaldo">
+      <a class="backbone-node" href="#alianzas" data-section="alianzas" data-km="40.0" aria-label="Ir a Alianzas">
         <span class="node-dot"></span>
-        <span class="node-tooltip"><span class="km">KM 40.0</span>Red CHILCO &middot; AEI Seattle</span>
+        <span class="node-tooltip"><span class="km">KM 40.0</span>Alianzas</span>
       </a>
-      <a class="backbone-node" href="#roadmap" data-section="roadmap" data-km="55.0" aria-label="Ir a Roadmap">
+      <a class="backbone-node" href="#roadmap" data-section="roadmap" data-km="55.0" aria-label="Ir a Hoja de ruta">
         <span class="node-dot"></span>
-        <span class="node-tooltip"><span class="km">KM 55.0</span>Despliegue Industrial</span>
+        <span class="node-tooltip"><span class="km">KM 55.0</span>Hoja de ruta</span>
       </a>
-      <a class="backbone-node" href="#contacto" data-section="contacto" data-km="60.0" aria-label="Ir a Contacto y Pilotos">
+      <a class="backbone-node" href="#contacto" data-section="contacto" data-km="60.0" aria-label="Ir a Contacto">
         <span class="node-dot"></span>
-        <span class="node-tooltip"><span class="km">KM 60+</span>Co-dise&ntilde;o de Piloto</span>
+        <span class="node-tooltip"><span class="km">KM 60+</span>Contacto</span>
       </a>
     </div>
   </aside>
@@ -167,7 +166,7 @@
       <div class="wrap">
         <div class="hero-content">
           <div class="hero-pill-row reveal">
-            <span class="eyebrow"><span class="idx">PIONEROS</span> <span>Detecci&oacute;n Ac&uacute;stica Distribuida (DAS) en Chile</span></span>
+            <span class="eyebrow"><span class="idx">PIONEROS</span> <span>&middot; DAS en Chile</span></span>
           </div>
 
           <h1 class="hero-tag reveal">
@@ -183,8 +182,11 @@
           <div class="hero-demo-stage" aria-hidden="true">
             <p class="hero-demo-hint">
               <span class="hint-dot"></span>
+              <span class="hint-text">
+              <span class="hint-note">Pulsos de luz infrarroja (1550 nm), invisibles al ojo, recorren la fibra.</span>
               <span class="hint-pointer">Mueve el cursor cerca de la fibra: detecta la vibraci&oacute;n y te dice en qu&eacute; kil&oacute;metro ocurri&oacute;.</span>
               <span class="hint-touch">Toca cerca de la fibra: detecta la vibraci&oacute;n y te dice en qu&eacute; kil&oacute;metro ocurri&oacute;.</span>
+              </span>
             </p>
           </div>
 
@@ -354,7 +356,7 @@
                   <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
                   <span>Registro Fotogr&aacute;fico de Terreno</span>
                 </span>
-                <button type="button" class="fan-toggle" aria-controls="caulle-photo-fan" aria-expanded="false">Click para desplegar</button>
+                <button type="button" class="fan-toggle" aria-controls="caulle-photo-fan" aria-expanded="false" data-i18n-skip>Click para desplegar</button>
               </div>
               <div class="photo-fan" id="caulle-photo-fan" role="button" tabindex="0" aria-label="Desplegar fotos de terreno del Cord&oacute;n Caulle">
                 <div class="field-photo-card" data-title="Vista a&eacute;rea del complejo volc&aacute;nico Puyehue&ndash;Cord&oacute;n Caulle" data-desc="Complejo volc&aacute;nico Puyehue&ndash;Cord&oacute;n Caulle, sur de Chile." data-tags="Cord&oacute;n Caulle, Enero 2026" data-img="images/caulle/cordon-caulle-aerial.jpg">
@@ -433,8 +435,8 @@
     <section class="section-pad" id="pilotos">
       <div class="wrap">
         <div class="section-head reveal">
-          <span class="eyebrow"><span class="idx">02</span> <span>Programa de Pilotos &middot; Co-Dise&ntilde;o en Faena</span></span>
-          <h2 class="h-section">Casos de Aplicaci&oacute;n: Co-dise&ntilde;amos pilotos industriales</h2>
+          <span class="eyebrow"><span class="idx">02</span> <span>Aplicaciones por sector &middot; Pilotos a medida</span></span>
+          <h2 class="h-section">Aplicaciones: d&oacute;nde la fibra se convierte en sensor</h2>
           <p class="lead">
             Buscamos empresas mineras, de energ&iacute;a, sanitarias y de transporte, junto a sus gerencias de innovaci&oacute;n, para desplegar pruebas de concepto de detecci&oacute;n distribuida que resuelvan sus necesidades de vigilancia, monitoreo y alerta temprana, adapt&aacute;ndonos a la geometr&iacute;a y geolog&iacute;a de cada sitio:
           </p>
@@ -458,7 +460,7 @@
               </span>
               <span class="tab-label">
                 <strong>Energía</strong>
-                <span>Cables · Gasoductos · Presas</span>
+                <span>Líneas · Gasoductos · Presas</span>
               </span>
             </button>
             <button class="apps-tab-btn" data-tab="water" role="tab" aria-selected="false" aria-controls="tab-water" id="btn-water">
@@ -467,7 +469,7 @@
               </span>
               <span class="tab-label">
                 <strong>Agua</strong>
-                <span>Acueductos · Embalses</span>
+                <span>Acueductos · Embalses · Océano</span>
               </span>
             </button>
             <button class="apps-tab-btn" data-tab="transport" role="tab" aria-selected="false" aria-controls="tab-transport" id="btn-transport">
@@ -475,8 +477,8 @@
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 17H3a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v6h-2"/><circle cx="7.5" cy="17.5" r="2.5"/><circle cx="17.5" cy="17.5" r="2.5"/></svg>
               </span>
               <span class="tab-label">
-                <strong>Transporte</strong>
-                <span>Mineroductos · Ferrocarriles · Túneles</span>
+                <strong>Transporte e infraestructura</strong>
+                <span>Ductos · Vías · Puentes · Edificios</span>
               </span>
             </button>
             <button class="apps-tab-btn" data-tab="geo" role="tab" aria-selected="false" aria-controls="tab-geo" id="btn-geo">
@@ -485,7 +487,7 @@
               </span>
               <span class="tab-label">
                 <strong>Peligros geológicos</strong>
-                <span>Sismos · Volcanes · Deslizamientos</span>
+                <span>Sismos · Volcanes · Suelos</span>
               </span>
             </button>
           </nav>
@@ -500,13 +502,13 @@
                     <rect x="0" y="0" width="320" height="280" fill="rgba(4,9,17,0.5)" rx="4"/>
                     <path d="M0 60 L40 60 L40 75 L58 75 L58 90 L76 90 L76 105 L94 105 L94 120 L150 120 L150 105 L168 105 L168 90 L186 90 L186 75 L204 75 L204 60 L320 60 L320 280 L0 280 Z" fill="rgba(25,40,38,0.4)"/>
                     <path d="M0 60 L40 60 L40 75 L58 75 L58 90 L76 90 L76 105 L94 105 L94 120 L150 120 L150 105 L168 105 L168 90 L186 90 L186 75 L204 75 L204 60 L320 60" stroke="rgba(255,255,255,0.14)" stroke-width="1.4"/>
-                    <path d="M40 73 L58 73 L58 88 L76 88 L76 103 L94 103 L94 118 L150 118 L150 103 L168 103 L168 88 L186 88 L186 73 L204 73" stroke="rgba(0,240,255,0.7)" stroke-width="1.6" stroke-dasharray="5 3"/>
+                    <path class="fiber-glow" d="M40 73 L58 73 L58 88 L76 88 L76 103 L94 103 L94 118 L150 118 L150 103 L168 103 L168 88 L186 88 L186 73 L204 73"/><path class="fiber-core" id="fp-mining-1" d="M40 73 L58 73 L58 88 L76 88 L76 103 L94 103 L94 118 L150 118 L150 103 L168 103 L168 88 L186 88 L186 73 L204 73"/><g class="fiber-pulse"><circle r="6.5" class="fiber-pulse-ring"/><circle r="2.8" class="fiber-pulse-dot"/><animateMotion dur="3.0s" begin="0.6s" repeatCount="indefinite" rotate="auto"><mpath href="#fp-mining-1"/></animateMotion></g>
                     <path d="M236 60 L252 40 L288 40 L304 60 Z" fill="rgba(0,255,163,0.12)" stroke="rgba(0,255,163,0.55)" stroke-width="1.3"/>
-                    <path d="M252 40 L288 40" stroke="rgba(0,240,255,0.7)" stroke-width="1.6" stroke-dasharray="5 3"/>
+                    <path class="fiber-glow" d="M252 40 L288 40"/><path class="fiber-core" id="fp-mining-2" d="M252 40 L288 40"/><g class="fiber-pulse"><circle r="6.5" class="fiber-pulse-ring"/><circle r="2.8" class="fiber-pulse-dot"/><animateMotion dur="2.4s" begin="1.2s" repeatCount="indefinite" rotate="auto"><mpath href="#fp-mining-2"/></animateMotion></g>
                     <line x1="122" y1="120" x2="122" y2="252" stroke="rgba(0,255,163,0.35)" stroke-width="6" stroke-linecap="round"/>
-                    <line x1="122" y1="122" x2="122" y2="250" stroke="rgba(0,240,255,0.8)" stroke-width="1.8" stroke-dasharray="5 3"/>
+                    <path class="fiber-glow" d="M122 122 L122 250"/><path class="fiber-core" id="fp-mining-3" d="M122 122 L122 250"/><g class="fiber-pulse"><circle r="6.5" class="fiber-pulse-ring"/><circle r="2.8" class="fiber-pulse-dot"/><animateMotion dur="2.4s" begin="1.8s" repeatCount="indefinite" rotate="auto"><mpath href="#fp-mining-3"/></animateMotion></g>
                     <rect x="150" y="206" width="160" height="18" rx="9" fill="rgba(0,0,0,0.45)" stroke="rgba(0,255,163,0.45)" stroke-width="1.3"/>
-                    <line x1="156" y1="215" x2="304" y2="215" stroke="rgba(0,240,255,0.8)" stroke-width="1.8" stroke-dasharray="5 3"/>
+                    <path class="fiber-glow" d="M156 215 L304 215"/><path class="fiber-core" id="fp-mining-4" d="M156 215 L304 215"/><g class="fiber-pulse"><circle r="6.5" class="fiber-pulse-ring"/><circle r="2.8" class="fiber-pulse-dot"/><animateMotion dur="2.4s" begin="0.0s" repeatCount="indefinite" rotate="auto"><mpath href="#fp-mining-4"/></animateMotion></g>
                     <circle cx="214" cy="166" r="18" stroke="rgba(255,75,85,0.4)" stroke-width="1" stroke-dasharray="3 3"/>
                     <circle cx="214" cy="166" r="34" stroke="rgba(0,255,163,0.25)" stroke-width="1" stroke-dasharray="2 4"/>
                     <line x1="214" y1="166" x2="122" y2="190" stroke="rgba(255,176,32,0.55)" stroke-width="1" stroke-dasharray="3 3"/>
@@ -518,7 +520,7 @@
                     <circle class="svg-blink" cx="250" cy="215" r="3.5" fill="rgba(0,240,255,1)" style="animation-delay:0.3s"/>
                     <circle class="svg-blink" cx="168" cy="103" r="3.5" fill="rgba(0,240,255,1)" style="animation-delay:0.6s"/>
                     <text x="96" y="52" text-anchor="middle" font-family="monospace" font-size="6.5" fill="rgba(0,255,163,0.8)">RAJO + FIBRA EN BANCOS</text>
-                    <text x="270" y="34" text-anchor="middle" font-family="monospace" font-size="6" fill="rgba(0,255,163,0.8)">MURO DE RELAVES</text>
+                    <text x="270" y="29" text-anchor="middle" font-family="monospace" font-size="6" fill="rgba(0,255,163,0.8)">MURO DE RELAVES</text>
                     <text x="128" y="266" font-family="monospace" font-size="6.5" fill="rgba(0,240,255,0.75)">SONDAJE + FIBRA</text>
                     <text x="160" y="238" font-family="monospace" font-size="6.5" fill="rgba(0,240,255,0.75)">GALER&Iacute;A + FIBRA</text>
                     <text x="226" y="150" font-family="monospace" font-size="6.5" fill="rgba(255,75,85,0.9)">HIPOCENTRO LOCALIZADO</text>
@@ -528,12 +530,11 @@
                 <div class="tab-panel-content">
                   <div class="tab-content-eyebrow">Minería Subterránea y a Rajo Abierto · Geomecánica</div>
                   <h3 class="tab-content-title">Microsismicidad mejor detectada y localizada, en toda la faena</h3>
-                  <p class="tab-content-sub">Las redes de geófonos tienen pocos puntos de medición y dejan zonas sin cubrir. Una fibra agrega cientos o miles de canales a lo largo de galerías, sondajes o bermas, incluso en zonas extensas o de difícil acceso, sin electrónica en terreno.</p>
+                  <p class="tab-content-sub">Las redes de geófonos tienen pocos puntos de medición y dejan zonas sin cubrir. Una fibra agrega cientos o miles de canales en galerías, sondajes o bermas, incluso donde no se puede instalar electrónica.</p>
                   <ul class="tab-feature-list">
-                    <li><span class="feat-dot"></span><span><strong>Detección más fina:</strong> más canales cerca de la fuente ayudan a registrar eventos de menor magnitud que hoy pasan inadvertidos.</span></li>
-                    <li><span class="feat-dot"></span><span><strong>Mejor localización de hipocentros:</strong> una geometría de medición densa y extensa reduce la incertidumbre en la ubicación de cada evento.</span></li>
-                    <li><span class="feat-dot"></span><span><strong>Despliegue donde no llegan los sensores:</strong> zonas extensas, remotas o de riesgo, como muros de relaves, laderas o labores antiguas, cubiertas con un solo cable pasivo.</span></li>
-                    <li><span class="feat-dot"></span><span><strong>Cavidades y huecos (estudios de detalle):</strong> tomografía sísmica con DAS para detectar zonas de baja velocidad o huecos en el subsuelo, como muestran <a class="ref-link" href="https://doi.org/10.1190/GEO2020-0400.1" target="_blank" rel="noopener">Abukrat y Reshef (2021)</a> y <a class="ref-link" href="https://doi.org/10.1029/2024JB030659" target="_blank" rel="noopener">Liu et al. (2025)</a>.</span></li>
+                    <li><span class="feat-dot"></span><span><strong>Microsismicidad:</strong> más canales cerca de la fuente registran eventos de menor magnitud y reducen la incertidumbre en la ubicación de cada hipocentro.</span></li>
+                    <li><span class="feat-dot"></span><span><strong>Taludes y relaves:</strong> caída de rocas y vigilancia sísmica continua de muros, en zonas extensas o de difícil acceso.</span></li>
+                    <li><span class="feat-dot"></span><span><strong>Caracterización del macizo (estudios de detalle):</strong> tomografía sísmica para detectar zonas de baja velocidad o huecos, como muestran <a class="ref-link" href="https://doi.org/10.1190/GEO2020-0400.1" target="_blank" rel="noopener">Abukrat y Reshef (2021)</a> y <a class="ref-link" href="https://doi.org/10.1029/2024JB030659" target="_blank" rel="noopener">Liu et al. (2025)</a>, y perfiles sísmicos en sondajes (VSP).</span></li>
                   </ul>
                   <div class="tab-metrics-row">
                     <div class="tab-metric"><span class="tab-metric-val">65 km</span><span class="tab-metric-lbl">Por fibra</span></div>
@@ -553,12 +554,14 @@
                     <rect x="0" y="150" width="320" height="130" fill="rgba(40,30,15,0.3)"/>
                     <line x1="0" y1="150" x2="320" y2="150" stroke="rgba(255,255,255,0.12)" stroke-width="1.5"/>
                     <path d="M58 150 L70 40 L82 150 M62 112 L78 112 M65 80 L75 80 M50 55 L90 55 M70 40 L70 30" stroke="rgba(255,176,32,0.55)" stroke-width="1.6"/>
+                    <path class="fiber-glow" d="M0 36 Q40 32 70 30 Q190 52 320 36"/><path class="fiber-core" id="fp-energy-5" d="M0 36 Q40 32 70 30 Q190 52 320 36"/><g class="fiber-pulse"><circle r="6.5" class="fiber-pulse-ring"/><circle r="2.8" class="fiber-pulse-dot"/><animateMotion dur="3.8s" begin="0.6s" repeatCount="indefinite" rotate="auto"><mpath href="#fp-energy-5"/></animateMotion></g>
+                    <text x="104" y="52" font-family="monospace" font-size="6" fill="rgba(0,240,255,0.75)">L&Iacute;NEA A&Eacute;REA &middot; FIBRA OPGW</text>
                     <path d="M90 55 Q190 75 320 58" stroke="rgba(255,176,32,0.35)" stroke-width="1.2"/>
                     <path d="M0 62 Q25 58 50 55" stroke="rgba(255,176,32,0.35)" stroke-width="1.2"/>
                     <rect x="0" y="191" width="320" height="10" rx="5" fill="rgba(255,176,32,0.12)" stroke="rgba(255,176,32,0.55)" stroke-width="1.4"/>
-                    <line x1="0" y1="196" x2="320" y2="196" stroke="rgba(0,240,255,0.75)" stroke-width="1.8" stroke-dasharray="6 4"/>
+                    <path class="fiber-glow" d="M0 196 L320 196"/><path class="fiber-core" id="fp-energy-6" d="M0 196 L320 196"/><g class="fiber-pulse"><circle r="6.5" class="fiber-pulse-ring"/><circle r="2.8" class="fiber-pulse-dot"/><animateMotion dur="3.8s" begin="1.2s" repeatCount="indefinite" rotate="auto"><mpath href="#fp-energy-6"/></animateMotion></g>
                     <rect x="0" y="232" width="320" height="14" rx="7" fill="rgba(176,102,255,0.1)" stroke="rgba(176,102,255,0.5)" stroke-width="1.4"/>
-                    <line x1="0" y1="239" x2="320" y2="239" stroke="rgba(0,240,255,0.5)" stroke-width="1.4" stroke-dasharray="4 4"/>
+                    <path class="fiber-glow" d="M0 239 L320 239"/><path class="fiber-core" id="fp-energy-7" d="M0 239 L320 239"/><g class="fiber-pulse"><circle r="6.5" class="fiber-pulse-ring"/><circle r="2.8" class="fiber-pulse-dot"/><animateMotion dur="3.8s" begin="1.8s" repeatCount="indefinite" rotate="auto"><mpath href="#fp-energy-7"/></animateMotion></g>
                     <rect x="214" y="128" width="34" height="16" rx="3" fill="rgba(255,176,32,0.25)" stroke="rgba(255,176,32,0.8)" stroke-width="1.3"/>
                     <rect x="208" y="144" width="46" height="6" rx="3" fill="rgba(255,176,32,0.4)"/>
                     <path d="M246 132 L272 112 L286 150 L278 172" stroke="rgba(255,176,32,0.8)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
@@ -583,9 +586,9 @@
                   <h3 class="tab-content-title">Vigilancia continua de cables eléctricos, gasoductos y presas</h3>
                   <p class="tab-content-sub">La fibra que acompaña a un cable de poder o a un ducto se convierte en un sensor a lo largo de todo su trazado, sin instalar equipos en terreno.</p>
                   <ul class="tab-feature-list">
-                    <li><span class="feat-dot"></span><span><strong>Cables eléctricos:</strong> localización de fallas y alerta ante excavaciones o intervención de terceros cerca del trazado.</span></li>
-                    <li><span class="feat-dot"></span><span><strong>Gasoductos y oleoductos:</strong> detección y localización de fugas, intervención de terceros y seguimiento del PIG durante la limpieza o inspección.</span></li>
-                    <li><span class="feat-dot"></span><span><strong>Presas hidroeléctricas:</strong> vigilancia sísmica continua de la estructura y su entorno.</span></li>
+                    <li><span class="feat-dot"></span><span><strong>Líneas y cables eléctricos:</strong> con la fibra OPGW de las líneas aéreas o la que acompaña a cables soterrados, se localizan fallas, intervención de terceros, oscilación de conductores por viento y acumulación de hielo.</span></li>
+                    <li><span class="feat-dot"></span><span><strong>Gasoductos y oleoductos:</strong> fugas, intervención de terceros y seguimiento del PIG.</span></li>
+                    <li><span class="feat-dot"></span><span><strong>Presas y geotermia:</strong> vigilancia sísmica de presas y microsismicidad en campos geotérmicos.</span></li>
                   </ul>
                   <div class="tab-metrics-row">
                     <div class="tab-metric"><span class="tab-metric-val">65 km</span><span class="tab-metric-lbl">Por fibra</span></div>
@@ -605,36 +608,43 @@
                     <path d="M0 72 L72 72 L72 150 L0 150 Z" fill="rgba(77,163,255,0.18)"/>
                     <path d="M0 72 Q36 67 72 72" stroke="rgba(77,163,255,0.6)" stroke-width="1.2"/>
                     <path d="M70 50 L92 50 L114 150 L70 150 Z" fill="rgba(120,130,150,0.25)" stroke="rgba(77,163,255,0.55)" stroke-width="1.4"/>
-                    <path d="M70 50 L92 50 L114 150" stroke="rgba(0,240,255,0.7)" stroke-width="1.6" stroke-dasharray="5 3"/>
-                    <rect x="0" y="150" width="320" height="130" fill="rgba(20,30,45,0.35)"/>
-                    <line x1="0" y1="150" x2="320" y2="150" stroke="rgba(255,255,255,0.12)" stroke-width="1.5"/>
+                    <path class="fiber-glow" d="M70 50 L92 50 L114 150"/><path class="fiber-core" id="fp-water-8" d="M70 50 L92 50 L114 150"/><g class="fiber-pulse"><circle r="6.5" class="fiber-pulse-ring"/><circle r="2.8" class="fiber-pulse-dot"/><animateMotion dur="2.4s" begin="0.0s" repeatCount="indefinite" rotate="auto"><mpath href="#fp-water-8"/></animateMotion></g>
+                    <path d="M0 150 L205 150 Q215 262 320 266 L320 280 L0 280 Z" fill="rgba(20,30,45,0.35)"/>
+                    <path d="M205 150 L320 150 L320 266 Q215 262 205 150 Z" fill="rgba(77,163,255,0.14)"/>
+                    <path d="M205 150 Q222 146 238 150 T272 150 T306 150 T320 150" stroke="rgba(77,163,255,0.6)" stroke-width="1.2"/>
+                    <line x1="0" y1="150" x2="205" y2="150" stroke="rgba(255,255,255,0.12)" stroke-width="1.5"/>
+                    <path d="M205 150 Q215 262 320 266" stroke="rgba(255,255,255,0.12)" stroke-width="1.2"/>
                     <path d="M104 204 L88 204 L88 150" stroke="rgba(77,163,255,0.5)" stroke-width="3"/>
-                    <rect x="100" y="196" width="220" height="16" rx="8" fill="rgba(77,163,255,0.12)" stroke="rgba(77,163,255,0.6)" stroke-width="1.5"/>
-                    <line x1="100" y1="224" x2="320" y2="224" stroke="rgba(0,240,255,0.75)" stroke-width="1.8" stroke-dasharray="6 4"/>
-                    <circle cx="220" cy="204" r="5" fill="#ff4b55"/>
-                    <circle class="svg-pulse-ring" cx="220" cy="204" r="8" stroke="#ff4b55" stroke-width="1.5" fill="none"/>
-                    <path d="M214 194 q-3 -10 2 -16 M226 194 q3 -10 -2 -16" stroke="rgba(77,163,255,0.7)" stroke-width="1.3"/>
-                    <circle cx="220" cy="172" r="2" fill="rgba(77,163,255,0.8)"/>
-                    <line x1="220" y1="212" x2="220" y2="224" stroke="rgba(255,75,85,0.6)" stroke-dasharray="2 2"/>
-                    <circle cx="220" cy="224" r="3.5" fill="#ff4b55"/>
-                    <circle class="svg-blink" cx="130" cy="224" r="3.5" fill="rgba(0,240,255,0.9)" style="animation-delay:0s"/>
-                    <circle class="svg-blink" cx="280" cy="224" r="3.5" fill="rgba(0,240,255,0.9)" style="animation-delay:0.5s"/>
-                    <circle class="svg-blink" cx="81" cy="100" r="3" fill="rgba(0,240,255,0.8)" style="animation-delay:0.3s"/>
+                    <rect x="100" y="196" width="96" height="16" rx="8" fill="rgba(77,163,255,0.12)" stroke="rgba(77,163,255,0.6)" stroke-width="1.5"/>
+                    <path class="fiber-glow" d="M100 224 L196 224"/><path class="fiber-core" id="fp-water-9" d="M100 224 L196 224"/><g class="fiber-pulse"><circle r="6.5" class="fiber-pulse-ring"/><circle r="2.8" class="fiber-pulse-dot"/><animateMotion dur="2.4s" begin="0.6s" repeatCount="indefinite" rotate="auto"><mpath href="#fp-water-9"/></animateMotion></g>
+                    <circle cx="150" cy="204" r="5" fill="#ff4b55"/>
+                    <circle class="svg-pulse-ring" cx="150" cy="204" r="8" stroke="#ff4b55" stroke-width="1.5" fill="none"/>
+                    <path d="M144 194 q-3 -10 2 -16 M156 194 q3 -10 -2 -16" stroke="rgba(77,163,255,0.7)" stroke-width="1.3"/>
+                    <line x1="150" y1="212" x2="150" y2="224" stroke="rgba(255,75,85,0.6)" stroke-dasharray="2 2"/>
+                    <path d="M224 142 L252 142 L248 150 L228 150 Z" fill="rgba(200,210,225,0.35)" stroke="rgba(200,210,225,0.7)" stroke-width="1"/>
+                    <rect x="232" y="135" width="10" height="7" fill="rgba(200,210,225,0.35)"/>
+                    <path d="M246 196 Q262 182 286 190 Q296 194 300 198 L310 190 L308 202 L300 200 Q286 208 262 206 Q248 204 246 196 Z" fill="rgba(77,163,255,0.55)" stroke="rgba(77,163,255,0.9)" stroke-width="1"/>
+                    <path d="M240 200 q-6 6 0 12 M233 196 q-9 10 0 20 M226 192 q-12 14 0 28" stroke="rgba(77,163,255,0.55)" stroke-width="1.1"/>
+                    <path class="fiber-glow" d="M205 156 Q218 255 320 259"/><path class="fiber-core" id="fp-water-10" d="M205 156 Q218 255 320 259"/><g class="fiber-pulse"><circle r="6.5" class="fiber-pulse-ring"/><circle r="2.8" class="fiber-pulse-dot"/><animateMotion dur="2.4s" begin="1.2s" repeatCount="indefinite" rotate="auto"><mpath href="#fp-water-10"/></animateMotion></g>
+                    <circle class="svg-blink" cx="260" cy="245" r="3.5" fill="rgba(0,240,255,1)" style="animation-delay:0.2s"/>
                     <text x="8" y="64" font-family="monospace" font-size="6.5" fill="rgba(77,163,255,0.85)">EMBALSE</text>
                     <text x="104" y="190" font-family="monospace" font-size="6.5" fill="rgba(77,163,255,0.85)">ACUEDUCTO</text>
-                    <text x="104" y="242" font-family="monospace" font-size="6.5" fill="rgba(0,240,255,0.75)">FIBRA &Oacute;PTICA &middot; DAS</text>
-                    <text x="232" y="176" font-family="monospace" font-size="6" fill="rgba(255,75,85,0.85)">FUGA LOCALIZADA</text>
-                    <text x="160" y="18" text-anchor="middle" font-family="monospace" font-size="7.5" fill="rgba(77,163,255,0.75)" letter-spacing="1">AGUA &middot; DAS</text>
+                    <text x="104" y="242" font-family="monospace" font-size="6.5" fill="rgba(0,240,255,0.75)">FIBRA &Oacute;PTICA</text>
+                    <text x="158" y="182" font-family="monospace" font-size="6" fill="rgba(255,75,85,0.85)">FUGA</text>
+                    <text x="270" y="178" text-anchor="middle" font-family="monospace" font-size="6" fill="rgba(77,163,255,0.9)">BALLENA</text>
+                    <text x="238" y="130" text-anchor="middle" font-family="monospace" font-size="6" fill="rgba(200,210,225,0.8)">BARCO</text>
+                    <text x="230" y="276" font-family="monospace" font-size="6" fill="rgba(0,240,255,0.75)">CABLE SUBMARINO</text>
+                    <text x="160" y="18" text-anchor="middle" font-family="monospace" font-size="7.5" fill="rgba(77,163,255,0.75)" letter-spacing="1">AGUA &middot; OC&Eacute;ANO &middot; DAS</text>
                   </svg>
                 </div>
                 <div class="tab-panel-content">
-                  <div class="tab-content-eyebrow">Servicios Sanitarios · Recursos Hídricos</div>
-                  <h3 class="tab-content-title">Detección de fugas e intervenciones en redes de agua</h3>
+                  <div class="tab-content-eyebrow">Servicios Sanitarios · Recursos Hídricos · Océano</div>
+                  <h3 class="tab-content-title">Redes de agua y monitoreo del océano</h3>
                   <p class="tab-content-sub">En un país con escasez hídrica, cada fuga cuenta. DAS escucha la tubería completa y ubica el punto donde algo cambió.</p>
                   <ul class="tab-feature-list">
-                    <li><span class="feat-dot"></span><span><strong>Acueductos y tuberías:</strong> detección y localización de fugas a lo largo del trazado.</span></li>
-                    <li><span class="feat-dot"></span><span><strong>Intervención de terceros:</strong> alerta ante excavaciones o maquinaria cerca de la red.</span></li>
+                    <li><span class="feat-dot"></span><span><strong>Acueductos y tuberías:</strong> detección y localización de fugas e intervención de terceros.</span></li>
                     <li><span class="feat-dot"></span><span><strong>Embalses y presas:</strong> vigilancia sísmica continua de muros y laderas.</span></li>
+                    <li><span class="feat-dot"></span><span><strong>Océano:</strong> los cables submarinos de telecomunicaciones funcionan como hidrófonos de decenas de kilómetros para registrar ballenas, tráfico de barcos y oleaje (<a class="ref-link" href="https://doi.org/10.1121/10.0037218" target="_blank" rel="noopener">Xenaki et al., 2025</a>).</span></li>
                   </ul>
                   <div class="tab-metrics-row">
                     <div class="tab-metric"><span class="tab-metric-val">65 km</span><span class="tab-metric-lbl">Por fibra</span></div>
@@ -645,54 +655,61 @@
               </div>
             </div>
 
-            <!-- ===== TAB 4: TRANSPORTE ===== -->
+            <!-- ===== TAB 4: TRANSPORTE E INFRAESTRUCTURA ===== -->
             <div class="apps-tab-panel" data-tab="transport" id="tab-transport" role="tabpanel" aria-labelledby="btn-transport">
               <div class="tab-panel-inner">
                 <div class="tab-panel-visual">
                   <svg viewBox="0 0 320 280" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <rect x="0" y="0" width="320" height="280" fill="rgba(4,9,17,0.5)" rx="4"/>
-                    <path d="M170 150 Q215 62 320 66 L320 150 Z" fill="rgba(40,32,55,0.45)" stroke="rgba(176,102,255,0.3)" stroke-width="1.2"/>
-                    <rect x="0" y="150" width="320" height="130" fill="rgba(20,15,40,0.35)"/>
-                    <line x1="0" y1="150" x2="320" y2="150" stroke="rgba(255,255,255,0.14)" stroke-width="1.5"/>
-                    <path d="M246 150 L246 126 Q266 108 286 126 L286 150 Z" fill="rgba(0,0,0,0.65)" stroke="rgba(176,102,255,0.6)" stroke-width="1.4"/>
-                    <line x1="0" y1="140" x2="246" y2="140" stroke="rgba(176,102,255,0.7)" stroke-width="1.6"/>
-                    <line x1="0" y1="146" x2="246" y2="146" stroke="rgba(176,102,255,0.7)" stroke-width="1.6"/>
-                    <g stroke="rgba(176,102,255,0.3)" stroke-width="3">
-                      <line x1="12" y1="138" x2="12" y2="148"/><line x1="36" y1="138" x2="36" y2="148"/><line x1="60" y1="138" x2="60" y2="148"/><line x1="84" y1="138" x2="84" y2="148"/><line x1="108" y1="138" x2="108" y2="148"/><line x1="132" y1="138" x2="132" y2="148"/><line x1="156" y1="138" x2="156" y2="148"/><line x1="180" y1="138" x2="180" y2="148"/><line x1="204" y1="138" x2="204" y2="148"/><line x1="228" y1="138" x2="228" y2="148"/>
-                    </g>
-                    <rect x="38" y="114" width="78" height="22" rx="4" fill="rgba(176,102,255,0.22)" stroke="rgba(176,102,255,0.85)" stroke-width="1.3"/>
-                    <rect x="46" y="119" width="12" height="7" rx="1" fill="rgba(0,240,255,0.45)"/><rect x="64" y="119" width="12" height="7" rx="1" fill="rgba(0,240,255,0.45)"/><rect x="82" y="119" width="12" height="7" rx="1" fill="rgba(0,240,255,0.45)"/><rect x="100" y="119" width="10" height="7" rx="1" fill="rgba(0,240,255,0.45)"/>
-                    <circle cx="52" cy="138" r="3" fill="rgba(176,102,255,0.9)"/><circle cx="102" cy="138" r="3" fill="rgba(176,102,255,0.9)"/>
-                    <line x1="0" y1="157" x2="320" y2="157" stroke="rgba(0,240,255,0.75)" stroke-width="1.8" stroke-dasharray="6 4"/>
-                    <path d="M232 92 l6 -3 l4 5 l-5 4 z M222 110 l5 -2 l3 4 l-4 3 z M236 122 l4 -2 l3 3 l-3 3 z" fill="rgba(255,176,32,0.75)"/>
-                    <path d="M226 96 L232 120" stroke="rgba(255,176,32,0.5)" stroke-width="1" stroke-dasharray="2 2"/>
-                    <circle cx="236" cy="157" r="4.5" fill="#ffb020"/>
-                    <circle class="svg-pulse-ring" cx="236" cy="157" r="8" stroke="#ffb020" stroke-width="1.5" fill="none"/>
-                    <circle class="svg-blink" cx="77" cy="157" r="4" fill="rgba(0,240,255,1)" style="animation-delay:0s"/>
-                    <rect x="0" y="206" width="320" height="16" rx="8" fill="rgba(176,102,255,0.1)" stroke="rgba(176,102,255,0.55)" stroke-width="1.4"/>
-                    <line x1="0" y1="232" x2="320" y2="232" stroke="rgba(0,240,255,0.7)" stroke-width="1.6" stroke-dasharray="6 4"/>
-                    <circle cx="190" cy="214" r="5" fill="#ff4b55"/>
-                    <circle class="svg-pulse-ring" cx="190" cy="214" r="8" stroke="#ff4b55" stroke-width="1.5" fill="none"/>
-                    <line x1="190" y1="222" x2="190" y2="232" stroke="rgba(255,75,85,0.6)" stroke-dasharray="2 2"/>
-                    <circle class="svg-blink" cx="60" cy="232" r="3" fill="rgba(0,240,255,0.85)" style="animation-delay:0.3s"/>
-                    <circle class="svg-blink" cx="290" cy="232" r="3" fill="rgba(0,240,255,0.85)" style="animation-delay:0.7s"/>
-                    <text x="8" y="174" font-family="monospace" font-size="6.5" fill="rgba(0,240,255,0.75)">V&Iacute;A F&Eacute;RREA + FIBRA</text>
-                    <text x="77" y="106" text-anchor="middle" font-family="monospace" font-size="6" fill="rgba(0,240,255,0.85)">TREN DETECTADO</text>
-                    <text x="266" y="100" text-anchor="middle" font-family="monospace" font-size="6" fill="rgba(176,102,255,0.85)">T&Uacute;NEL</text>
-                    <text x="214" y="82" text-anchor="middle" font-family="monospace" font-size="6" fill="rgba(255,176,32,0.9)">DESPRENDIMIENTO</text>
-                    <text x="8" y="200" font-family="monospace" font-size="6.5" fill="rgba(176,102,255,0.8)">MINERODUCTO</text>
-                    <text x="200" y="250" font-family="monospace" font-size="6" fill="rgba(255,75,85,0.9)">ANOMAL&Iacute;A EN EL DUCTO</text>
-                    <text x="160" y="16" text-anchor="middle" font-family="monospace" font-size="7.5" fill="rgba(176,102,255,0.75)" letter-spacing="1">DUCTOS &middot; V&Iacute;AS &middot; T&Uacute;NELES &middot; DAS</text>
+                    <path d="M196 150 Q240 62 320 66 L320 150 Z" fill="rgba(40,32,55,0.45)" stroke="rgba(176,102,255,0.3)" stroke-width="1.2"/>
+                    <path d="M0 150 L40 150 Q70 200 90 204 Q112 200 140 150 L320 150 L320 280 L0 280 Z" fill="rgba(20,15,40,0.35)"/>
+                    <path d="M0 150 L40 150 Q70 200 90 204 Q112 200 140 150 L320 150" stroke="rgba(255,255,255,0.14)" stroke-width="1.4"/>
+                    <rect x="62" y="145" width="6" height="48" fill="rgba(176,102,255,0.3)" stroke="rgba(176,102,255,0.6)" stroke-width="1"/>
+                    <rect x="112" y="145" width="6" height="46" fill="rgba(176,102,255,0.3)" stroke="rgba(176,102,255,0.6)" stroke-width="1"/>
+                    <rect x="6" y="139" width="140" height="6" fill="rgba(176,102,255,0.35)" stroke="rgba(176,102,255,0.75)" stroke-width="1.2"/>
+                    <line x1="6" y1="137" x2="146" y2="137" stroke="rgba(176,102,255,0.8)" stroke-width="1.4"/>
+                    <rect x="40" y="114" width="72" height="20" rx="4" fill="rgba(176,102,255,0.22)" stroke="rgba(176,102,255,0.85)" stroke-width="1.3"/>
+                    <rect x="47" y="119" width="11" height="6" rx="1" fill="rgba(0,240,255,0.45)"/><rect x="63" y="119" width="11" height="6" rx="1" fill="rgba(0,240,255,0.45)"/><rect x="79" y="119" width="11" height="6" rx="1" fill="rgba(0,240,255,0.45)"/><rect x="95" y="119" width="11" height="6" rx="1" fill="rgba(0,240,255,0.45)"/>
+                    <circle cx="52" cy="135" r="2.6" fill="rgba(176,102,255,0.9)"/><circle cx="100" cy="135" r="2.6" fill="rgba(176,102,255,0.9)"/>
+                    <rect x="156" y="86" width="28" height="64" fill="rgba(200,210,225,0.1)" stroke="rgba(200,210,225,0.55)" stroke-width="1.2"/>
+                    <g fill="rgba(0,240,255,0.3)"><rect x="161" y="93" width="5" height="5"/><rect x="174" y="93" width="5" height="5"/><rect x="161" y="105" width="5" height="5"/><rect x="174" y="105" width="5" height="5"/><rect x="161" y="117" width="5" height="5"/><rect x="174" y="117" width="5" height="5"/><rect x="161" y="129" width="5" height="5"/><rect x="174" y="129" width="5" height="5"/></g>
+                    <path class="fiber-glow" d="M170 148 L170 90"/><path class="fiber-core" id="fp-transport-v5-1" d="M170 148 L170 90"/><g class="fiber-pulse"><circle r="6.5" class="fiber-pulse-ring"/><circle r="2.8" class="fiber-pulse-dot"/><animateMotion dur="2.4s" begin="0.7s" repeatCount="indefinite" rotate="auto"><mpath href="#fp-transport-v5-1"/></animateMotion></g>
+                    <path d="M250 150 L250 126 Q270 108 290 126 L290 150 Z" fill="rgba(0,0,0,0.65)" stroke="rgba(176,102,255,0.6)" stroke-width="1.4"/>
+                    <line x1="184" y1="148" x2="250" y2="148" stroke="rgba(255,255,255,0.35)" stroke-width="1" stroke-dasharray="4 4"/>
+                    <rect x="206" y="138" width="24" height="9" rx="3" fill="rgba(200,210,225,0.3)" stroke="rgba(200,210,225,0.8)" stroke-width="1"/>
+                    <circle cx="211" cy="148" r="2" fill="rgba(200,210,225,0.9)"/><circle cx="225" cy="148" r="2" fill="rgba(200,210,225,0.9)"/>
+                    <path d="M236 94 l6 -3 l4 5 l-5 4 z M228 110 l5 -2 l3 4 l-4 3 z M242 120 l4 -2 l3 3 l-3 3 z" fill="rgba(255,176,32,0.75)"/>
+                    <path d="M232 98 L238 120" stroke="rgba(255,176,32,0.5)" stroke-width="1" stroke-dasharray="2 2"/>
+                    <path class="fiber-glow" d="M0 147 L146 147 L154 157 L320 157"/><path class="fiber-core" id="fp-transport-v5-2" d="M0 147 L146 147 L154 157 L320 157"/><g class="fiber-pulse"><circle r="6.5" class="fiber-pulse-ring"/><circle r="2.8" class="fiber-pulse-dot"/><animateMotion dur="3.8s" begin="1.4s" repeatCount="indefinite" rotate="auto"><mpath href="#fp-transport-v5-2"/></animateMotion></g>
+                    <circle class="svg-blink" cx="76" cy="147" r="4" fill="rgba(0,240,255,1)" style="animation-delay:0s"/>
+                    <circle cx="244" cy="157" r="4.5" fill="#ffb020"/>
+                    <circle class="svg-pulse-ring" cx="244" cy="157" r="8" stroke="#ffb020" stroke-width="1.5" fill="none"/>
+                    <rect x="0" y="222" width="320" height="16" rx="8" fill="rgba(176,102,255,0.1)" stroke="rgba(176,102,255,0.55)" stroke-width="1.4"/>
+                    <path class="fiber-glow" d="M0 250 L320 250"/><path class="fiber-core" id="fp-transport-v5-3" d="M0 250 L320 250"/><g class="fiber-pulse"><circle r="6.5" class="fiber-pulse-ring"/><circle r="2.8" class="fiber-pulse-dot"/><animateMotion dur="3.8s" begin="0.0s" repeatCount="indefinite" rotate="auto"><mpath href="#fp-transport-v5-3"/></animateMotion></g>
+                    <circle cx="190" cy="230" r="5" fill="#ff4b55"/>
+                    <circle class="svg-pulse-ring" cx="190" cy="230" r="8" stroke="#ff4b55" stroke-width="1.5" fill="none"/>
+                    <line x1="190" y1="238" x2="190" y2="250" stroke="rgba(255,75,85,0.6)" stroke-dasharray="2 2"/>
+                    <circle class="svg-blink" cx="60" cy="250" r="3" fill="rgba(0,240,255,0.85)" style="animation-delay:0.3s"/>
+                    <circle class="svg-blink" cx="290" cy="250" r="3" fill="rgba(0,240,255,0.85)" style="animation-delay:0.7s"/>
+                    <text x="76" y="106" text-anchor="middle" font-family="monospace" font-size="6" fill="rgba(0,240,255,0.85)">TREN DETECTADO</text>
+                    <text x="90" y="178" text-anchor="middle" font-family="monospace" font-size="6.5" fill="rgba(176,102,255,0.85)">PUENTE</text>
+                    <text x="170" y="80" text-anchor="middle" font-family="monospace" font-size="6" fill="rgba(200,210,225,0.85)">EDIFICIO</text>
+                    <text x="214" y="174" text-anchor="middle" font-family="monospace" font-size="6" fill="rgba(200,210,225,0.8)">CARRETERA</text>
+                    <text x="270" y="102" text-anchor="middle" font-family="monospace" font-size="6" fill="rgba(176,102,255,0.85)">T&Uacute;NEL</text>
+                    <text x="214" y="84" text-anchor="middle" font-family="monospace" font-size="6" fill="rgba(255,176,32,0.9)">DESPRENDIMIENTO</text>
+                    <text x="8" y="216" font-family="monospace" font-size="6.5" fill="rgba(176,102,255,0.8)">MINERODUCTO</text>
+                    <text x="200" y="268" font-family="monospace" font-size="6" fill="rgba(255,75,85,0.9)">ANOMAL&Iacute;A EN EL DUCTO</text>
+                    <text x="160" y="16" text-anchor="middle" font-family="monospace" font-size="7.5" fill="rgba(176,102,255,0.75)" letter-spacing="1">DUCTOS &middot; V&Iacute;AS &middot; ESTRUCTURAS &middot; DAS</text>
                   </svg>
                 </div>
                 <div class="tab-panel-content">
-                  <div class="tab-content-eyebrow">Ductos · Ferrocarriles · Vialidad</div>
-                  <h3 class="tab-content-title">Mineroductos, vías férreas y túneles bajo vigilancia continua</h3>
+                  <div class="tab-content-eyebrow">Ductos · Ferrocarriles · Vialidad · Estructuras</div>
+                  <h3 class="tab-content-title">Ductos, vías y estructuras bajo vigilancia continua</h3>
                   <p class="tab-content-sub">Los cables de comunicaciones que ya recorren ductos, vías y carreteras pueden convertirse en sensores sin detener la operación.</p>
                   <ul class="tab-feature-list">
-                    <li><span class="feat-dot"></span><span><strong>Mineroductos:</strong> caracterización acústica del flujo de pulpa y detección de anomalías a lo largo del trazado.</span></li>
-                    <li><span class="feat-dot"></span><span><strong>Ferrocarriles:</strong> seguimiento de trenes, detección de anomalías en la vía e intrusión de personas o vehículos.</span></li>
-                    <li><span class="feat-dot"></span><span><strong>Túneles y carreteras:</strong> detección de desprendimientos y monitoreo de tráfico.</span></li>
+                    <li><span class="feat-dot"></span><span><strong>Mineroductos:</strong> flujo de pulpa y anomalías a lo largo del trazado.</span></li>
+                    <li><span class="feat-dot"></span><span><strong>Ferrocarriles y carreteras:</strong> seguimiento de trenes y tráfico, clasificación de vehículos, anomalías en la vía e intrusión.</span></li>
+                    <li><span class="feat-dot"></span><span><strong>Puentes, túneles y edificios:</strong> vibración de puentes, desprendimientos en túneles y monitoreo de cómo responden las estructuras ante un sismo.</span></li>
                   </ul>
                   <div class="tab-metrics-row">
                     <div class="tab-metric"><span class="tab-metric-val">>60 km</span><span class="tab-metric-lbl">Mineroducto analizado</span></div>
@@ -714,7 +731,8 @@
                     <path d="M76 56 q-4 -8 1 -14 q5 -6 0 -12 M84 56 q4 -8 -1 -14" stroke="rgba(200,210,225,0.45)" stroke-width="1.3"/>
                     <path d="M238 112 L262 103 L270 116 L246 125 Z" fill="rgba(255,176,32,0.3)" stroke="rgba(255,176,32,0.85)" stroke-width="1.3"/>
                     <path d="M248 104 L236 110 M236 110 l3 -4 M236 110 l4 1" stroke="rgba(255,176,32,0.85)" stroke-width="1.3"/>
-                    <path d="M0 157 L140 157 L190 157 Q250 121 320 99" stroke="rgba(0,240,255,0.75)" stroke-width="1.8" stroke-dasharray="6 4"/>
+                    <path class="fiber-glow" d="M0 157 L140 157 L190 157 Q250 121 320 99"/><path class="fiber-core" id="fp-geo-14" d="M0 157 L140 157 L190 157 Q250 121 320 99"/><g class="fiber-pulse"><circle r="6.5" class="fiber-pulse-ring"/><circle r="2.8" class="fiber-pulse-dot"/><animateMotion dur="3.9s" begin="1.2s" repeatCount="indefinite" rotate="auto"><mpath href="#fp-geo-14"/></animateMotion></g>
+                    <line x1="0" y1="186" x2="120" y2="186" stroke="rgba(200,210,225,0.3)" stroke-width="1" stroke-dasharray="2 3"/>
                     <path d="M108 280 L178 172" stroke="rgba(255,75,85,0.45)" stroke-width="1.4" stroke-dasharray="6 3"/>
                     <path d="M118 236 A36 36 0 0 1 190 236" stroke="rgba(255,75,85,0.45)" stroke-width="1.2"/>
                     <path d="M96 236 A58 58 0 0 1 212 236" stroke="rgba(0,240,255,0.3)" stroke-width="1.2" stroke-dasharray="4 3"/>
@@ -725,11 +743,11 @@
                     <circle class="svg-pulse-ring" cx="254" cy="129" r="8" stroke="#ffb020" stroke-width="1.5" fill="none"/>
                     <circle class="svg-blink" cx="60" cy="157" r="3.5" fill="rgba(0,240,255,1)" style="animation-delay:0.2s"/>
                     <circle class="svg-blink" cx="154" cy="157" r="4" fill="rgba(0,240,255,1)" style="animation-delay:0s"/>
-                    <circle class="svg-blink" cx="210" cy="148" r="3.5" fill="rgba(0,240,255,1)" style="animation-delay:0.4s"/>
                     <circle class="svg-blink" cx="300" cy="105" r="3.5" fill="rgba(0,240,255,1)" style="animation-delay:0.6s"/>
                     <text x="80" y="24" text-anchor="middle" font-family="monospace" font-size="6.5" fill="rgba(200,210,225,0.8)">VOLC&Aacute;N</text>
                     <text x="262" y="92" text-anchor="middle" font-family="monospace" font-size="6" fill="rgba(255,176,32,0.9)">DESLIZAMIENTO</text>
-                    <text x="8" y="174" font-family="monospace" font-size="6.5" fill="rgba(0,240,255,0.75)">FIBRA EXISTENTE &middot; DAS</text>
+                    <text x="8" y="174" font-family="monospace" font-size="6.5" fill="rgba(0,240,255,0.75)">FIBRA &Oacute;PTICA &middot; DAS</text>
+                    <text x="8" y="196" font-family="monospace" font-size="6" fill="rgba(200,210,225,0.6)">SUELO &middot; Vs30</text>
                     <text x="166" y="256" font-family="monospace" font-size="6.5" fill="rgba(255,75,85,0.9)">SISMO</text>
                     <text x="182" y="186" font-family="monospace" font-size="6" fill="rgba(255,75,85,0.7)">FALLA</text>
                     <text x="160" y="12" text-anchor="middle" font-family="monospace" font-size="7.5" fill="rgba(0,240,255,0.7)" letter-spacing="1">SISMOS &middot; VOLCANES &middot; DESLIZAMIENTOS</text>
@@ -737,12 +755,12 @@
                 </div>
                 <div class="tab-panel-content">
                   <div class="tab-content-eyebrow">Geofísica · Alerta Temprana</div>
-                  <h3 class="tab-content-title">Sismos, volcanes y deslizamientos vigilados con fibra existente</h3>
+                  <h3 class="tab-content-title">Sismos, volcanes y deslizamientos vigilados con fibra óptica</h3>
                   <p class="tab-content-sub">Chile es uno de los países más sísmicos y volcánicos del mundo. Con DAS, la fibra óptica que ya existe, incluida la fibra oscura de telecomunicaciones, se convierte en una red densa de sensores para vigilar peligros geológicos.</p>
                   <ul class="tab-feature-list">
-                    <li><span class="feat-dot"></span><span><strong>Sismos:</strong> registro de ondas P y S a lo largo de decenas de kilómetros de fibra, como el sismo Mw 4.6 registrado en Patache.</span></li>
-                    <li><span class="feat-dot"></span><span><strong>Volcanes:</strong> registro de microsismicidad y emanación de gases, como en el Cordón Caulle.</span></li>
-                    <li><span class="feat-dot"></span><span><strong>Deslizamientos:</strong> alerta temprana de remociones en masa en laderas y taludes.</span></li>
+                    <li><span class="feat-dot"></span><span><strong>Sismos:</strong> ondas P y S a lo largo de decenas de kilómetros de fibra, como el sismo Mw 4.6 registrado en Patache.</span></li>
+                    <li><span class="feat-dot"></span><span><strong>Volcanes y deslizamientos:</strong> microsismicidad y emanación de gases, como en el Cordón Caulle, y alerta temprana de remociones en masa.</span></li>
+                    <li><span class="feat-dot"></span><span><strong>Suelos:</strong> perfiles de velocidad de onda S (Vs30) para la clasificación sísmica del suelo.</span></li>
                   </ul>
                   <div class="tab-metrics-row">
                     <div class="tab-metric"><span class="tab-metric-val">Mw 4.6</span><span class="tab-metric-lbl">Sismo registrado en Patache</span></div>
@@ -801,9 +819,9 @@
             <p class="partner-desc">
               Colaboraci&oacute;n t&eacute;cnica para el acceso a datos y pruebas piloto de monitoreo ac&uacute;stico en mineroductos y faena minera de alta cordillera, validando el comportamiento &oacute;ptico en condiciones operativas extremas.
             </p>
-            <span class="partner-link" style="color: var(--fg-2);">
-              <span>Colaboraci&oacute;n en faena</span>
-            </span>
+            <a class="partner-link" href="https://www.collahuasi.cl/" target="_blank" rel="noopener">
+              <span>collahuasi.cl</span> <span class="arr">&rarr;</span>
+            </a>
           </div>
 
           <!-- Partner 4: Depto Geofísica U. de Chile -->
@@ -932,7 +950,7 @@
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 7L2 7"/></svg>
                 </div>
                 <div>
-                  <strong style="display:block; color:#fff; font-size:14px;">Correo Directo</strong>
+                  <strong style="display:block; color:#fff; font-size:14px;">Correo</strong>
                   <a href="mailto:contacto@fiberandes.cl" style="color:var(--cyan); text-decoration:none;">contacto@fiberandes.cl</a>
                 </div>
               </div>
@@ -942,7 +960,7 @@
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
                 </div>
                 <div>
-                  <strong style="display:block; color:#fff; font-size:14px;">Presencia &amp; Coordinaci&oacute;n en Terreno</strong>
+                  <strong style="display:block; color:#fff; font-size:14px;">Ubicaci&oacute;n</strong>
                   <span style="color:var(--fg-1);">Base en San Felipe &middot; despliegues en todo Chile</span>
                 </div>
               </div>
@@ -964,6 +982,8 @@
             <input type="hidden" name="_subject" value="Solicitud de piloto desde FiberAndes.cl">
             <input type="hidden" name="_template" value="table">
             <input type="hidden" name="_captcha" value="false">
+            <!-- FormSubmit honeypot: bots fill it, people never see it -->
+            <input type="text" name="_honey" class="form-honeypot" tabindex="-1" autocomplete="off" aria-hidden="true">
 
             <!-- Pilot Feasibility Qualifier (3-step assessment) -->
             <div class="feasibility-box full">
@@ -980,7 +1000,7 @@
                 <button type="button" class="feasibility-chip active" data-val="mineria">Miner&iacute;a</button>
                 <button type="button" class="feasibility-chip" data-val="energia">Energ&iacute;a</button>
                 <button type="button" class="feasibility-chip" data-val="agua">Agua</button>
-                <button type="button" class="feasibility-chip" data-val="transporte">Transporte</button>
+                <button type="button" class="feasibility-chip" data-val="transporte">Transporte e infraestructura</button>
                 <button type="button" class="feasibility-chip" data-val="geo">Peligros geol&oacute;gicos</button>
               </div>
 
@@ -1001,7 +1021,7 @@
               </div>
 
               <div class="feasibility-result" id="feasibility-result-box">
-                <p class="feasibility-result-text" id="feasibility-text" aria-live="polite"></p>
+                <p class="feasibility-result-text" id="feasibility-text" aria-live="polite" data-i18n-skip></p>
                 <button type="button" class="feasibility-apply-btn" id="btn-apply-feasibility">
                   Auto-completar Formulario &darr;
                 </button>
@@ -1014,12 +1034,12 @@
             </div>
 
             <div class="form-field">
-              <label for="contact-company">Empresa / Faena / Instituci&oacute;n *</label>
+              <label for="contact-company">Empresa o instituci&oacute;n *</label>
               <input type="text" id="contact-company" name="company" required placeholder="Ej. Minera, sanitaria, el&eacute;ctrica&hellip;">
             </div>
 
             <div class="form-field">
-              <label for="contact-email">Correo Corporativo *</label>
+              <label for="contact-email">Correo *</label>
               <input type="email" id="contact-email" name="email" required placeholder="nombre@empresa.cl">
             </div>
 
@@ -1034,7 +1054,7 @@
                 <option value="Minería">Miner&iacute;a: microsismicidad, taludes y relaves</option>
                 <option value="Energía">Energ&iacute;a: cables el&eacute;ctricos, gasoductos y presas</option>
                 <option value="Agua">Agua: acueductos y embalses</option>
-                <option value="Transporte">Transporte: mineroductos, ferrocarriles y t&uacute;neles</option>
+                <option value="Transporte e infraestructura">Transporte e infraestructura: ductos, v&iacute;as, puentes y edificios</option>
                 <option value="Peligros geológicos">Peligros geol&oacute;gicos: sismos, volcanes y deslizamientos</option>
                 <option value="Otro">Otro desaf&iacute;o de monitoreo</option>
               </select>
@@ -1050,7 +1070,8 @@
                 Co-dise&ntilde;ar piloto <span class="arr">&rarr;</span>
               </button>
             </div>
-            <div id="contact-feedback" class="form-feedback" role="status" aria-live="polite" style="display:none;"></div>
+            <p class="form-privacy">Usamos tus datos solo para responder tu solicitud. No los compartimos con terceros.</p>
+            <div id="contact-feedback" class="form-feedback" role="status" aria-live="polite" style="display:none;" data-i18n-skip></div>
           </form>
         </div>
       </div>
@@ -1063,48 +1084,47 @@
       <div class="footer-top">
         <div class="footer-brand">
           <a class="brand" href="index.html" aria-label="FiberAndes Inicio">
-            <img class="logo-svg" src="assets/logo.svg?v=20261005_01" alt="FiberAndes Logo">
+            <img class="logo-svg" src="assets/logo-static.svg?v=20261005_03" alt="FiberAndes Logo">
           </a>
           <p>
-            Primera startup chilena de Distributed Fiber Optic Sensing (DFOS / DAS). Monitoreo continuo, en tiempo real y sin puntos ciegos para la gran miner&iacute;a e infraestructura cr&iacute;tica andina.
+            Detecci&oacute;n ac&uacute;stica distribuida (DAS) hecha en Chile: monitoreo continuo con fibra &oacute;ptica para miner&iacute;a, energ&iacute;a, agua, transporte y peligros geol&oacute;gicos.
           </p>
         </div>
 
         <div class="footer-cols">
           <div class="footer-col">
             <h5>Navegaci&oacute;n</h5>
-            <a href="#inicio">Inicio &amp; Equipo</a>
-            <a href="#evidencia">Evidencia en Terreno</a>
-            <a href="#pilotos">Pilotos Industriales</a>
+            <a href="#inicio">Inicio y equipo</a>
+            <a href="#evidencia">Evidencia en terreno</a>
+            <a href="#pilotos">Aplicaciones</a>
             <a href="#alianzas">Alianzas</a>
-            <a href="#roadmap">Roadmap</a>
+            <a href="#roadmap">Hoja de ruta</a>
             <a href="#contacto">Contacto</a>
           </div>
 
           <div class="footer-col">
-            <h5>Contacto Directo</h5>
+            <h5>Contacto</h5>
             <a href="mailto:contacto@fiberandes.cl">contacto@fiberandes.cl</a>
             <a href="tel:+56994290168">+56 9 9429 0168</a>
-            <a href="https://wa.me/56994290168" target="_blank" rel="noopener">WhatsApp Directo</a>
-            <a href="https://www.linkedin.com" target="_blank" rel="noopener">LinkedIn</a>
+            <a href="https://wa.me/56994290168" target="_blank" rel="noopener">WhatsApp</a>
           </div>
 
           <div class="footer-col">
-            <h5>Presencia en Chile</h5>
+            <h5>Ubicaci&oacute;n</h5>
             <p style="font-size: 13px; color: var(--fg-2); line-height: 1.6; margin: 0;">
-              Ingenier&iacute;a, modelaci&oacute;n y despliegue en terreno en todo Chile.
+              Base en San Felipe. Despliegues en todo Chile.
             </p>
           </div>
         </div>
       </div>
 
       <div class="footer-bot" style="flex-direction: column; gap: 8px; text-align: center; border-top: 1px solid var(--line-light); padding-top: 20px;">
-        <p style="margin: 0; font-size: 13px; color: var(--fg-2);">
-          Startup chilena co-fundada por <strong style="color: #fff;">Ver&oacute;nica Gaete Elgueta</strong> (PhD(c) Earth &amp; Space Sciences, University of Washington; MSc. F&iacute;sica U. de Chile, especialista en DAS) y <strong style="color: #fff;">Jos&eacute; Estay Herrera</strong> (Ge&oacute;logo, MSc. &middot; Universidad de Chile, especialista en peligros geol&oacute;gicos).
+        <p style="margin: 0 auto; max-width: 760px; font-family: var(--font-body); font-size: 14px; line-height: 1.6; color: var(--fg-1);">
+          Chile es un laboratorio natural de clase mundial, y varios experimentos con fibra &oacute;ptica se han hecho aqu&iacute; desde el extranjero. Creemos que el conocimiento, los datos y las capacidades tambi&eacute;n deben quedarse en Chile: por eso FiberAndes es ciencia de frontera hecha por chilenos, en colaboraci&oacute;n con el ecosistema de universidades e industrias locales.
         </p>
-        <div style="display: flex; justify-content: space-between; width: 100%; font-size: 12px; color: var(--fg-3); margin-top: 6px; flex-wrap: wrap; gap: 10px;">
-          <span>&copy; 2026 FiberAndes SpA. Todos los derechos reservados. San Felipe, Chile.</span>
-          <span>Distributed Fiber Optic Sensing &middot; Made in Chile</span>
+        <div style="display: flex; justify-content: space-between; width: 100%; font-size: 12px; color: var(--fg-muted); margin-top: 6px; flex-wrap: wrap; gap: 10px;">
+          <span>&copy; 2026 FiberAndes. Todos los derechos reservados. San Felipe, Chile.</span>
+          <span>Detecci&oacute;n ac&uacute;stica distribuida &middot; Hecho en Chile</span>
         </div>
       </div>
     </div>
@@ -1126,9 +1146,9 @@
       <button class="field-lightbox-close" id="lightbox-close-btn" aria-label="Cerrar modal">&times;</button>
       <img src="" alt="" class="field-lightbox-img" id="lightbox-modal-img">
       <div class="field-lightbox-meta">
-        <h4 id="lightbox-modal-title">Operaci&oacute;n DAS en Terreno</h4>
-        <p id="lightbox-modal-desc"></p>
-        <div class="field-lightbox-tags" id="lightbox-modal-tags"></div>
+        <h4 id="lightbox-modal-title" data-i18n-skip>Operaci&oacute;n DAS en Terreno</h4>
+        <p id="lightbox-modal-desc" data-i18n-skip></p>
+        <div class="field-lightbox-tags" id="lightbox-modal-tags" data-i18n-skip></div>
       </div>
     </div>
   </div>
@@ -1153,7 +1173,8 @@
   </script>
 
   <!-- Scripts -->
-  <script src="js/hero-canvas.js?v=20261005_05"></script>
-  <script src="js/app.js?v=20261005_08"></script>
+  <script src="js/i18n.js?v=20261005_06"></script>
+  <script src="js/hero-canvas.js?v=20261005_07"></script>
+  <script src="js/app.js?v=20261005_11"></script>
 </body>
 </html>

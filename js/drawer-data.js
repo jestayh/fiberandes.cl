@@ -20,7 +20,7 @@ const drawerData = {
       <p>El sistema inyecta pulsos de luz láser ultra-coherente con un ancho de línea espectral menor a 1 kHz. A medida que el pulso viaja a la velocidad de la luz en el núcleo de sílice (n ≈ 1.468), microscópicas inhomogeneidades naturales generan retrodispersión elástica de Rayleigh.</p>
       <p style="margin-top:12px;">Cualquier perturbación acústica, onda sísmica o vibración mecánica comprime o estira dinámicamente la fibra en fracciones de nanómetro. Esto produce un cambio de fase interferométrica que el interrogador FiberAndes demodula instantáneamente a miles de veces por segundo, georreferenciando con exactitud métrica la fuente de la vibración.</p>
       <h4 style="margin-top:20px;">Ventaja Frente a Geófonos Discretos</h4>
-      <p>A diferencia de geófonos puntuales (tipo ESI) que solo detectan en la ubicación del pozo o estación de superficie, DAS entrega una imagen continua (waterfall de distancia vs. tiempo) a lo largo de túneles, galerías o rajos, detectando eventos microsísmicos que caerían en los puntos ciegos tradicionales.</p>
+      <p>A diferencia de geófonos puntuales que solo detectan en la ubicación del pozo o estación de superficie, DAS entrega una imagen continua (waterfall de distancia vs. tiempo) a lo largo de túneles, galerías o rajos, detectando eventos microsísmicos que caerían en los puntos ciegos tradicionales.</p>
     `
   },
   dss: {

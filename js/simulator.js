@@ -1,5 +1,5 @@
 /* ============================================================
-   FIBERANDES — Interactive DFOS vs. ESI (Discrete) Simulator
+   FIBERANDES — Interactive DFOS vs. discrete geophone Simulator
    Demonstrates continuous coverage vs. dangerous discrete blind spots
    ============================================================ */
 (function() {
@@ -15,7 +15,7 @@
   let eventX = 0.42; // Normalized position (0 to 1) along the 10km section
   let isDragging = false;
 
-  // Discrete ESI stations at normalized intervals: 0.1, 0.3, 0.5, 0.7, 0.9
+  // Discrete geophone stations at normalized intervals: 0.1, 0.3, 0.5, 0.7, 0.9
   const esiStations = [0.10, 0.30, 0.50, 0.70, 0.90];
   const SENSOR_RADIUS = 0.04; // Detection radius of discrete sensor (~400m on a 10km scale)
 
@@ -41,7 +41,7 @@
         badgeClass: 'detected'
       };
     } else {
-      // ESI mode: Check distance to closest discrete station
+      // Discrete mode: Check distance to closest station
       let minDist = 1;
       let closestStationIdx = -1;
       esiStations.forEach((st, idx) => {
@@ -149,7 +149,7 @@
       ctx.restore();
 
     } else {
-      // --- ESI MODE: Discrete stations with massive blind spots ---
+      // --- DISCRETE MODE: stations with massive blind spots ---
       // Faint reference line
       ctx.beginPath();
       ctx.moveTo(padX, lineY);
@@ -188,7 +188,7 @@
 
         ctx.fillStyle = '#FFB020';
         ctx.font = '9px "JetBrains Mono", monospace';
-        ctx.fillText(`ESI-${idx + 1}`, sx, lineY - 22);
+        ctx.fillText(`G-${idx + 1}`, sx, lineY - 22);
       });
 
       // Blind spot hazard zones label in between stations

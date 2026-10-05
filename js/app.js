@@ -2,6 +2,8 @@
    FIBERANDES — Application Controller & Interaction Logic
    ============================================================ */
 document.addEventListener('DOMContentLoaded', () => {
+  const T = s => (window.faI18n ? window.faI18n.t(s) : s);
+
   // 1. Sticky Navigation on Scroll
   const nav = document.querySelector('.nav');
   window.addEventListener('scroll', () => {
@@ -116,8 +118,12 @@ document.addEventListener('DOMContentLoaded', () => {
   const contactForm = document.getElementById('contact-form');
   const feedback = document.getElementById('contact-feedback');
 
-  function showFeedback(ok, text) {
+  let lastFeedback = null;
+
+  function showFeedback(ok, esText) {
     if (!feedback) return;
+    lastFeedback = { ok, esText };
+    const text = T(esText);
     feedback.className = `form-feedback ${ok ? 'ok' : 'err'}`;
     feedback.replaceChildren(document.createTextNode(text));
     if (!ok) {
@@ -129,10 +135,14 @@ document.addEventListener('DOMContentLoaded', () => {
       wa.target = '_blank';
       wa.rel = 'noopener';
       wa.textContent = 'WhatsApp +56 9 9429 0168';
-      feedback.append(' Escríbenos directamente a ', mail, ' o por ', wa, '.');
+      feedback.append(` ${T('Escríbenos directamente a')} `, mail, ` ${T('o por')} `, wa, '.');
     }
     feedback.style.display = 'block';
   }
+
+  document.addEventListener('fa:langchange', () => {
+    if (lastFeedback && feedback && feedback.style.display !== 'none') showFeedback(lastFeedback.ok, lastFeedback.esText);
+  });
 
   if (contactForm) {
     const submitBtn = contactForm.querySelector('button[type="submit"]');
@@ -143,7 +153,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (feedback) feedback.style.display = 'none';
       if (submitBtn) {
         submitBtn.disabled = true;
-        submitBtn.textContent = 'Enviando...';
+        submitBtn.textContent = T('Enviando...');
       }
 
       try {
@@ -166,6 +176,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (submitBtn) {
           submitBtn.disabled = false;
           submitBtn.innerHTML = submitLabel;
+          if (window.faI18n) window.faI18n.refresh(submitBtn);
         }
       }
     });
@@ -184,11 +195,11 @@ document.addEventListener('DOMContentLoaded', () => {
   const telemetryBar = document.getElementById('optical-telemetry-bar');
 
   const trackedSections = [
-    { id: 'evidencia', km: 1.5, label: '01 · CORDÓN CAULLE' },
-    { id: 'pilotos', km: 15, label: '02 · PILOTOS & MINERÍA' },
-    { id: 'alianzas', km: 40, label: '03 · REDES & ALIANZAS' },
-    { id: 'roadmap', km: 55, label: '04 · DESPLIEGUE ROADMAP' },
-    { id: 'contacto', km: 60, label: '05 · CO-DISEÑO PILOTO' }
+    { id: 'evidencia', km: 1.5, label: '01 · EVIDENCIA EN TERRENO' },
+    { id: 'pilotos', km: 15, label: '02 · APLICACIONES' },
+    { id: 'alianzas', km: 40, label: '03 · ALIANZAS' },
+    { id: 'roadmap', km: 55, label: '04 · HOJA DE RUTA' },
+    { id: 'contacto', km: 60, label: '05 · CONTACTO' }
   ];
   const sectionEls = trackedSections.map(s => document.getElementById(s.id));
   const lastIdx = trackedSections.length - 1;
@@ -247,12 +258,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const km = cur.km + (next.km - cur.km) * frac;
 
     if (mobileProgLine) mobileProgLine.style.width = `${((idx + frac) / lastIdx) * 100}%`;
-    if (mobileOtdrSec) mobileOtdrSec.textContent = cur.label;
+    if (mobileOtdrSec) mobileOtdrSec.textContent = T(cur.label);
     if (mobileOtdrKm) mobileOtdrKm.textContent = `KM ${km.toFixed(1)} / 60 KM`;
   }
 
   window.addEventListener('scroll', updateOpticalBackbone, { passive: true });
   window.addEventListener('resize', updateOpticalBackbone);
+  document.addEventListener('fa:langchange', updateOpticalBackbone);
   updateOpticalBackbone();
 
   // 7. Field Evidence Lightbox Modal
@@ -334,7 +346,7 @@ document.addEventListener('DOMContentLoaded', () => {
       fan.setAttribute('role', expanded ? 'group' : 'button');
       fan.tabIndex = expanded ? -1 : 0;
       if (toggleBtn) {
-        toggleBtn.textContent = expanded ? 'Agrupar fotos' : 'Click para desplegar';
+        toggleBtn.textContent = T(expanded ? 'Agrupar fotos' : 'Click para desplegar');
         toggleBtn.setAttribute('aria-expanded', String(expanded));
       }
       layout();
@@ -354,6 +366,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
     if (toggleBtn) toggleBtn.addEventListener('click', () => setExpanded(!fan.classList.contains('expanded')));
     window.addEventListener('resize', layout);
+    document.addEventListener('fa:langchange', () => setExpanded(fan.classList.contains('expanded')));
     setExpanded(false);
   });
 
@@ -373,7 +386,7 @@ document.addEventListener('DOMContentLoaded', () => {
     mineria: { label: 'Minería', select: 'Minería' },
     energia: { label: 'Energía', select: 'Energía' },
     agua: { label: 'Agua', select: 'Agua' },
-    transporte: { label: 'Transporte', select: 'Transporte' },
+    transporte: { label: 'Transporte e infraestructura', select: 'Transporte e infraestructura' },
     geo: { label: 'Peligros geológicos', select: 'Peligros geológicos' }
   };
   const FIBERS = {
@@ -392,23 +405,23 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function fiberSentence(fiber) {
     if (fiber === 'instalada' || fiber === 'comunicaciones') {
-      return 'Con fibra existente, un piloto puede partir sin obras: basta acceder a un hilo libre en un extremo para conectar el interrogador.';
+      return T('Con fibra existente, un piloto puede partir sin obras: basta acceder a un hilo libre en un extremo para conectar el interrogador.');
     }
     if (fiber === 'ninguna') {
-      return 'Requiere instalar fibra; diseñamos el trazado según la geología del sitio.';
+      return T('Requiere instalar fibra; diseñamos el trazado según la geología del sitio.');
     }
-    return 'Revisamos contigo la fibra disponible en la primera reunión.';
+    return T('Revisamos contigo la fibra disponible en la primera reunión.');
   }
 
   function updateCaseSummary() {
     if (!resultText) return;
     const parts = [fiberSentence(caseState.fiber)];
     if (caseState.extent === 'e4') {
-      parts.push('Se necesitaría más de un interrogador o un despliegue por etapas.');
+      parts.push(T('Se necesitaría más de un interrogador o un despliegue por etapas.'));
     }
     resultText.replaceChildren();
     const strong = document.createElement('strong');
-    strong.textContent = `${SECTORS[caseState.sector].label} · ${EXTENTS[caseState.extent]}: `;
+    strong.textContent = `${T(SECTORS[caseState.sector].label)} · ${EXTENTS[caseState.extent]}: `;
     resultText.append(strong, parts.join(' '));
   }
 
@@ -427,12 +440,18 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
   updateCaseSummary();
+  document.addEventListener('fa:langchange', updateCaseSummary);
 
   if (applyBtn) {
     applyBtn.addEventListener('click', () => {
       if (selectApp) selectApp.value = SECTORS[caseState.sector].select;
       if (messageArea) {
-        messageArea.value = `Hola equipo FiberAndes, nos interesa evaluar un piloto de detección acústica distribuida (DAS):\n- Sector: ${SECTORS[caseState.sector].label}\n- Fibra: ${FIBERS[caseState.fiber]}\n- Extensión: ${EXTENTS[caseState.extent]}\n\nNos gustaría coordinar una reunión técnica preliminar para revisar condiciones operacionales.`;
+        messageArea.value = `${T('Hola equipo FiberAndes, nos interesa evaluar un piloto de detección acústica distribuida (DAS):')}
+- ${T('Sector')}: ${T(SECTORS[caseState.sector].label)}
+- ${T('Fibra')}: ${T(FIBERS[caseState.fiber])}
+- ${T('Extensión')}: ${EXTENTS[caseState.extent]}
+
+${T('Nos gustaría coordinar una reunión técnica preliminar para revisar condiciones operacionales.')}`;
         messageArea.focus();
         messageArea.scrollIntoView({ behavior: 'smooth', block: 'center' });
       }

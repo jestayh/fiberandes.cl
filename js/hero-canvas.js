@@ -283,7 +283,7 @@
     ui.fill();
     ui.shadowBlur = 0;
 
-    ui.font = '600 9px "JetBrains Mono", monospace';
+    ui.font = '600 9px "IBM Plex Mono", monospace';
     ui.fillStyle = 'rgba(0, 240, 255, 0.75)';
     ui.fillText('KM 0', x, y - 6);
     ui.restore();
@@ -364,8 +364,9 @@
         const fadeIn = Math.min(1, ev.labelAge / 12);
         const fadeOut = Math.max(0, 1 - Math.max(0, ev.labelAge - 120) / 50);
         ui.globalAlpha = fadeIn * fadeOut;
-        const text = `EVENTO DETECTADO · KM ${ev.km.toFixed(1)}`;
-        ui.font = '700 11px "JetBrains Mono", monospace';
+        const label = window.faI18n ? window.faI18n.t('EVENTO DETECTADO') : 'EVENTO DETECTADO';
+        const text = `${label} · KM ${ev.km.toFixed(1)}`;
+        ui.font = '700 11px "IBM Plex Mono", monospace';
         const tw = ui.measureText(text).width;
         const lx = Math.min(Math.max(ev.x - tw / 2 - 8, 8), w - tw - 24);
         const ly = ev.y - 44;

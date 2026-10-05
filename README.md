@@ -6,7 +6,7 @@ Sitio web oficial de **FiberAndes** ([www.fiberandes.cl](https://www.fiberandes.
 
 ## 🏔️ Propuesta de Valor y Ventaja Competitiva
 
-FiberAndes revoluciona la instrumentación geotécnica y estructural frente a tecnologías convencionales de sensores discretos / puntuales (**ESI**):
+FiberAndes revoluciona la instrumentación geotécnica y estructural frente a tecnologías convencionales de sensores discretos / puntuales (geófonos):
 
 * **Toda la fibra es el sensor:** Convierte un cable de fibra óptica monomodo o blindado en más de 50.000 puntos de medición virtuales continuos cada 1 metro.
 * **Cero puntos ciegos:** Detección y georreferenciación métrica de cualquier microfractura, deformación o filtración en tiempo real.
@@ -33,7 +33,7 @@ fiberandes.cl/
 │   ├── app.js               # Controlador principal, scroll reveal, menú móvil y drawer modal
 │   ├── drawer-data.js       # Fichas técnicas detalladas y física optoelectrónica
 │   ├── hero-canvas.js       # Animación interactiva en Canvas de ondas sísmicas y pulsos láser
-│   ├── simulator.js         # Simulador interactivo comparativo: DFOS vs. Sensores Discretos (ESI)
+│   ├── simulator.js         # Simulador interactivo comparativo: DFOS vs. sensores discretos (geófonos)
 │   ├── configurator.js      # Cotizador y recomendador interactivo de arquitectura DFOS
 │   └── i18n.js              # Motor bilingüe en memoria (Español / Inglés)
 └── assets/
@@ -97,5 +97,5 @@ http://localhost:8080/index.html
 
 ---
 
-© 2026 FiberAndes SpA. Todos los derechos reservados.
+© 2026 FiberAndes. Todos los derechos reservados.
 San Felipe, Chile.
