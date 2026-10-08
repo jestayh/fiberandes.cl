@@ -3078,6 +3078,35 @@ h1, h2, h3, h4, h5 {
   color: var(--emerald);
 }
 
+.roadmap-badge-next {
+  background: rgba(0, 240, 255, 0.15);
+  color: var(--cyan);
+}
+
+/* --- Como funciona --- */
+.how-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+
+.how-grid .roadmap-quarter {
+  flex-direction: column-reverse;
+  align-items: flex-start;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.how-note {
+  margin: 24px 0 0;
+  max-width: 860px;
+  font-size: 14px;
+  color: var(--fg-1);
+  line-height: 1.6;
+  border-left: 2px solid var(--amber);
+  padding-left: 14px;
+}
+
 .roadmap-title {
   font-family: var(--font-display);
   font-size: 15px;
@@ -3133,7 +3162,8 @@ h1, h2, h3, h4, h5 {
   .partners-grid {
     grid-template-columns: repeat(2, 1fr);
   }
-  .roadmap-timeline {
+  .roadmap-timeline,
+  .how-grid {
     grid-template-columns: repeat(2, 1fr);
   }
 }
@@ -3142,7 +3172,8 @@ h1, h2, h3, h4, h5 {
   .partners-grid {
     grid-template-columns: 1fr;
   }
-  .roadmap-timeline {
+  .roadmap-timeline,
+  .how-grid {
     grid-template-columns: 1fr;
   }
 }
