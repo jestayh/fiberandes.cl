@@ -3493,46 +3493,8 @@ h1, h2, h3, h4, h5 {
   text-overflow: ellipsis;
 }
 
-/* Stacked "fan" of field photos that deals out into a grid (layout set in app.js) */
-.photo-fan {
-  position: relative;
-  transition: height 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-}
-.photo-fan:not(.expanded) {
-  cursor: pointer;
-}
-.photo-fan:focus-visible {
-  outline: 2px solid var(--cyan);
-  outline-offset: 4px;
-  border-radius: 6px;
-}
-.photo-fan .field-photo-card {
-  position: absolute;
-  aspect-ratio: auto;
-  transform-origin: 50% 100%;
-  transition: left 0.5s cubic-bezier(0.16, 1, 0.3, 1), top 0.5s cubic-bezier(0.16, 1, 0.3, 1),
-              width 0.5s cubic-bezier(0.16, 1, 0.3, 1), height 0.5s cubic-bezier(0.16, 1, 0.3, 1),
-              transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.2s ease, box-shadow 0.2s ease;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.55);
-}
-.photo-fan:not(.expanded) .photo-caption-bar {
-  opacity: 0;
-}
-.photo-fan:not(.expanded) .field-photo-card:first-child .photo-caption-bar {
-  opacity: 1;
-}
-.fan-toggle {
-  background: none;
-  border: none;
-  padding: 0;
-  font-family: var(--font-mono);
-  font-size: 10px;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--fg-2);
-}
-.fan-toggle:hover {
-  color: var(--cyan);
+.field-photos-grid.quad {
+  grid-template-columns: repeat(2, 1fr);
 }
 
 .field-photos-grid.single {
