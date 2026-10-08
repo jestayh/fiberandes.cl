@@ -2974,6 +2974,18 @@ h1, h2, h3, h4, h5 {
   margin-top: 32px;
 }
 
+@media (min-width: 1081px) {
+  .partners-grid {
+    grid-template-columns: repeat(6, 1fr);
+  }
+  .partners-grid > .partner-card {
+    grid-column: span 2;
+  }
+  .partners-grid > .partner-card:nth-child(4) {
+    grid-column: 2 / span 2;
+  }
+}
+
 .partner-card {
   background: rgba(13, 22, 39, 0.55);
   border: 1px solid var(--line-light);
@@ -3029,6 +3041,14 @@ h1, h2, h3, h4, h5 {
 
 .partner-link:hover {
   text-decoration: underline;
+}
+
+.partner-link-static {
+  color: var(--fg-2);
+}
+
+.partner-link-static:hover {
+  text-decoration: none;
 }
 
 /* --- Roadmap 2026 - 2027 --- */
