@@ -195,6 +195,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const telemetryBar = document.getElementById('optical-telemetry-bar');
 
   const trackedSections = [
+    { id: 'como-funciona', km: 0.5, label: '00 · CÓMO FUNCIONA' },
     { id: 'evidencia', km: 1.5, label: '01 · EVIDENCIA EN TERRENO' },
     { id: 'pilotos', km: 15, label: '02 · APLICACIONES' },
     { id: 'alianzas', km: 40, label: '03 · ALIANZAS' },
