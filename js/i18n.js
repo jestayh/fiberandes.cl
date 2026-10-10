@@ -367,7 +367,18 @@
       "Nos gustaría coordinar una reunión técnica preliminar para revisar condiciones operacionales.": "We would like to schedule a preliminary technical meeting to review operating conditions.",
       "EVENTO DETECTADO": "EVENT DETECTED",
       "y": "and",
-      "Caso de estudio: monitorear un nivel nuevo con fibra en sondajes": "Case study: monitoring a new mine level with fibre in boreholes"
+      "Caso de estudio: monitorear un nivel nuevo con fibra en sondajes": "Case study: monitoring a new mine level with fibre in boreholes",
+      "Caso 3D": "3D case",
+      "Nuevo": "New",
+      "Red sísmica actual: el nivel nuevo queda mal cubierto": "Current seismic network: the new level is poorly covered",
+      "Red más fibra en sondajes: el nivel nuevo queda bien cubierto": "Network plus fibre in boreholes: the new level is well covered",
+      "Antes: red actual": "Before: current network",
+      "Después: red + fibra": "After: network + fibre",
+      "Nuevo · Caso de estudio 3D": "New · 3D case study",
+      "¿Cómo monitorear un nivel nuevo antes de excavarlo?": "How do you monitor a new mine level before it is excavated?",
+      "error de ubicación de sismos en el nivel nuevo, al sumar fibra en sondajes a la red": "event location error at the new level, adding fibre in boreholes to the network",
+      "Explore un modelo 3D interactivo de una mina de block caving: compare la red sísmica actual con fibra en sondajes nuevos o existentes.": "Explore an interactive 3D model of a block-caving mine: compare the current seismic network with fibre in new or existing boreholes.",
+      "Explorar el modelo 3D": "Explore the 3D model"
   };
   // extra page dictionaries (e.g. js/caso-i18n.js), loaded before this file
   Object.assign(EN, window.FA_EN_EXTRA || {});

@@ -3851,3 +3851,45 @@ h1, h2, h3, h4, h5 {
 
 
 
+
+
+/* ============================================================
+   Case study teaser (Aplicaciones) and "Nuevo" badge in the nav
+   ============================================================ */
+.case-teaser {
+  display: grid; grid-template-columns: 1.25fr 1fr; gap: 0; margin-top: 36px;
+  border: 1px solid var(--line-strong); border-radius: var(--r-lg); overflow: hidden;
+  background: var(--bg-card); color: inherit; text-decoration: none;
+  box-shadow: 0 0 40px var(--cyan-dim); transition: transform .25s ease, box-shadow .25s ease;
+}
+.case-teaser:hover { transform: translateY(-3px); box-shadow: 0 0 60px var(--cyan-glow); }
+.case-teaser-media { position: relative; aspect-ratio: 1080 / 640; background: #060911; }
+.ct-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.ct-after, .ct-label-after { animation: ct-swap 7s ease-in-out infinite; }
+.ct-label-before { animation: ct-swap-rev 7s ease-in-out infinite; }
+.ct-label {
+  position: absolute; left: 14px; top: 14px; padding: 5px 10px; border-radius: 6px;
+  font: 600 13px var(--font-body); background: rgba(6, 9, 17, 0.85); border: 1px solid var(--line-strong);
+}
+.ct-label-after { color: #060911; background: var(--cyan); border-color: var(--cyan); }
+@keyframes ct-swap { 0%, 38% { opacity: 0; } 50%, 88% { opacity: 1; } 100% { opacity: 0; } }
+@keyframes ct-swap-rev { 0%, 38% { opacity: 1; } 50%, 88% { opacity: 0; } 100% { opacity: 1; } }
+@media (prefers-reduced-motion: reduce) {
+  .ct-after, .ct-label-after { animation: none; opacity: 1; }
+  .ct-label-before { animation: none; opacity: 0; }
+}
+.case-teaser-body { padding: 28px 30px; display: flex; flex-direction: column; gap: 14px; justify-content: center; }
+.ct-eyebrow { font: 600 12px var(--font-mono); letter-spacing: .12em; text-transform: uppercase; color: var(--emerald); }
+.ct-title { font: 700 clamp(20px, 2.4vw, 26px)/1.25 var(--font-display); color: var(--fg); margin: 0; }
+.ct-stat { display: flex; flex-direction: column; gap: 4px; }
+.ct-stat-val { font: 700 clamp(28px, 3.6vw, 40px) var(--font-display); color: var(--cyan); }
+.ct-stat-lbl { font-size: 13px; color: var(--fg-2); }
+.ct-text { color: var(--fg-1); font-size: 15px; line-height: 1.6; margin: 0; }
+.case-teaser .btn { align-self: flex-start; }
+@media (max-width: 860px) { .case-teaser { grid-template-columns: 1fr; } }
+
+.nav-new { display: inline-flex; align-items: center; gap: 6px; }
+.badge-new {
+  font: 700 10px var(--font-mono); letter-spacing: .08em; text-transform: uppercase;
+  color: #060911; background: var(--emerald); padding: 2px 6px; border-radius: 999px;
+}
