@@ -6,6 +6,7 @@
 (function () {
   const EN = {
       "FiberAndes — Distributed Fiber Optic Sensing (DFOS / DAS) en Chile": "FiberAndes — Distributed Fiber Optic Sensing (DFOS / DAS) in Chile",
+      "FiberAndes — Fibra óptica como sensor (DAS) en Chile": "FiberAndes — Optical fiber as a sensor (DAS) in Chile",
       "FiberAndes Inicio": "FiberAndes home",
       "Menú principal": "Main menu",
       "Inicio y equipo": "Home & team",
