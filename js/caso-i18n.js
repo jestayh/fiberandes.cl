@@ -73,10 +73,11 @@ window.FA_EN_EXTRA = Object.assign(window.FA_EN_EXTRA || {}, {
   "Mw −1,16": "Mw −1.16", "Mw −0,88": "Mw −0.88", "Mw −1,20": "Mw −1.20", "Mw −0,94": "Mw −0.94",
   "Mw −1,30": "Mw −1.30", "Mw −1,02": "Mw −1.02", "Mw −0,95": "Mw −0.95", "Mw −1,36": "Mw −1.36",
   "Mw −1,17": "Mw −1.17", "Mw −1,92": "Mw −1.92", "Mw −1,78": "Mw −1.78",
+  "Mw −1,21": "Mw −1.21", "Mw −1,31": "Mw −1.31", "Mw −1,91": "Mw −1.91",
   "Una diferencia de 0,2 en magnitud equivale a registrar alrededor de 1,6 veces más sismos. Con el equipo de menor ruido (1 pε/√Hz), la detección mejora en casi 0,8 unidades: unas 6 veces más sismos.":
     "A difference of 0.2 in magnitude means recording about 1.6 times more events. With the lowest-noise equipment (1 pε/√Hz), detection improves by almost 0.8 units: about 6 times more events.",
   "¿Y con geófonos en los mismos sondajes?": "What about geophones in the same boreholes?",
-  "En precisión de ubicación, una sarta de geófonos y la fibra rinden parecido en los mismos sondajes. La fibra detecta sismos algo más chicos, y suma ventajas que estos mapas no miden.":
+  "En precisión de ubicación, una cadena de geófonos y la fibra rinden parecido en los mismos sondajes. La fibra detecta sismos algo más chicos, y suma ventajas que estos mapas no miden.":
     "In location accuracy, a geophone string and the fibre perform similarly in the same boreholes. The fibre detects somewhat smaller events, and adds advantages these maps do not measure.",
   "Con la práctica típica (3 geófonos por sondaje), la fibra de 5 pε/√Hz tiene 4–6 m menos de error y detecta unas 0,2 unidades de magnitud más abajo. Con 6 geófonos por sondaje, el tope práctico, la diferencia se reduce a 2–3 m. Lo que limita la precisión es el modelo de velocidades, que afecta igual a todos los sensores de un mismo sondaje.":
     "With typical practice (3 geophones per borehole), the 5 pε/√Hz fibre has 4–6 m less error and detects about 0.2 magnitude units lower. With 6 geophones per borehole, the practical maximum, the difference shrinks to 2–3 m. What limits accuracy is the velocity model, which affects all the sensors in one borehole alike.",
@@ -135,6 +136,50 @@ window.FA_EN_EXTRA = Object.assign(window.FA_EN_EXTRA || {}, {
   "New Afton:": "New Afton:",
   "la fibra mejorada da una señal unas 10 veces mayor (+20 dB) que la estándar (Bellefleur et al. 2020).": "enhanced fibre gives a signal about 10 times larger (+20 dB) than standard fibre (Bellefleur et al. 2020).",
   "Por eso el primer paso de un piloto es medir el ruido real en la mina.": "That is why the first step of a pilot is to measure the actual noise in the mine.",
+  "La red está en los niveles de producción y transporte, 230 a 270 m sobre el nivel nuevo. La fibra, cementada en tres sondajes perforados desde el nivel de transporte, atraviesa el nivel nuevo antes de que se excave.":
+    "The network sits on the production and haulage levels, 230 to 270 m above the new level. The fibre, grouted in three boreholes drilled from the haulage level, crosses the new level before it is excavated.",
+  "Error de ubicación de un sismo Mw −0,5 en la planta del nivel nuevo (2200 m). La línea punteada marca su huella, los puntos blancos son los sensores de la red y las líneas cyan, los sondajes con fibra, con el punto donde cruzan el nivel.":
+    "Location error of an Mw −0.5 event on the plan of the new level (2200 m). The dashed line marks its footprint, the white dots are the network sensors and the cyan lines the fibre boreholes, with the point where they cross the level.",
+  "Cada fila es una configuración. El punto lleno es el nivel nuevo y el punto vacío, 200 m más abajo: cuanto más corta la barra, menos empeora en profundidad.":
+    "Each row is one configuration. The filled dot is the new level and the hollow dot 200 m deeper: the shorter the bar, the less it degrades with depth.",
+  "La mejor estación (E5) está cerca del centro del nivel nuevo. La etapa 1 usa uno de sus sondajes y la etapa 2 suma otros dos en direcciones distintas.":
+    "The best station (E5) is near the centre of the new level. Stage 1 uses one of its boreholes and stage 2 adds two more in different directions.",
+  "Con fibra de 1 pε/√Hz se detectan sismos unas 0,75 unidades de magnitud más chicos que con la red sola. Con 10 pε/√Hz, la fibra detecta lo mismo que 6 geófonos por sondaje en el nivel nuevo y, 200 m más abajo, apenas mejora la red.":
+    "With 1 pε/√Hz fibre, events about 0.75 magnitude units smaller are detected than with the network alone. With 10 pε/√Hz, the fibre detects the same as 6 geophones per borehole on the new level and, 200 m deeper, barely improves on the network.",
+  "Con los mismos tres sondajes, la fibra registra unas 35 veces más rayos que una cadena de geófonos. Los canales vecinos ven la roca por caminos casi iguales, así que no mejoran la ubicación en esa proporción, pero son la materia prima de la tomografía que corrige el modelo de velocidades.":
+    "In the same three boreholes, the fibre records about 35 times more rays than a geophone string. Neighbouring channels see the rock along nearly the same paths, so they do not improve location in that proportion, but they are the raw material for the tomography that corrects the velocity model.",
+  "Ubicar sismos es solo el primer uso": "Locating events is only the first use",
+  "Una vez cementada, la fibra queda en la roca por años. El mismo cable puede entregar mucho más que la ubicación de sismos, con el mismo interrogador o con otro.":
+    "Once grouted, the fibre stays in the rock for years. The same cable can deliver much more than event locations, with the same interrogator or another one.",
+  "Medido en minas": "Measured in mines",
+  "Probado en otras industrias": "Proven in other industries",
+  "En investigación": "Research stage",
+  "Aviso antes de que llegue la cavidad": "Warning before the cave arrives",
+  "En una mina de hundimiento, la fibra de un sondaje al costado de la cavidad registró deformación creciente antes de cortarse, con tiempo para activar protocolos de seguridad (Anderson y Parker 2024). En una mina de hundimiento por subniveles, la deformación medida en sondajes de más de 300 m siguió el avance del techo de la cavidad (John y Hoehn 2024).":
+    "In a block cave mine, the fibre in a borehole beside the cave recorded rising strain before it was cut, with time to trigger safety protocols (Anderson and Parker 2024). In a sublevel caving mine, strain measured in boreholes over 300 m long tracked the advance of the cave back (John and Hoehn 2024).",
+  "Cambios de esfuerzo en el macizo": "Stress changes in the rock mass",
+  "En Onaping Depth, la señal de baja frecuencia de la fibra subió con fuerza mientras se excavaba una chimenea a través de una zona de falla, y bajó cuando la excavación la atravesó: refleja cómo se acumulan y liberan esfuerzos en la roca (Dande et al. 2024).":
+    "At Onaping Depth, the fibre's low-frequency signal rose sharply while a raise was excavated through a fault zone, and dropped once the excavation broke through: it reflects how stress builds up and is released in the rock (Dande et al. 2024).",
+  "Control de tronaduras": "Blast control",
+  "En una tronadura de 176 tiros, la fibra instalada en dos sondajes distinguió tiros separados por 25 ms e identificó los que fallaron. Sirve para comparar cada tronadura con su diseño (Anderson y Parker 2024).":
+    "In a 176-hole blast, the fibre installed in two boreholes separated shots 25 ms apart and identified the misfires. It allows each blast to be compared with its design (Anderson and Parker 2024).",
+  "Imágenes del macizo": "Images of the rock mass",
+  "En New Afton y en Kylylahti, la fibra en sondajes subterráneos registró disparos sísmicos con los que se obtuvieron imágenes de fallas, contactos y del cuerpo mineralizado (Bellefleur et al. 2020; Riedel et al. 2018).":
+    "At New Afton and Kylylahti, fibre in underground boreholes recorded seismic shots that produced images of faults, contacts and the orebody (Bellefleur et al. 2020; Riedel et al. 2018).",
+  "Seguir el preacondicionamiento": "Tracking preconditioning",
+  "La fibra en sondajes existentes permitiría mapear las fracturas hidráulicas del preacondicionamiento, como se hace en petróleo y gas (Anderson y Parker 2024; Staněk et al. 2022). En una mina ya se midieron bandas de deformación que coinciden con campañas de preacondicionamiento (John y Hoehn 2024).":
+    "Fibre in existing boreholes would allow the hydraulic fractures of preconditioning to be mapped, as is done in oil and gas (Anderson and Parker 2024; Staněk et al. 2022). In one mine, strain bands matching preconditioning campaigns have already been measured (John and Hoehn 2024).",
+  "Temperatura y agua": "Temperature and water",
+  "Con un interrogador de temperatura, la misma fibra detecta filtraciones, como ya se hace en presas (Anderson y Parker 2024). En una mina, podría avisar del ingreso de agua al sector en producción.":
+    "With a temperature interrogator, the same fibre detects seepage, as is already done in dams (Anderson and Parker 2024). In a mine, it could warn of water entering the production area.",
+  "Monitoreo con ruido ambiental": "Ambient noise monitoring",
+  "El ruido de equipos y ventilación sirve como fuente para caracterizar la roca alrededor del sondaje, sin disparos (Li et al. 2022, en geotermia). Repetido en el tiempo, podría mostrar cómo se daña la roca antes de que llegue la cavidad. Es la técnica que usamos en volcanes.":
+    "Noise from equipment and ventilation serves as a source to characterise the rock around the borehole, without shots (Li et al. 2022, in geothermal). Repeated over time, it could show how the rock is damaged before the cave arrives. It is the technique we use on volcanoes.",
+  "Tomografía con los sismos de la mina": "Tomography with the mine's own events",
+  "Los miles de rayos que registra la fibra permiten corregir el modelo de velocidades, y con un modelo mejor todos los sensores ubican mejor (Furlong y Anderson 2026).":
+    "The thousands of rays recorded by the fibre help correct the velocity model, and with a better model every sensor locates better (Furlong and Anderson 2026).",
+  "Por eso un sondaje con fibra sirve para varias cosas a la vez. El piloto parte por la ubicación de sismos porque es lo más fácil de comparar con la red que ya existe.":
+    "That is why a borehole with fibre serves several purposes at once. The pilot starts with event location because it is the easiest to compare with the existing network.",
   "Límites del estudio": "Limits of the study",
   "Es un modelo conceptual: muestra tendencias y ordena opciones, pero las cifras exactas de una mina real dependen de su geometría, su red y su ruido.":
     "It is a conceptual model: it shows trends and ranks options, but the exact figures for a real mine depend on its geometry, its network and its noise.",
