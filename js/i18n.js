@@ -378,7 +378,13 @@
       "¿Cómo monitorear un nivel nuevo antes de excavarlo?": "How do you monitor a new mine level before it is excavated?",
       "error de ubicación de sismos en el nivel nuevo, al sumar fibra en sondajes a la red": "event location error at the new level, adding fibre in boreholes to the network",
       "Explore un modelo 3D interactivo de una mina de block caving: compare la red sísmica actual con fibra en sondajes nuevos o existentes.": "Explore an interactive 3D model of a block-caving mine: compare the current seismic network with fibre in new or existing boreholes.",
-      "Explorar el modelo 3D": "Explore the 3D model"
+      "Explorar el modelo 3D": "Explore the 3D model",
+      "Hoja de Ruta": "Roadmap",
+      "Paso 1": "Step 1", "Paso 2": "Step 2", "Paso 3": "Step 3", "Paso 4": "Step 4", "Paso 5": "Step 5",
+      "Buscamos nuestro primer piloto en minería": "We are looking for our first mining pilot",
+      "Buscamos una faena para co-diseñar la primera prueba de concepto: fibra en sondajes nuevos o existentes, junto a la red sísmica, para medir el ruido real y validar la detección y ubicación de microsismicidad.": "We are looking for a mine site to co-design the first proof of concept: fibre in new or existing boreholes, alongside the seismic network, to measure the actual noise and validate the detection and location of microseismicity.",
+      "Ver el caso de estudio": "See the case study",
+      "EN DESARROLLO": "IN DEVELOPMENT"
   };
   // extra page dictionaries (e.g. js/caso-i18n.js), loaded before this file
   Object.assign(EN, window.FA_EN_EXTRA || {});
