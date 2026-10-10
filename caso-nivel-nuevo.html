@@ -23,7 +23,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=Sora:wght@500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/styles.css?v=20261010_01">
+  <link rel="stylesheet" href="css/styles.css?v=20261010_02">
   <style>
     .case-main { padding-top: var(--nav-h); }
     .case-main > .section-pad:first-child { padding-top: 32px; }
@@ -54,21 +54,41 @@
       <a class="brand" href="index.html" aria-label="FiberAndes Inicio">
         <img class="logo-svg" src="assets/logo.svg?v=20261005_04" alt="FiberAndes &mdash; Distributed Sensing Chile">
       </a>
-      <nav class="nav-links" role="navigation" aria-label="Menú principal">
+
+      <nav class="nav-links" role="navigation" aria-label="Men&uacute; principal">
         <a href="index.html#inicio">Inicio y equipo</a>
         <a href="index.html#evidencia">Evidencia en terreno</a>
-        <a href="index.html#pilotos">Aplicaciones</a>
+        <a href="index.html#pilotos" class="nav-new">Aplicaciones <span class="badge-new">Nuevo</span></a>
+        <a href="index.html#alianzas">Alianzas</a>
+        <a href="index.html#roadmap">Hoja de ruta</a>
         <a href="index.html#contacto">Contacto</a>
       </nav>
+
       <div class="nav-right">
         <div class="lang-toggle" role="group" aria-label="Selector de idioma">
           <button data-lang="es" class="active">ES</button>
           <button data-lang="en">EN</button>
         </div>
-        <a href="index.html#contacto" class="btn btn-primary btn-sm">Co-diseñar piloto</a>
+
+        <a href="index.html#contacto" class="btn btn-primary btn-sm">Co-dise&ntilde;ar piloto</a>
+
+        <button class="nav-toggle" aria-label="Abrir men&uacute; de navegaci&oacute;n" aria-expanded="false">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+        </button>
       </div>
     </div>
   </header>
+
+  <!-- Mobile Navigation Dropdown -->
+  <div class="mobile-nav" role="navigation" aria-label="Men&uacute; m&oacute;vil">
+    <a href="index.html#inicio">Inicio y equipo</a>
+    <a href="index.html#evidencia">Evidencia en terreno</a>
+    <a href="index.html#pilotos" class="nav-new">Aplicaciones <span class="badge-new">Nuevo</span></a>
+    <a href="index.html#alianzas">Alianzas</a>
+    <a href="index.html#roadmap">Hoja de ruta</a>
+    <a href="index.html#contacto">Contacto</a>
+    <a href="index.html#contacto" class="btn btn-primary" style="margin-top:20px;">Co-dise&ntilde;ar piloto</a>
+  </div>
 
   <main class="case-main">
     <section class="section-pad">
@@ -212,10 +232,50 @@
 
   <footer class="footer" role="contentinfo">
     <div class="wrap">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <a class="brand" href="index.html" aria-label="FiberAndes Inicio">
+            <img class="logo-svg" src="assets/logo-static.svg?v=20261005_03" alt="FiberAndes Logo">
+          </a>
+          <p>
+            Detecci&oacute;n ac&uacute;stica distribuida (DAS) hecha en Chile: monitoreo continuo con fibra &oacute;ptica para miner&iacute;a, energ&iacute;a, agua, transporte y peligros geol&oacute;gicos.
+          </p>
+        </div>
+
+        <div class="footer-cols">
+          <div class="footer-col">
+            <h5>Navegaci&oacute;n</h5>
+            <a href="index.html#inicio">Inicio y equipo</a>
+            <a href="index.html#evidencia">Evidencia en terreno</a>
+            <a href="index.html#pilotos">Aplicaciones</a>
+            <a href="index.html#alianzas">Alianzas</a>
+            <a href="index.html#roadmap">Hoja de ruta</a>
+            <a href="index.html#contacto">Contacto</a>
+          </div>
+
+          <div class="footer-col">
+            <h5>Contacto</h5>
+            <a href="mailto:contacto@fiberandes.cl">contacto@fiberandes.cl</a>
+            <a href="tel:+56994290168">+56 9 9429 0168</a>
+            <a href="https://wa.me/56994290168" target="_blank" rel="noopener">WhatsApp</a>
+          </div>
+
+          <div class="footer-col">
+            <h5>Ubicaci&oacute;n</h5>
+            <p style="font-size: 13px; color: var(--fg-2); line-height: 1.6; margin: 0;">
+              Base en San Felipe. Despliegues en todo Chile.
+            </p>
+          </div>
+        </div>
+      </div>
+
       <div class="footer-bot" style="flex-direction: column; gap: 8px; text-align: center; border-top: 1px solid var(--line-light); padding-top: 20px;">
-        <div style="display: flex; justify-content: space-between; width: 100%; font-size: 12px; color: var(--fg-muted); flex-wrap: wrap; gap: 10px;">
-          <span>© 2026 FiberAndes. Todos los derechos reservados. San Felipe, Chile.</span>
-          <span><a href="mailto:contacto@fiberandes.cl" class="ref-link">contacto@fiberandes.cl</a></span>
+        <p style="margin: 0 auto; max-width: 760px; font-family: var(--font-body); font-size: 14px; line-height: 1.6; color: var(--fg-1);">
+          Chile es un laboratorio natural de clase mundial, y varios experimentos con fibra &oacute;ptica se han hecho aqu&iacute; desde el extranjero. Creemos que el conocimiento, los datos y las capacidades tambi&eacute;n deben quedarse en Chile: por eso FiberAndes es ciencia de frontera hecha por chilenos, en colaboraci&oacute;n con el ecosistema de universidades e industrias locales.
+        </p>
+        <div style="display: flex; justify-content: space-between; width: 100%; font-size: 12px; color: var(--fg-muted); margin-top: 6px; flex-wrap: wrap; gap: 10px;">
+          <span>&copy; 2026 FiberAndes. Todos los derechos reservados. San Felipe, Chile.</span>
+          <span>Detecci&oacute;n ac&uacute;stica distribuida &middot; Hecho en Chile</span>
         </div>
       </div>
     </div>
@@ -236,6 +296,15 @@
       }
       document.addEventListener('fa:langchange', function (e) { apply(e.detail.lang); });
       document.addEventListener('DOMContentLoaded', function () { apply(window.faI18n ? window.faI18n.lang : 'es'); });
+    })();
+  </script>
+  <script>
+    // mobile menu (as js/app.js on the homepage)
+    (function () {
+      var t = document.querySelector('.nav-toggle'), m = document.querySelector('.mobile-nav');
+      if (!t || !m) return;
+      t.addEventListener('click', function () { m.classList.toggle('open'); t.setAttribute('aria-expanded', m.classList.contains('open')); });
+      m.querySelectorAll('a').forEach(function (a) { a.addEventListener('click', function () { m.classList.remove('open'); }); });
     })();
   </script>
 </body>
