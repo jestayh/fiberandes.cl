@@ -26,8 +26,8 @@ window.FA_EN_EXTRA = Object.assign(window.FA_EN_EXTRA || {}, {
   "En ese mismo proyecto, la magnitud mínima detectada pasó de Mw −2,0 a −0,7 a medida que avanzaban los túneles, y hubo que ir agregando sensores (Rodríguez et al. 2023).":
     "In the same project, the smallest detected magnitude went from Mw −2.0 to −0.7 as the tunnels advanced, and sensors had to be added along the way (Rodríguez et al. 2023).",
   "Las redes se diseñan alrededor de la infraestructura,": "Networks are designed around the infrastructure,",
-  "no del volumen que se quiere monitorear; los sensores en sondajes suelen limitarse a 4–6 por pozo (Furlong y Anderson 2026).":
-    "not around the volume to be monitored; borehole sensors are usually limited to 4–6 per hole (Furlong and Anderson 2026).",
+  "no del volumen que se quiere monitorear; suelen instalarse hasta 4 sensores por sondaje (Furlong y Anderson 2026).":
+    "not around the volume to be monitored; usually up to 4 sensors are installed per borehole (Furlong and Anderson 2026).",
   "La autoridad lo pide.": "The regulator asks for it.",
   "Tras el accidente de El Teniente en 2025, Sernageomin (2026) recomendó “reforzar el monitoreo en profundidad, acoplado a sondajes”.":
     "After the 2025 accident at El Teniente, Sernageomin (2026), Chile's mining regulator, recommended “strengthening deep monitoring, coupled to boreholes”.",
@@ -79,8 +79,8 @@ window.FA_EN_EXTRA = Object.assign(window.FA_EN_EXTRA || {}, {
   "¿Y con geófonos en los mismos sondajes?": "What about geophones in the same boreholes?",
   "En precisión de ubicación, una cadena de geófonos y la fibra rinden parecido en los mismos sondajes. La fibra detecta sismos algo más chicos, y suma ventajas que estos mapas no miden.":
     "In location accuracy, a geophone string and the fibre perform similarly in the same boreholes. The fibre detects somewhat smaller events, and adds advantages these maps do not measure.",
-  "Con la práctica típica (3 geófonos por sondaje), la fibra de 5 pε/√Hz tiene 4–6 m menos de error y detecta unas 0,2 unidades de magnitud más abajo. Con 6 geófonos por sondaje, el tope práctico, la diferencia se reduce a 2–3 m. Lo que limita la precisión es el modelo de velocidades, que afecta igual a todos los sensores de un mismo sondaje.":
-    "With typical practice (3 geophones per borehole), the 5 pε/√Hz fibre has 4–6 m less error and detects about 0.2 magnitude units lower. With 6 geophones per borehole, the practical maximum, the difference shrinks to 2–3 m. What limits accuracy is the velocity model, which affects all the sensors in one borehole alike.",
+  "Con 3 geófonos por sondaje, dentro de lo habitual en minas (de 1 a 4), la fibra de 5 pε/√Hz tiene 4–6 m menos de error y detecta unas 0,2 unidades de magnitud más abajo. Con 6 por sondaje, más de lo que se instala en la práctica, la diferencia se reduce a 2–3 m. Lo que limita la precisión es el modelo de velocidades, que afecta igual a todos los sensores de un mismo sondaje.":
+    "With 3 geophones per borehole, within the usual range in mines (1 to 4), the 5 pε/√Hz fibre has 4–6 m less error and detects about 0.2 magnitude units lower. With 6 per borehole, more than is installed in practice, the difference shrinks to 2–3 m. What limits accuracy is the velocity model, which affects all the sensors in one borehole alike.",
   "Ventajas de la fibra que no aparecen en los mapas:": "Advantages of the fibre that do not show in the maps:",
   "Sin electrónica en el fondo.": "No downhole electronics.",
   "Si el cable se corta, sigue midiendo hasta el corte; el punto de corte indica dónde se movió la roca.": "If the cable is cut, it keeps measuring up to the cut; the cut point shows where the rock moved.",
