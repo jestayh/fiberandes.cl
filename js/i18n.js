@@ -384,6 +384,7 @@
       "Buscamos nuestro primer piloto en minería": "We are looking for our first mining pilot",
       "Buscamos una faena para co-diseñar la primera prueba de concepto: fibra en sondajes nuevos o existentes, junto a la red sísmica, para medir el ruido real y validar la detección y ubicación de microsismicidad.": "We are looking for a mine site to co-design the first proof of concept: fibre in new or existing boreholes, alongside the seismic network, to measure the actual noise and validate the detection and location of microseismicity.",
       "Ver el caso de estudio": "See the case study",
+      "Ver el caso de estudio →": "See the case study →",
       "EN DESARROLLO": "IN DEVELOPMENT"
   };
   // extra page dictionaries (e.g. js/caso-i18n.js), loaded before this file

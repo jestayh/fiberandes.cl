@@ -3899,3 +3899,11 @@ h1, h2, h3, h4, h5 {
   50%      { box-shadow: 0 0 0 7px rgba(0, 255, 163, 0); opacity: 0.75; }
 }
 @media (prefers-reduced-motion: reduce) { .badge-new { animation: none; } }
+
+/* Roadmap: call to action to the case study (step 2) */
+.roadmap-cta { margin-top: 14px; align-self: flex-start; animation: cta-glow 2.4s ease-in-out infinite; }
+@keyframes cta-glow {
+  0%, 100% { box-shadow: 0 0 12px var(--cyan-glow); }
+  50%      { box-shadow: 0 0 26px rgba(0, 240, 255, 0.55); }
+}
+@media (prefers-reduced-motion: reduce) { .roadmap-cta { animation: none; } }
