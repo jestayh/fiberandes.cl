@@ -414,7 +414,10 @@
           img.alt = lang === 'en' ? img.dataset.altEn : img.dataset.altEs;
         });
       }
-      document.addEventListener('fa:langchange', function (e) { apply(e.detail.lang); });
+      // after the click has painted: reloading the 3D view blocks the page for a moment
+      document.addEventListener('fa:langchange', function (e) {
+        requestAnimationFrame(function () { setTimeout(function () { apply(e.detail.lang); }, 0); });
+      });
       document.addEventListener('DOMContentLoaded', function () { apply(window.faI18n ? window.faI18n.lang : 'es'); });
     })();
   </script>
