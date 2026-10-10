@@ -366,8 +366,11 @@
       "Extensión": "Length",
       "Nos gustaría coordinar una reunión técnica preliminar para revisar condiciones operacionales.": "We would like to schedule a preliminary technical meeting to review operating conditions.",
       "EVENTO DETECTADO": "EVENT DETECTED",
-      "y": "and"
+      "y": "and",
+      "Caso de estudio: monitorear un nivel nuevo con fibra en sondajes": "Case study: monitoring a new mine level with fibre in boreholes"
   };
+  // extra page dictionaries (e.g. js/caso-i18n.js), loaded before this file
+  Object.assign(EN, window.FA_EN_EXTRA || {});
 
   const ATTRS = ['placeholder', 'aria-label', 'alt', 'title', 'data-title', 'data-desc', 'data-tags'];
   const SKIP = '[data-i18n-skip], script, style, noscript';

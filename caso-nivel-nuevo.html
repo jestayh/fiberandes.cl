@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fibra óptica para monitorear un nivel nuevo — FiberAndes</title>
+  <meta name="description" content="Caso de estudio: una mina hipotética de block caving construye un nivel más profundo. Con fibra óptica cementada en sondajes, el nivel nuevo queda monitoreado antes de excavarlo. Modelo 3D interactivo.">
+  <meta name="author" content="FiberAndes">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://www.fiberandes.cl/caso-nivel-nuevo.html">
+
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://www.fiberandes.cl/caso-nivel-nuevo.html">
+  <meta property="og:site_name" content="FiberAndes">
+  <meta property="og:locale" content="es_CL">
+  <meta property="og:title" content="Fibra óptica para monitorear un nivel nuevo antes de excavarlo">
+  <meta property="og:description" content="Modelo 3D interactivo: la red sísmica no ve el nivel nuevo; con fibra en sondajes queda cubierto desde el primer día.">
+  <meta property="og:image" content="https://www.fiberandes.cl/images/caso/caso-nivel-nuevo.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="theme-color" content="#060911">
+
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg?v=20261005_03">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=Sora:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css?v=20261005_24">
+  <style>
+    .case-main { padding-top: var(--nav-h); }
+    .case-main > .section-pad:first-child { padding-top: 32px; }
+    .case-text { max-width: 860px; }
+    .case-text h2 { font-family: var(--font-display); font-size: clamp(22px, 3vw, 30px); color: var(--fg); margin: 56px 0 14px; }
+    .case-text p, .case-text li { color: var(--fg-1); line-height: 1.7; font-size: 16px; }
+    .case-text p { margin: 0 0 14px; }
+    .case-text ul { margin: 0 0 16px 20px; }
+    .case-text li { margin-bottom: 8px; }
+    .case-text strong { color: var(--fg); }
+    .case-text .key { color: var(--fg); font-size: 17px; }
+    .case-table-wrap { overflow-x: auto; margin: 6px 0 18px; border: 1px solid var(--line-light); border-radius: var(--r); }
+    .case-table { width: 100%; border-collapse: collapse; font-size: 14px; min-width: 520px; }
+    .case-table th, .case-table td { padding: 10px 14px; border-bottom: 1px solid var(--line-light); text-align: left; color: var(--fg-1); }
+    .case-table th { background: rgba(13, 22, 39, 0.95); font-family: var(--font-mono); font-size: 12px; letter-spacing: .05em; text-transform: uppercase; color: var(--fg-2); }
+    .case-table tr.hl td { color: var(--fg); background: var(--cyan-dim); font-weight: 600; }
+    .case-3d { width: 100%; height: min(980px, 92vh); min-height: 640px; border: 1px solid var(--line); border-radius: var(--r-lg); background: var(--bg); }
+    .case-3d-note { color: var(--fg-2); font-size: 13px; margin-top: 8px; }
+    .case-refs li { font-size: 14px; }
+    .case-cta { margin-top: 56px; padding: 28px; border: 1px solid var(--line); border-radius: var(--r-lg); background: var(--bg-card); }
+    @media (max-width: 700px) { .case-3d { min-height: 760px; height: 95vh; } }
+  </style>
+</head>
+<body>
+
+  <header class="nav" role="banner">
+    <div class="wrap">
+      <a class="brand" href="index.html" aria-label="FiberAndes Inicio">
+        <img class="logo-svg" src="assets/logo.svg?v=20261005_04" alt="FiberAndes &mdash; Distributed Sensing Chile">
+      </a>
+      <nav class="nav-links" role="navigation" aria-label="Menú principal">
+        <a href="index.html#inicio">Inicio y equipo</a>
+        <a href="index.html#evidencia">Evidencia en terreno</a>
+        <a href="index.html#pilotos">Aplicaciones</a>
+        <a href="index.html#contacto">Contacto</a>
+      </nav>
+      <div class="nav-right">
+        <div class="lang-toggle" role="group" aria-label="Selector de idioma">
+          <button data-lang="es" class="active">ES</button>
+          <button data-lang="en">EN</button>
+        </div>
+        <a href="index.html#contacto" class="btn btn-primary btn-sm">Co-diseñar piloto</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="case-main">
+    <section class="section-pad">
+      <div class="wrap">
+        <div class="section-head">
+          <span class="eyebrow"><span>Caso de estudio · Minería subterránea</span></span>
+          <h1 class="h-section">Fibra óptica para monitorear un nivel nuevo antes de excavarlo</h1>
+          <p class="lead">Cuando una mina subterránea construye un nivel más profundo, su red sísmica queda arriba y no ve bien lo que pasa abajo. Con fibra óptica cementada en sondajes perforados antes de excavar, el nivel nuevo queda monitoreado desde el primer día. Lo mostramos con un modelo 3D de una mina hipotética de block caving.</p>
+        </div>
+
+        <iframe id="case-3d" class="case-3d" src="caso/mina-hipotetica-3d.html" loading="lazy"
+                title="Modelo 3D interactivo de la mina hipotética"></iframe>
+        <p class="case-3d-note">Use los botones <strong>Antes</strong> y <strong>Después</strong> para comparar la red actual con la red más la fibra. El modelo se gira y se acerca con el mouse o con los dedos. <a id="case-3d-full" class="ref-link" href="caso/mina-hipotetica-3d.html" target="_blank" rel="noopener">Abrir en pantalla completa</a></p>
+
+        <div class="case-text">
+          <h2>El problema: los sensores llegan después que los túneles</h2>
+          <p>Las redes sísmicas de las minas se instalan en las galerías que ya existen. Cuando se excava un nivel nuevo, la red queda arriba y la zona en construcción queda mal cubierta justo cuando más se necesita.</p>
+          <ul>
+            <li><strong>Es donde ocurren los estallidos.</strong> El desarrollo de túneles profundos en roca de alto esfuerzo concentra los estallidos de roca: en el proyecto Andes Norte de El Teniente se registraron siete durante la construcción de sus túneles de acceso (Rodríguez et al. 2026).</li>
+            <li><strong>La red pierde sensibilidad mientras se avanza.</strong> En ese mismo proyecto, la magnitud mínima detectada pasó de Mw −2,0 a −0,7 a medida que avanzaban los túneles, y hubo que ir agregando sensores (Rodríguez et al. 2023).</li>
+            <li><strong>Las redes se diseñan alrededor de la infraestructura,</strong> no del volumen que se quiere monitorear; los sensores en sondajes suelen limitarse a 4–6 por pozo (Furlong y Anderson 2026).</li>
+            <li><strong>La autoridad lo pide.</strong> Tras el accidente de El Teniente en 2025, Sernageomin (2026) recomendó “reforzar el monitoreo en profundidad, acoplado a sondajes”.</li>
+          </ul>
+          <p>La buena práctica es instalar sensores en sondajes largos antes de excavar (Butler y Simser 2018). La fibra óptica permite hacerlo con cientos de puntos de medición por sondaje y sin electrónica en el fondo.</p>
+
+          <h2>La mina modelo</h2>
+          <p>Es una mina hipotética de block caving, construida con parámetros publicados; no representa ninguna mina real.</p>
+          <div class="case-table-wrap"><table class="case-table">
+            <thead><tr><th>Elemento</th><th>En el modelo</th></tr></thead>
+            <tbody>
+              <tr><td>Cavidad</td><td>Una cavidad en producción desde 2500 m hasta un cráter de subsidencia en superficie</td></tr>
+              <tr><td>Red sísmica</td><td>100 sensores en los niveles de producción (2470 m), transporte (2430 m) y perimetral (2700 m), con la sensibilidad de una red real de la región (Mw −1,1)</td></tr>
+              <tr><td>Nivel nuevo</td><td>En construcción a 2200 m, 300 m bajo el actual, sin sensores</td></tr>
+              <tr><td>Piloto de fibra</td><td>3 sondajes de 900 m desde el nivel de transporte, en abanico a 30° bajo la horizontal, con fibra cementada y un solo interrogador</td></tr>
+            </tbody>
+          </table></div>
+
+          <h2>Qué muestran los mapas</h2>
+          <p class="key">Con la fibra, el error de ubicación en el nivel nuevo baja a la mitad (de 27 a 13 m) y la red detecta sismos más chicos; 200 m más abajo, donde la red ya casi no ubica nada, la fibra deja el error en 22 m.</p>
+          <p>Los mapas siguen el formato estándar de los reportes de diseño de redes sísmicas de mina (por ejemplo, Zvarivadza et al. 2017):</p>
+          <ul>
+            <li><strong>Sensibilidad:</strong> magnitud del sismo más chico que registran al menos 5 sitios. Más negativo es mejor.</li>
+            <li><strong>Precisión:</strong> error de ubicación de un sismo Mw −0,5, con errores de lectura de 2 ms (onda P) y 5 ms (onda S) y un 5 % de error en el modelo de velocidades.</li>
+          </ul>
+          <p>Valores medianos bajo la mina:</p>
+          <div class="case-table-wrap"><table class="case-table">
+            <thead><tr><th>Caso</th><th>Nivel nuevo (2200 m): sensibilidad</th><th>Nivel nuevo: error</th><th>2000 m: sensibilidad</th><th>2000 m: error</th></tr></thead>
+            <tbody>
+              <tr><td>Red actual</td><td>Mw −1,16</td><td>27 m</td><td>Mw −0,88</td><td>56 m</td></tr>
+              <tr><td>Red + 3 geófonos por sondaje</td><td>Mw −1,20</td><td>17 m</td><td>Mw −0,94</td><td>28 m</td></tr>
+              <tr><td>Red + 6 geófonos por sondaje</td><td>Mw −1,30</td><td>15 m</td><td>Mw −1,02</td><td>25 m</td></tr>
+              <tr><td>Red + fibra, 10 pε/√Hz</td><td>Mw −1,30</td><td>15 m</td><td>Mw −0,95</td><td>25 m</td></tr>
+              <tr class="hl"><td>Red + fibra, 5 pε/√Hz</td><td>Mw −1,36</td><td>13 m</td><td>Mw −1,17</td><td>22 m</td></tr>
+              <tr><td>Red + fibra, 1 pε/√Hz</td><td>Mw −1,92</td><td>12 m</td><td>Mw −1,78</td><td>18 m</td></tr>
+            </tbody>
+          </table></div>
+          <p>Una diferencia de 0,2 en magnitud equivale a registrar alrededor de 1,6 veces más sismos. Con el equipo de menor ruido (1 pε/√Hz), la detección mejora en casi 0,8 unidades: unas 6 veces más sismos.</p>
+
+          <h2>¿Y con geófonos en los mismos sondajes?</h2>
+          <p class="key">En precisión de ubicación, una sarta de geófonos y la fibra rinden parecido en los mismos sondajes. La fibra detecta sismos algo más chicos, y suma ventajas que estos mapas no miden.</p>
+          <p>Con la práctica típica (3 geófonos por sondaje), la fibra de 5 pε/√Hz tiene 4–6 m menos de error y detecta unas 0,2 unidades de magnitud más abajo. Con 6 geófonos por sondaje, el tope práctico, la diferencia se reduce a 2–3 m. Lo que limita la precisión es el modelo de velocidades, que afecta igual a todos los sensores de un mismo sondaje.</p>
+          <p>Ventajas de la fibra que no aparecen en los mapas:</p>
+          <ul>
+            <li><strong>Sin electrónica en el fondo.</strong> Si el cable se corta, sigue midiendo hasta el corte; el punto de corte indica dónde se movió la roca.</li>
+            <li><strong>Cobertura continua.</strong> Mide en todo el largo del sondaje, no en 3 a 6 puntos.</li>
+            <li><strong>Deformación lenta.</strong> La misma fibra registra cambios de deformación de baja frecuencia, que en minas se han asociado a cambios en el estado de esfuerzos del macizo (Dande et al. 2024).</li>
+            <li><strong>Miles de rayos para tomografía,</strong> que permiten corregir el modelo de velocidades. Con un modelo mejor, todos los sensores ubican mejor (Furlong y Anderson 2026).</li>
+          </ul>
+          <p>Los geófonos tienen sus propias ventajas: registran las tres componentes del movimiento, necesarias para calcular mecanismos focales, y el software minero ya trabaja con ellos. Por eso proponemos la fibra como complemento de la red, no como reemplazo.</p>
+
+          <h2>Un piloto por etapas, con sondajes que ya existen</h2>
+          <p class="key">No hace falta perforar sondajes nuevos: con tres sondajes de exploración existentes, bien elegidos, se obtiene cerca del 90 % del beneficio del piloto diseñado.</p>
+          <p>Las minas suelen tener muchos sondajes de exploración largos que ya no se usan (Butler y Simser 2018; Anderson y Parker 2024). En el modelo simulamos 24 sondajes “heredados”, perforados en abanico desde 6 estaciones de perforación del nivel de transporte, y buscamos la mejor combinación. Error mediano de ubicación en torno al nivel nuevo, para un sismo Mw −1,0:</p>
+          <div class="case-table-wrap"><table class="case-table">
+            <thead><tr><th>Etapa</th><th>Qué se instala</th><th>Error mediano</th></tr></thead>
+            <tbody>
+              <tr><td>Hoy</td><td>Solo la red</td><td>127 m</td></tr>
+              <tr><td>1</td><td>Fibra en 1 sondaje existente de la mejor estación</td><td>62 m</td></tr>
+              <tr class="hl"><td>2</td><td>Fibra en 2 sondajes más de la misma estación (3 en total)</td><td>42 m</td></tr>
+              <tr><td>Referencia</td><td>Piloto diseñado: 3 sondajes nuevos de 900 m</td><td>33 m</td></tr>
+            </tbody>
+          </table></div>
+          <ul>
+            <li><strong>La etapa 1 sirve para medir el ruido real</strong> de la fibra en la mina. Es el dato que más condiciona el resultado.</li>
+            <li><strong>La etapa 2 agrega ángulos.</strong> Con sondajes en direcciones distintas, los sismos se ubican mejor en tres dimensiones.</li>
+            <li><strong>Conviene partir de una sola estación de perforación,</strong> cerca del centro del nivel nuevo: collares juntos, un solo interrogador y poco cable expuesto en las galerías. Las estaciones del borde rinden bastante menos (64–104 m de error con tres sondajes).</li>
+          </ul>
+          <p>Antes de elegir hay que inspeccionar los sondajes: pueden estar derrumbados, entubados o tapados. En New Afton, con sondajes de 700–870 m, la fibra se instaló por dentro de las barras de perforación y se cementó desde el fondo (Bellefleur et al. 2020).</p>
+
+          <h2>¿De qué depende?</h2>
+          <p class="key">El factor decisivo es el ruido de la fibra instalada, que depende del equipo (interrogador), del tipo de fibra y de qué tan bien queda cementada.</p>
+          <div class="case-table-wrap"><table class="case-table">
+            <thead><tr><th>Ruido</th><th>Qué representa</th></tr></thead>
+            <tbody>
+              <tr><td>1 pε/√Hz</td><td>Valor de ficha técnica de interrogadores actuales para minería, medido en laboratorio con fibra corta y bien acoplada</td></tr>
+              <tr class="hl"><td>5 pε/√Hz</td><td>Lo que esperamos en terreno con fibra mejorada bien cementada: nuestro caso principal</td></tr>
+              <tr><td>10 pε/√Hz</td><td>Caso conservador: fibra estándar o acople imperfecto</td></tr>
+            </tbody>
+          </table></div>
+          <p>La evidencia publicada en minas apunta en la misma dirección:</p>
+          <ul>
+            <li><strong>Onaping Depth (2490 m de profundidad):</strong> una fibra cementada en un sondaje de 200 m registró 107 de 120 sismos cercanos y mejoró la ubicación de la red (Dande et al. 2024).</li>
+            <li><strong>Mina a ~1500 m de profundidad:</strong> la fibra cementada en sondaje concordó con los geófonos; la fibra amarrada a la malla del túnel tuvo “utilidad muy limitada” (du Toit et al. 2022).</li>
+            <li><strong>New Afton:</strong> la fibra mejorada da una señal unas 10 veces mayor (+20 dB) que la estándar (Bellefleur et al. 2020).</li>
+          </ul>
+          <p>Por eso el primer paso de un piloto es medir el ruido real en la mina.</p>
+
+          <h2>Límites del estudio</h2>
+          <p>Es un modelo conceptual: muestra tendencias y ordena opciones, pero las cifras exactas de una mina real dependen de su geometría, su red y su ruido.</p>
+          <ul>
+            <li><strong>Mina hipotética.</strong> La geometría, la red y los sondajes existentes son sintéticos, construidos con valores publicados.</li>
+            <li><strong>Rayos rectos y errores aleatorios,</strong> como en los reportes estándar de redes sísmicas. No incluimos errores estructurados del modelo de velocidades (por ejemplo, el borde de una cavidad mal ubicado), donde la densidad de la fibra debería dar una ventaja adicional.</li>
+            <li><strong>Detección canal por canal.</strong> No modelamos el apilamiento de canales vecinos, que en la práctica mejora la detección con fibra.</li>
+            <li><strong>Solo ubicación y detección.</strong> No evaluamos magnitudes, mecanismos focales ni la medición de deformación.</li>
+            <li><strong>Instalación y costo</strong> no están modelados; dependen del estado de los sondajes y de la logística de cada mina.</li>
+          </ul>
+
+          <div class="case-cta">
+            <h2 style="margin-top:0">¿Su mina está desarrollando un nivel nuevo?</h2>
+            <p>Podemos hacer este mismo análisis con la geometría de su mina, su red sísmica y su catastro de sondajes, y diseñar un piloto por etapas.</p>
+            <a href="index.html#contacto" class="btn btn-primary">Co-diseñar un piloto</a>
+          </div>
+
+          <h2>Referencias</h2>
+          <ul class="case-refs" data-i18n-skip>
+            <li>Anderson, Z. y Parker, R. (2024). Rockmass response monitoring using DFOS. <em>MassMin 2024</em>, Kiruna, pp. 1585–1591.</li>
+            <li>Bellefleur, G. et al. (2020). Vertical seismic profiling using distributed acoustic sensing with scatter-enhanced fibre-optic cable at the Cu–Au New Afton porphyry deposit. <em>Geophysical Prospecting</em>, 68, 313–333. <a class="ref-link" href="https://doi.org/10.1111/1365-2478.12828" target="_blank" rel="noopener">doi:10.1111/1365-2478.12828</a></li>
+            <li>Butler, T. y Simser, B. (2018). Early access microseismic monitoring using sensors installed in long boreholes. <em>J. South. Afr. Inst. Min. Metall.</em>, 118, 251–257.</li>
+            <li>Dande, S. et al. (2024). Utilising distributed acoustic sensing for monitoring rock mass stress conditions in underground mining: a case study. <em>Deep Mining 2024</em>, ACG, Perth. <a class="ref-link" href="https://doi.org/10.36487/ACG_repo/2465_19" target="_blank" rel="noopener">doi:10.36487/ACG_repo/2465_19</a></li>
+            <li>du Toit, H. J., Goldswain, G. y Olivier, G. (2022). Can DAS be used to monitor mining induced seismicity? <em>Int. J. Rock Mech. Min. Sci.</em>, 155, 105127. <a class="ref-link" href="https://doi.org/10.1016/j.ijrmms.2022.105127" target="_blank" rel="noopener">doi:10.1016/j.ijrmms.2022.105127</a></li>
+            <li>Furlong, J. y Anderson, Z. (2026). Velocity model uncertainty in block cave microseismic monitoring: a case for distributed acoustic sensing. <em>Caving 2026</em>, ACG. <a class="ref-link" href="https://doi.org/10.36487/ACG_repo/2645_87" target="_blank" rel="noopener">doi:10.36487/ACG_repo/2645_87</a></li>
+            <li>Rodríguez, W., Vallejos, J. A. y Landeros, P. (2023). Seismic rock mass response to tunnel development with destress blasting in high-stress conditions. <em>Rock Mech. Rock Eng.</em>, 56, 1621–1643. <a class="ref-link" href="https://doi.org/10.1007/s00603-022-03171-5" target="_blank" rel="noopener">doi:10.1007/s00603-022-03171-5</a></li>
+            <li>Rodríguez, W., Vallejos, J. A. y Jaque, M. (2026). Methodology for the causal analysis of rockbursts in deep high-stress tunnels. <em>Applied Sciences</em>, 16, 1616. <a class="ref-link" href="https://doi.org/10.3390/app16031616" target="_blank" rel="noopener">doi:10.3390/app16031616</a></li>
+            <li>Sernageomin (2026). Informe de investigación de accidente fatal, Codelco Chile División El Teniente (accidente del 31 de julio de 2025), mayo 2026.</li>
+            <li>Zvarivadza, T., Sengani, F. y Adoko, A. C. (2017). In-stope pillar scaling and fracturing in Southern African deep level gold mines. <em>Proc. 26th Int. Symp. on Mine Planning and Equipment Selection (MPES 2017)</em>, Luleå University of Technology.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer" role="contentinfo">
+    <div class="wrap">
+      <div class="footer-bot" style="flex-direction: column; gap: 8px; text-align: center; border-top: 1px solid var(--line-light); padding-top: 20px;">
+        <div style="display: flex; justify-content: space-between; width: 100%; font-size: 12px; color: var(--fg-muted); flex-wrap: wrap; gap: 10px;">
+          <span>© 2026 FiberAndes. Todos los derechos reservados. San Felipe, Chile.</span>
+          <span><a href="mailto:contacto@fiberandes.cl" class="ref-link">contacto@fiberandes.cl</a></span>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/caso-i18n.js?v=20261010_01"></script>
+  <script src="js/i18n.js?v=20261010_01"></script>
+  <script>
+    // 3D view in the page language (Spanish / English versions), keeping its view state (#map=...)
+    (function () {
+      var frame = document.getElementById('case-3d'), full = document.getElementById('case-3d-full');
+      function src(lang) { return 'caso/mina-hipotetica-3d' + (lang === 'en' ? '-en' : '') + '.html'; }
+      function apply(lang) {
+        var hash = '';
+        try { hash = frame.contentWindow.location.hash; } catch (e) { /* not loaded yet */ }
+        if (frame.getAttribute('src').indexOf(src(lang)) !== 0) frame.setAttribute('src', src(lang) + (hash || ''));
+        full.setAttribute('href', src(lang));
+      }
+      document.addEventListener('fa:langchange', function (e) { apply(e.detail.lang); });
+      document.addEventListener('DOMContentLoaded', function () { apply(window.faI18n ? window.faI18n.lang : 'es'); });
+    })();
+  </script>
+</body>
+</html>
