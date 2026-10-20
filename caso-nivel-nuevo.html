@@ -39,7 +39,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=Sora:wght@500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/styles.css?v=20261020_01">
+  <link rel="stylesheet" href="css/styles.css?v=20261020_02">
   <style>
     .case-main { padding-top: var(--nav-h); }
     .case-main > .section-pad:first-child { padding-top: 32px; }
@@ -77,18 +77,17 @@
 </head>
 <body>
 
-  <header class="nav scrolled" role="banner">
+  <header class="nav scrolled" data-solid="true" role="banner">
     <div class="wrap">
       <a class="brand" href="index.html" aria-label="FiberAndes Inicio">
         <img class="logo-svg" src="assets/logo.svg?v=20261005_04" alt="FiberAndes &mdash; Distributed Sensing Chile">
       </a>
 
       <nav class="nav-links" role="navigation" aria-label="Men&uacute; principal">
-        <a href="index.html#inicio">Inicio y equipo</a>
-        <a href="index.html#evidencia">Evidencia en terreno</a>
-        <a href="index.html#caso-3d" class="nav-new">Aplicaciones <span class="badge-new">Nuevo</span></a>
-        <a href="index.html#alianzas">Alianzas</a>
-        <a href="index.html#roadmap">Hoja de ruta</a>
+        <a href="evidencia.html">Evidencia</a>
+        <a href="aplicaciones.html">Aplicaciones</a>
+        <a href="caso-nivel-nuevo.html" class="nav-new" aria-current="page">Caso de estudio <span class="badge-new">Nuevo</span></a>
+        <a href="nosotros.html">Nosotros</a>
         <a href="index.html#contacto">Contacto</a>
       </nav>
 
@@ -109,11 +108,10 @@
 
   <!-- Mobile Navigation Dropdown -->
   <div class="mobile-nav" role="navigation" aria-label="Men&uacute; m&oacute;vil">
-    <a href="index.html#inicio">Inicio y equipo</a>
-    <a href="index.html#evidencia">Evidencia en terreno</a>
-    <a href="index.html#caso-3d" class="nav-new">Aplicaciones <span class="badge-new">Nuevo</span></a>
-    <a href="index.html#alianzas">Alianzas</a>
-    <a href="index.html#roadmap">Hoja de ruta</a>
+    <a href="evidencia.html">Evidencia</a>
+    <a href="aplicaciones.html">Aplicaciones</a>
+    <a href="caso-nivel-nuevo.html" class="nav-new" aria-current="page">Caso de estudio <span class="badge-new">Nuevo</span></a>
+    <a href="nosotros.html">Nosotros</a>
     <a href="index.html#contacto">Contacto</a>
     <a href="index.html#contacto" class="btn btn-primary" style="margin-top:20px;">Co-dise&ntilde;ar piloto</a>
   </div>
@@ -359,11 +357,11 @@
         <div class="footer-cols">
           <div class="footer-col">
             <h5>Navegaci&oacute;n</h5>
-            <a href="index.html#inicio">Inicio y equipo</a>
-            <a href="index.html#evidencia">Evidencia en terreno</a>
-            <a href="index.html#pilotos">Aplicaciones</a>
-            <a href="index.html#alianzas">Alianzas</a>
-            <a href="index.html#roadmap">Hoja de ruta</a>
+            <a href="index.html">Inicio</a>
+            <a href="evidencia.html">Evidencia</a>
+            <a href="aplicaciones.html">Aplicaciones</a>
+            <a href="caso-nivel-nuevo.html">Caso de estudio</a>
+            <a href="nosotros.html">Nosotros</a>
             <a href="index.html#contacto">Contacto</a>
           </div>
 
@@ -396,7 +394,7 @@
   </footer>
 
   <script src="js/caso-i18n.js?v=20261010_09"></script>
-  <script src="js/i18n.js?v=20261020_01"></script>
+  <script src="js/i18n.js?v=20261020_02"></script>
   <script>
     // 3D view in the page language (Spanish / English versions), keeping its view state (#map=...)
     (function () {

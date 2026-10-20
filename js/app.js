@@ -6,13 +6,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // 1. Sticky Navigation on Scroll
   const nav = document.querySelector('.nav');
-  window.addEventListener('scroll', () => {
-    if (window.scrollY > 40) {
-      nav.classList.add('scrolled');
-    } else {
-      nav.classList.remove('scrolled');
-    }
-  });
+  // Inner pages keep a solid header (data-solid); only the homepage turns transparent over the hero.
+  if (nav && !nav.hasAttribute('data-solid')) {
+    window.addEventListener('scroll', () => {
+      nav.classList.toggle('scrolled', window.scrollY > 40);
+    });
+  }
 
   // 2. Mobile Menu Toggle
   const navToggle = document.querySelector('.nav-toggle');
@@ -199,8 +198,7 @@ document.addEventListener('DOMContentLoaded', () => {
     { id: 'evidencia', km: 1.5, label: '01 · EVIDENCIA EN TERRENO' },
     { id: 'pilotos', km: 15, label: '02 · APLICACIONES' },
     { id: 'alianzas', km: 40, label: '03 · ALIANZAS' },
-    { id: 'roadmap', km: 55, label: '04 · HOJA DE RUTA' },
-    { id: 'contacto', km: 60, label: '05 · CONTACTO' }
+    { id: 'contacto', km: 60, label: '04 · CONTACTO' }
   ];
   const sectionEls = trackedSections.map(s => document.getElementById(s.id));
   const lastIdx = trackedSections.length - 1;
