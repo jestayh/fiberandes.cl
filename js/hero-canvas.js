@@ -1,14 +1,16 @@
 /* ============================================================
    FIBERANDES — Hero Photonics & Seismic Canvas Engine
-   Interrogator fires laser pulses down the fiber; seismic waves that
-   reach the fiber send a return signal back and get located by km.
+   Interrogator fires laser pulses down the fiber. Each event source
+   (earthquake, blast, traffic...) emits waves with its own signature;
+   the first wave to reach the fiber is located by km and classified,
+   and a simulated distance-time DAS record scrolls under the fiber.
    ============================================================ */
 (function () {
   const canvas = document.getElementById('hero-canvas');
   if (!canvas) return;
 
   const ctx = canvas.getContext('2d');
-  // Second canvas sits above .hero-veil so the interrogator and event labels aren't dimmed.
+  // Second canvas sits above .hero-veil so the interrogator, labels and record aren't dimmed.
   const uiCanvas = document.getElementById('hero-canvas-ui');
   const ui = uiCanvas ? uiCanvas.getContext('2d') : ctx;
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -17,6 +19,7 @@
   const EMERALD = '#00FFA3';
   const AMBER = '#FFB020';
   const MAX_EVENTS = 4;
+  const MAX_SOURCES = 4;
   // The fiber crosses a mine, a pipeline and a road; each section only reports events plausible there.
   const ZONES = [
     { toKm: 15, name: 'MINA', classes: ['SISMO', 'TRONADURA', 'DESPRENDIMIENTO DE ROCAS'] },
@@ -27,10 +30,11 @@
   const LABEL_LIFE = 200;
   const tr = s => (window.faI18n ? window.faI18n.t(s) : s);
 
-  let w = 0, h = 0, t = 0;
+  let w = 0, h = 0, t = 0, frame = 0;
   let fiberPoints = [];
   let pulses = [];
   let waves = [];
+  let sources = [];
   let particles = [];
   let returns = [];
   let events = [];
@@ -38,9 +42,10 @@
   let ledColor = EMERALD;
   let running = false;
   let visible = true;
-  let lastAutoWave = 0;
-  let lastMouseWave = 0;
+  let lastAutoSource = 0;
+  let lastMouseSource = 0;
   let laneTop = 0;
+  let strip = null;
 
   const INTERROGATOR_X = 46;
 
@@ -56,18 +61,28 @@
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     ui.setTransform(dpr, 0, 0, dpr, 0, 0);
     generateFiberRoute();
+    buildStrip();
   }
 
-  // Fit the fiber inside the .hero-demo-stage lane (below its hint line).
+  // The fiber sits in the .hero-demo-stage lane, between its hint line and the record strip.
   function fiberLane() {
     const stage = document.querySelector('.hero-demo-stage');
-    if (!stage) return { center: h * 0.58, height: 200 };
+    const stripH = w < 600 ? 44 : 60;
+    if (!stage) return { center: h * 0.58, height: 200, top: 0, stripTop: h * 0.8, stripH };
     const r = stage.getBoundingClientRect();
     const hint = stage.querySelector('.hero-demo-hint');
-    const top = (hint ? hint.getBoundingClientRect().bottom : r.top) + 30;
-    const bottom = r.bottom - 10;
     const canvasTop = canvas.getBoundingClientRect().top;
-    return { center: (top + bottom) / 2 - canvasTop, height: bottom - top, top: top - 30 - canvasTop };
+    const top = (hint ? hint.getBoundingClientRect().bottom : r.top) + 30;
+    const stripTop = r.bottom - stripH - 4;
+    // room under the fiber for the section labels
+    const bottom = stripTop - 30;
+    return {
+      center: (top + bottom) / 2 - canvasTop,
+      height: bottom - top,
+      top: top - 30 - canvasTop,
+      stripTop: stripTop - canvasTop,
+      stripH
+    };
   }
 
   function generateFiberRoute() {
@@ -75,9 +90,9 @@
     const startX = INTERROGATOR_X;
     const n = Math.max(12, Math.floor((w - startX) / 80));
     const lane = fiberLane();
-    laneTop = lane.top !== undefined ? lane.top : 0;
+    laneTop = lane.top;
     // The raw profile spans roughly -80..+120 around its baseline.
-    const amp = Math.min(1, lane.height / 200);
+    const amp = Math.max(0.3, Math.min(1, lane.height / 200));
     const baseY = lane.center - 20 * amp;
     for (let i = 0; i <= n; i++) {
       const x = startX + (i / n) * (w - startX);
@@ -113,6 +128,11 @@
     return best;
   }
 
+  function zoneAt(progress) {
+    const km = progress * FIBER_KM;
+    return ZONES.find(z => km <= z.toKm) || ZONES[ZONES.length - 1];
+  }
+
   function flashLed(color) {
     if (color === AMBER || ledColor !== AMBER || ledFlash < 0.3) {
       ledColor = color;
@@ -132,23 +152,29 @@
     }
   }
 
-  class SeismicWave {
-    constructor(x, y) {
+  // One expanding wavefront. Strength drives both the ring and the record strip.
+  class Wave {
+    constructor(src, x, y, opt) {
+      this.src = src;
       this.x = x;
       this.y = y;
-      this.radius = 4;
-      this.maxRadius = 140 + Math.random() * 100;
-      this.speed = 1.4;
-      this.opacity = 0.7;
+      this.radius = 3;
+      this.speed = opt.speed;
+      this.maxRadius = opt.maxRadius;
+      this.strength = opt.strength;
+      this.rgb = opt.rgb || '0, 240, 255';
+      this.lineWidth = opt.lineWidth || 1.5;
       this.hit = closestOnFiber(x, y);
       this.detected = this.hit.dist > this.maxRadius;
     }
+    get fade() {
+      return Math.max(0, 1 - this.radius / this.maxRadius);
+    }
     update() {
       this.radius += this.speed;
-      this.opacity = Math.max(0, 0.7 * (1 - this.radius / this.maxRadius));
       if (!this.detected && this.radius >= this.hit.dist) {
         this.detected = true;
-        onFiberContact(this.hit);
+        this.src.report(this.hit);
       }
       return this.radius < this.maxRadius;
     }
@@ -156,17 +182,68 @@
       ctx.save();
       ctx.beginPath();
       ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-      ctx.strokeStyle = `rgba(0, 240, 255, ${this.opacity * 0.6})`;
-      ctx.lineWidth = 1.5;
+      ctx.strokeStyle = `rgba(${this.rgb}, ${0.6 * this.fade * Math.min(1, this.strength + 0.3)})`;
+      ctx.lineWidth = this.lineWidth;
       ctx.stroke();
-      if (this.radius > 25) {
-        ctx.beginPath();
-        ctx.arc(this.x, this.y, this.radius - 22, 0, Math.PI * 2);
-        ctx.strokeStyle = `rgba(0, 255, 163, ${this.opacity * 0.35})`;
-        ctx.lineWidth = 1;
-        ctx.stroke();
-      }
       ctx.restore();
+    }
+  }
+
+  // Each event type has its own signature, so the class shown matches what the visitor sees.
+  const SIGNATURES = {
+    'SISMO': { life: 1, emit(s) {
+      // P wave first (fast, weaker), S wave behind it (slower, stronger)
+      s.wave({ speed: 2.6, maxRadius: 260, strength: 0.6 });
+      s.wave({ speed: 1.35, maxRadius: 230, strength: 1.0, rgb: '0, 255, 163', lineWidth: 2 });
+    } },
+    'TRONADURA': { life: 1, emit(s) {
+      s.wave({ speed: 2.2, maxRadius: 190, strength: 1.4, rgb: '255, 255, 255', lineWidth: 3 });
+    } },
+    'DESPRENDIMIENTO DE ROCAS': { life: 26, every: 9, emit(s) {
+      s.wave({ speed: 1.6, maxRadius: 150, strength: 0.55 });
+    } },
+    'MAQUINARIA CERCA DEL DUCTO': { life: 100, every: 14, near: 45, emit(s) {
+      s.wave({ speed: 1.5, maxRadius: 120, strength: 0.4 });
+    } },
+    'POSIBLE FUGA EN DUCTO': { life: 160, every: 6, near: 14, emit(s) {
+      s.wave({ speed: 1.2, maxRadius: 60, strength: 0.28 });
+    } },
+    'TRÁNSITO': { life: 170, every: 10, near: 24, moving: true, emit(s) {
+      s.wave({ speed: 1.5, maxRadius: 90, strength: 0.4 });
+    } }
+  };
+
+  class Source {
+    constructor(x, y) {
+      const hit = closestOnFiber(x, y);
+      const zone = zoneAt(hit.progress);
+      this.cls = zone.classes[Math.floor(Math.random() * zone.classes.length)];
+      this.sig = SIGNATURES[this.cls];
+      // Sources that hug the fiber (leaks, traffic, machinery) are placed at a fixed offset from it.
+      if (this.sig.near) {
+        const side = y >= hit.y ? 1 : -1;
+        x = hit.x;
+        y = hit.y + side * this.sig.near;
+      }
+      this.x = x;
+      this.y = y;
+      this.age = 0;
+      this.reported = false;
+    }
+    wave(opt) {
+      waves.push(new Wave(this, this.x, this.y, opt));
+    }
+    report(hit) {
+      if (this.reported) return;
+      this.reported = true;
+      onFiberContact(hit, this.cls);
+    }
+    update() {
+      const sig = this.sig;
+      if (this.age === 0 || (sig.every && this.age % sig.every === 0 && this.age < sig.life)) sig.emit(this);
+      if (sig.moving) this.x += 1.6;
+      this.age++;
+      return this.age < sig.life;
     }
   }
 
@@ -196,15 +273,13 @@
     }
   }
 
-  // A wave touched the fiber: flash there, then send the signal back to the interrogator.
-  function onFiberContact(hit) {
-    const km = hit.progress * FIBER_KM;
-    const zone = ZONES.find(z => km <= z.toKm) || ZONES[ZONES.length - 1];
+  // A wave reached the fiber: flash there, then send the signal back to the interrogator.
+  function onFiberContact(hit, cls) {
     const ev = {
       x: hit.x,
       y: hit.y,
-      km,
-      cls: zone.classes[Math.floor(Math.random() * zone.classes.length)],
+      km: hit.progress * FIBER_KM,
+      cls,
       age: 0,
       labelAge: -1
     };
@@ -213,8 +288,76 @@
     returns.push({ progress: hit.progress, ev });
   }
 
-  function spawnWave(x, y) {
-    waves.push(new SeismicWave(x, y));
+  function spawnSource(x, y) {
+    if (sources.length >= MAX_SOURCES) return false;
+    sources.push(new Source(x, y));
+    return true;
+  }
+
+  // ---------- Simulated distance-time record (waterfall) ----------
+  // Columns follow the fiber's x, so a column sits right under its km; newest time is the top row.
+  function buildStrip() {
+    const lane = fiberLane();
+    const x0 = INTERROGATOR_X;
+    const cols = Math.max(40, Math.floor((w - x0) / 3));
+    const rows = Math.max(16, Math.floor(lane.stripH / 2));
+    const off = document.createElement('canvas');
+    off.width = cols;
+    off.height = rows;
+    const octx = off.getContext('2d');
+    octx.fillStyle = 'rgb(9, 14, 26)';
+    octx.fillRect(0, 0, cols, rows);
+    const pts = [];
+    for (let c = 0; c < cols; c++) pts.push(pointAt(c / (cols - 1)));
+    strip = { x: x0, y: lane.stripTop, w: w - x0, h: lane.stripH, cols, rows, off, octx, pts, row: octx.createImageData(cols, 1) };
+  }
+
+  function stripSample(p) {
+    let v = 0;
+    for (const wv of waves) {
+      const d = Math.hypot(p.x - wv.x, p.y - wv.y) - wv.radius;
+      if (d > 14 || d < -14) continue;
+      v += wv.strength * wv.fade * Math.exp(-(d * d) / 18) * Math.cos(d * 0.7);
+    }
+    return v;
+  }
+
+  function updateStrip() {
+    if (!strip) return;
+    const { cols, rows, octx, off, pts, row } = strip;
+    octx.drawImage(off, 0, 0, cols, rows - 1, 0, 1, cols, rows - 1);
+    const data = row.data;
+    for (let c = 0; c < cols; c++) {
+      const v = stripSample(pts[c]) * 2.4 + (Math.random() - 0.5) * 0.16;
+      const a = Math.min(1, Math.abs(v));
+      // dark background blended toward cyan (compression) or amber (extension)
+      const [r2, g2, b2] = v >= 0 ? [0, 240, 255] : [255, 176, 32];
+      const i = c * 4;
+      data[i] = 9 + (r2 - 9) * a;
+      data[i + 1] = 14 + (g2 - 14) * a;
+      data[i + 2] = 26 + (b2 - 26) * a;
+      data[i + 3] = 255;
+    }
+    octx.putImageData(row, 0, 0);
+  }
+
+  function drawStrip() {
+    if (!strip) return;
+    ui.save();
+    ui.globalAlpha = 0.95;
+    ui.imageSmoothingEnabled = true;
+    ui.drawImage(strip.off, strip.x, strip.y, strip.w, strip.h);
+    ui.globalAlpha = 1;
+    ui.strokeStyle = 'rgba(0, 240, 255, 0.25)';
+    ui.lineWidth = 1;
+    ui.strokeRect(strip.x + 0.5, strip.y + 0.5, strip.w - 1, strip.h - 1);
+    ui.font = '600 9px "IBM Plex Mono", monospace';
+    ui.textBaseline = 'top';
+    ui.fillStyle = 'rgba(0, 240, 255, 0.7)';
+    ui.fillText(tr('REGISTRO DAS SIMULADO · DISTANCIA × TIEMPO'), strip.x + 6, strip.y + 4);
+    ui.textAlign = 'right';
+    ui.fillText(`KM ${FIBER_KM}`, strip.x + strip.w - 6, strip.y + 4);
+    ui.restore();
   }
 
   function drawStrata() {
@@ -303,8 +446,8 @@
 
     // curved arrow + label pointing at the box, so it reads as the interrogator
     const label = tr('INTERROGADOR');
-    // below the box when there is room underneath, above it on narrow screens
-    const below = fiberLane().height > 110;
+    // below the box on wide screens; above it on phones, where the section label sits underneath
+    const below = w >= 600 && fiberLane().height > 110;
     const tipX = x + bw / 2 + 4;
     const tipY = below ? y + bh + 3 : y - 3;
     const endX = tipX + (below ? 42 : 34);
@@ -336,11 +479,12 @@
     ui.font = '600 9px "IBM Plex Mono", monospace';
     ui.textAlign = 'center';
     ui.textBaseline = 'top';
+    const compact = w < 600;
     let fromKm = 0;
     ZONES.forEach((z, i) => {
       const mid = pointAt((fromKm + z.toKm) / 2 / FIBER_KM);
       ui.fillStyle = 'rgba(0, 240, 255, 0.45)';
-      ui.fillText(`KM ${fromKm}–${z.toKm} · ${tr(z.name)}`, mid.x, mid.y + 18);
+      ui.fillText(compact ? tr(z.name) : `KM ${fromKm}–${z.toKm} · ${tr(z.name)}`, mid.x, mid.y + 18);
       if (i < ZONES.length - 1) {
         const b = pointAt(z.toKm / FIBER_KM);
         ui.strokeStyle = 'rgba(0, 240, 255, 0.35)';
@@ -442,7 +586,7 @@
         const finalC = `${tr('IA')} → ${tr(ev.cls)}`;
         ui.font = '700 11px "IBM Plex Mono", monospace';
         const bw = Math.max(ui.measureText(text).width, ui.measureText(finalC).width) + 16;
-        const lx = Math.min(Math.max(ev.x - bw / 2, 8), w - bw - 8);
+        const lx = Math.min(Math.max(ev.x - bw / 2, INTERROGATOR_X + 8), w - bw - 8);
         // Above the event, unless that would cover the hint text above the lane.
         const above = ev.y - 58 >= laneTop;
         const ly = above ? ev.y - 58 : ev.y + 18;
@@ -471,19 +615,21 @@
       return;
     }
     t += 0.016;
+    frame++;
     ledFlash = Math.max(0, ledFlash - 0.04);
     ctx.clearRect(0, 0, w, h);
     ui.clearRect(0, 0, w, h);
 
     if (!reduceMotion) {
-      if (t - lastAutoWave > 3.2) {
-        lastAutoWave = t;
+      if (t - lastAutoSource > 3.2) {
+        lastAutoSource = t;
         const pt = fiberPoints[1 + Math.floor(Math.random() * (fiberPoints.length - 1))];
-        if (pt) spawnWave(pt.x + (Math.random() - 0.5) * 120, pt.y + 40 + Math.random() * 60);
+        if (pt) spawnSource(pt.x + (Math.random() - 0.5) * 120, pt.y + 40 + Math.random() * 60);
       }
       if (Math.random() < 0.04 && pulses.length < 9) pulses.push(new LaserPulse());
     }
 
+    sources = sources.filter(s => s.update());
     drawStrata();
     waves = waves.filter(wave => {
       const alive = wave.update();
@@ -497,10 +643,12 @@
       if (alive) p.draw();
       return alive;
     });
+    if (!reduceMotion && frame % 2 === 0) updateStrip();
+    drawStrip();
     drawZones();
     drawReturns();
-    drawEvents();
     drawInterrogator();
+    drawEvents();
 
     requestAnimationFrame(render);
   }
@@ -515,23 +663,24 @@
     const rect = canvas.getBoundingClientRect();
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
+    // the record strip is not part of the ground: no events from it
+    if (strip && y >= strip.y) return null;
     return x >= 0 && x <= w && y >= 0 && y <= h ? { x, y } : null;
   }
 
   window.addEventListener('mousemove', e => {
     if (!running) return;
     const now = performance.now();
-    if (now - lastMouseWave < 450) return;
+    if (now - lastMouseSource < 600) return;
     const p = canvasPoint(e);
     if (!p) return;
-    lastMouseWave = now;
-    spawnWave(p.x, p.y);
+    if (spawnSource(p.x, p.y)) lastMouseSource = now;
   });
 
   window.addEventListener('click', e => {
     const p = canvasPoint(e);
     if (!p) return;
-    spawnWave(p.x, p.y);
+    spawnSource(p.x, p.y);
     pulses.push(new LaserPulse());
   });
 

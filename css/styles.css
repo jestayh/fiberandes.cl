@@ -526,7 +526,7 @@ h1, h2, h3, h4, h5 {
 
 .hero-demo-stage {
   margin-top: 28px;
-  height: clamp(170px, 17vw, 220px);
+  height: clamp(240px, 23vw, 290px);
 }
 .hero-demo-hint {
   display: flex;
@@ -4048,3 +4048,8 @@ h1, h2, h3, h4, h5 {
 .faq-item[open] summary::after { content: "\2212"; }
 .faq-item summary:focus-visible { outline: 2px solid var(--cyan); outline-offset: 4px; }
 .faq-item p { margin: 0 0 18px; color: var(--fg-1); font-size: 15px; line-height: 1.65; max-width: 760px; }
+
+/* Hero demo: more height on phones, where the hint wraps and the record strip needs room */
+@media (max-width: 600px) {
+  .hero-demo-stage { height: 330px; }
+}
