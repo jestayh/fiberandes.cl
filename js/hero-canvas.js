@@ -17,6 +17,15 @@
   const EMERALD = '#00FFA3';
   const AMBER = '#FFB020';
   const MAX_EVENTS = 4;
+  // The fiber crosses a mine, a pipeline and a road; each section only reports events plausible there.
+  const ZONES = [
+    { toKm: 15, name: 'MINA', classes: ['SISMO', 'TRONADURA', 'DESPRENDIMIENTO DE ROCAS'] },
+    { toKm: 45, name: 'DUCTO', classes: ['MAQUINARIA CERCA DEL DUCTO', 'POSIBLE FUGA EN DUCTO'] },
+    { toKm: FIBER_KM, name: 'CAMINO', classes: ['TRÁNSITO'] }
+  ];
+  const CLASSIFY_DELAY = 30;
+  const LABEL_LIFE = 200;
+  const tr = s => (window.faI18n ? window.faI18n.t(s) : s);
 
   let w = 0, h = 0, t = 0;
   let fiberPoints = [];
@@ -31,6 +40,7 @@
   let visible = true;
   let lastAutoWave = 0;
   let lastMouseWave = 0;
+  let laneTop = 0;
 
   const INTERROGATOR_X = 46;
 
@@ -57,7 +67,7 @@
     const top = (hint ? hint.getBoundingClientRect().bottom : r.top) + 30;
     const bottom = r.bottom - 10;
     const canvasTop = canvas.getBoundingClientRect().top;
-    return { center: (top + bottom) / 2 - canvasTop, height: bottom - top };
+    return { center: (top + bottom) / 2 - canvasTop, height: bottom - top, top: top - 30 - canvasTop };
   }
 
   function generateFiberRoute() {
@@ -65,6 +75,7 @@
     const startX = INTERROGATOR_X;
     const n = Math.max(12, Math.floor((w - startX) / 80));
     const lane = fiberLane();
+    laneTop = lane.top !== undefined ? lane.top : 0;
     // The raw profile spans roughly -80..+120 around its baseline.
     const amp = Math.min(1, lane.height / 200);
     const baseY = lane.center - 20 * amp;
@@ -187,10 +198,13 @@
 
   // A wave touched the fiber: flash there, then send the signal back to the interrogator.
   function onFiberContact(hit) {
+    const km = hit.progress * FIBER_KM;
+    const zone = ZONES.find(z => km <= z.toKm) || ZONES[ZONES.length - 1];
     const ev = {
       x: hit.x,
       y: hit.y,
-      km: hit.progress * FIBER_KM,
+      km,
+      cls: zone.classes[Math.floor(Math.random() * zone.classes.length)],
       age: 0,
       labelAge: -1
     };
@@ -288,7 +302,7 @@
     ui.fillText('KM 0', x, y - 6);
 
     // curved arrow + label pointing at the box, so it reads as the interrogator
-    const label = window.faI18n ? window.faI18n.t('INTERROGADOR') : 'INTERROGADOR';
+    const label = tr('INTERROGADOR');
     // below the box when there is room underneath, above it on narrow screens
     const below = fiberLane().height > 110;
     const tipX = x + bw / 2 + 4;
@@ -313,6 +327,33 @@
     ui.fillStyle = 'rgba(0, 240, 255, 0.8)';
     ui.textBaseline = 'middle';
     ui.fillText(label, endX + 4, endY);
+    ui.restore();
+  }
+
+  function drawZones() {
+    if (fiberPoints.length < 2) return;
+    ui.save();
+    ui.font = '600 9px "IBM Plex Mono", monospace';
+    ui.textAlign = 'center';
+    ui.textBaseline = 'top';
+    let fromKm = 0;
+    ZONES.forEach((z, i) => {
+      const mid = pointAt((fromKm + z.toKm) / 2 / FIBER_KM);
+      ui.fillStyle = 'rgba(0, 240, 255, 0.45)';
+      ui.fillText(`KM ${fromKm}–${z.toKm} · ${tr(z.name)}`, mid.x, mid.y + 18);
+      if (i < ZONES.length - 1) {
+        const b = pointAt(z.toKm / FIBER_KM);
+        ui.strokeStyle = 'rgba(0, 240, 255, 0.35)';
+        ui.lineWidth = 1;
+        ui.setLineDash([2, 3]);
+        ui.beginPath();
+        ui.moveTo(b.x, b.y + 6);
+        ui.lineTo(b.x, b.y + 26);
+        ui.stroke();
+        ui.setLineDash([]);
+      }
+      fromKm = z.toKm;
+    });
     ui.restore();
   }
 
@@ -363,10 +404,13 @@
   }
 
   function drawEvents() {
+    // Only the newest reported event carries a label, so labels never stack.
+    const labeled = events.filter(e => e.labelAge >= 0);
+    const newest = labeled.length ? labeled.reduce((a, b) => (b.labelAge < a.labelAge ? b : a)) : null;
     events = events.filter(ev => {
       ev.age++;
       if (ev.labelAge >= 0) ev.labelAge++;
-      if (ev.labelAge > 170) return false;
+      if (ev.labelAge > LABEL_LIFE) return false;
 
       ui.save();
       if (ev.age < 50) {
@@ -377,7 +421,7 @@
         ui.arc(ev.x, ev.y, 4 + k * 22, 0, Math.PI * 2);
         ui.stroke();
       }
-      const dotAlpha = ev.labelAge < 0 ? 1 : Math.max(0, 1 - ev.labelAge / 170);
+      const dotAlpha = ev.labelAge < 0 ? 1 : Math.max(0, 1 - ev.labelAge / LABEL_LIFE);
       ui.globalAlpha = dotAlpha;
       ui.fillStyle = AMBER;
       ui.shadowColor = AMBER;
@@ -387,27 +431,34 @@
       ui.fill();
       ui.shadowBlur = 0;
 
-      if (ev.labelAge >= 0) {
+      if (ev === newest) {
         const fadeIn = Math.min(1, ev.labelAge / 12);
-        const fadeOut = Math.max(0, 1 - Math.max(0, ev.labelAge - 120) / 50);
+        const fadeOut = Math.max(0, 1 - Math.max(0, ev.labelAge - (LABEL_LIFE - 50)) / 50);
         ui.globalAlpha = fadeIn * fadeOut;
-        const label = window.faI18n ? window.faI18n.t('EVENTO DETECTADO') : 'EVENTO DETECTADO';
-        const text = `${label} · KM ${ev.km.toFixed(1)}`;
+        const text = `${tr('EVENTO DETECTADO')} · KM ${ev.km.toFixed(1)}`;
+        // Second line is the analysis layer: "analyzing" first, then what the event was.
+        const classified = ev.labelAge >= CLASSIFY_DELAY;
+        const ctext = `${tr('IA')} → ${classified ? tr(ev.cls) : tr('ANALIZANDO…')}`;
+        const finalC = `${tr('IA')} → ${tr(ev.cls)}`;
         ui.font = '700 11px "IBM Plex Mono", monospace';
-        const tw = ui.measureText(text).width;
-        const lx = Math.min(Math.max(ev.x - tw / 2 - 8, 8), w - tw - 24);
-        const ly = ev.y - 44;
+        const bw = Math.max(ui.measureText(text).width, ui.measureText(finalC).width) + 16;
+        const lx = Math.min(Math.max(ev.x - bw / 2, 8), w - bw - 8);
+        // Above the event, unless that would cover the hint text above the lane.
+        const above = ev.y - 58 >= laneTop;
+        const ly = above ? ev.y - 58 : ev.y + 18;
         ui.strokeStyle = 'rgba(255, 176, 32, 0.6)';
         ui.lineWidth = 1;
         ui.beginPath();
-        ui.moveTo(ev.x, ev.y - 6);
-        ui.lineTo(ev.x, ly + 22);
+        ui.moveTo(ev.x, above ? ev.y - 6 : ev.y + 6);
+        ui.lineTo(ev.x, above ? ly + 40 : ly);
         ui.stroke();
-        ui.fillStyle = 'rgba(9, 14, 26, 0.9)';
-        ui.fillRect(lx, ly, tw + 16, 22);
-        ui.strokeRect(lx, ly, tw + 16, 22);
+        ui.fillStyle = 'rgba(9, 14, 26, 0.92)';
+        ui.fillRect(lx, ly, bw, 40);
+        ui.strokeRect(lx, ly, bw, 40);
         ui.fillStyle = AMBER;
-        ui.fillText(text, lx + 8, ly + 15);
+        ui.fillText(text, lx + 8, ly + 16);
+        ui.fillStyle = classified ? CYAN : 'rgba(0, 240, 255, 0.5)';
+        ui.fillText(ctext, lx + 8, ly + 33);
       }
       ui.restore();
       return true;
@@ -446,6 +497,7 @@
       if (alive) p.draw();
       return alive;
     });
+    drawZones();
     drawReturns();
     drawEvents();
     drawInterrogator();
@@ -493,6 +545,8 @@
   window.addEventListener('resize', resize);
   // Web fonts change the hero layout after first paint; re-anchor the fiber once they're in.
   window.addEventListener('load', resize);
+  // Switching language changes the hero text length, which moves the fiber lane.
+  document.addEventListener('fa:langchange', resize);
   resize();
   start();
 })();

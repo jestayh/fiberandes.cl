@@ -135,7 +135,7 @@ document.addEventListener('DOMContentLoaded', () => {
       wa.target = '_blank';
       wa.rel = 'noopener';
       wa.textContent = 'WhatsApp +56 9 9429 0168';
-      feedback.append(` ${T('Escríbenos directamente a')} `, mail, ` ${T('o por')} `, wa, '.');
+      feedback.append(` ${T('Escríbanos directamente a')} `, mail, ` ${T('o por')} `, wa, '.');
     }
     feedback.style.display = 'block';
   }
@@ -168,10 +168,10 @@ document.addEventListener('DOMContentLoaded', () => {
           throw new Error(data.message || `HTTP ${res.status}`);
         }
         contactForm.reset();
-        showFeedback(true, '¡Recibimos tu solicitud! Nuestro equipo te contactará pronto.');
+        showFeedback(true, '¡Recibimos su solicitud! Nuestro equipo se pondrá en contacto pronto.');
       } catch (err) {
         console.error('Contact form submission failed:', err);
-        showFeedback(false, 'No pudimos enviar tu mensaje.');
+        showFeedback(false, 'No pudimos enviar su mensaje.');
       } finally {
         if (submitBtn) {
           submitBtn.disabled = false;
@@ -344,7 +344,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (fiber === 'ninguna') {
       return T('Requiere instalar fibra; diseñamos el trazado según la geología del sitio.');
     }
-    return T('Revisamos contigo la fibra disponible en la primera reunión.');
+    return T('Revisamos con usted la fibra disponible en la primera reunión.');
   }
 
   function updateCaseSummary() {
