@@ -20,6 +20,10 @@
   const AMBER = '#FFB020';
   const MAX_EVENTS = 4;
   const MAX_SOURCES = 4;
+  // Light travels at one speed, out and back. One pulse is in the fiber at a time: the next one
+  // fires only after the previous pulse's backscatter has returned from the far end.
+  const PULSE_SPEED = 0.012;
+  const PULSE_PERIOD = Math.ceil(2 / PULSE_SPEED);
   // The fiber crosses a mine, a pipeline and a road; each section only reports events plausible there.
   const ZONES = [
     { toKm: 15, name: 'MINA', classes: ['MICROSISMO', 'TRONADURA', 'DESPRENDIMIENTO DE ROCAS'] },
@@ -46,6 +50,8 @@
   let lastMouseSource = 0;
   let laneTop = 0;
   let strip = null;
+  let speckle = [];
+  let nextPulseAt = 0;
 
   const INTERROGATOR_X = 46;
 
@@ -62,6 +68,7 @@
     ui.setTransform(dpr, 0, 0, dpr, 0, 0);
     generateFiberRoute();
     buildStrip();
+    buildSpeckle();
   }
 
   // The fiber sits in the .hero-demo-stage lane, between its hint line and the record strip.
@@ -143,14 +150,51 @@
   class LaserPulse {
     constructor() {
       this.progress = 0;
-      this.speed = 0.0035 + Math.random() * 0.002;
       flashLed(CYAN);
     }
     update() {
-      this.progress += this.speed;
+      this.progress += PULSE_SPEED;
       return this.progress <= 1;
     }
   }
+
+  // Rayleigh backscatter: a fixed, grainy (speckle) pattern along the fiber that fades with
+  // distance, and only flickers where a wave is straining the fiber, which is what DAS measures.
+  function buildSpeckle() {
+    speckle = [];
+    if (fiberPoints.length < 2) return;
+    const n = Math.max(60, Math.floor((w - INTERROGATOR_X) / 4));
+    const raw = Array.from({ length: n }, () => Math.min(2.5, -Math.log(1 - Math.random())) / 2.5);
+    for (let i = 0; i < n; i++) {
+      const progress = i / (n - 1);
+      // neighbouring scatterers blend within one pulse length
+      const base = (raw[Math.max(0, i - 1)] + 2 * raw[i] + raw[Math.min(n - 1, i + 1)]) / 4;
+      speckle.push({ p: pointAt(progress), base, cur: base, hot: 0, atten: Math.exp(-1.4 * progress) });
+    }
+  }
+
+  function drawSpeckle() {
+    ui.save();
+    for (const s of speckle) {
+      const strain = Math.abs(stripSample(s.p));
+      if (strain > 0.025) {
+        // the pattern changes from one pulse to the next where the fiber is being strained
+        s.cur = Math.random() * 2.2;
+        s.hot = Math.min(1, Math.max(s.hot, strain * 3));
+      } else {
+        s.cur += (s.base - s.cur) * 0.12;
+        s.hot *= 0.9;
+      }
+      const a = (0.05 + 0.5 * Math.min(s.cur, 1.6)) * (s.atten + (1 - s.atten) * s.hot);
+      const g = Math.round(255 - 45 * s.hot), b = Math.round(255 - 125 * s.hot);
+      ui.fillStyle = `rgba(${200 + Math.round(55 * s.hot)}, ${g}, ${b}, ${Math.min(1, a)})`;
+      ui.beginPath();
+      ui.arc(s.p.x, s.p.y, 1.5 + 1.4 * s.hot, 0, Math.PI * 2);
+      ui.fill();
+    }
+    ui.restore();
+  }
+
 
   // One expanding wavefront. Strength drives both the ring and the record strip.
   class Wave {
@@ -580,7 +624,7 @@
 
   function drawReturns() {
     returns = returns.filter(r => {
-      r.progress -= 0.012;
+      r.progress -= PULSE_SPEED;
       if (r.progress <= 0) {
         flashLed(AMBER);
         r.ev.labelAge = 0;
@@ -681,7 +725,10 @@
         const pt = fiberPoints[1 + Math.floor(Math.random() * (fiberPoints.length - 1))];
         if (pt) spawnSource(pt.x + (Math.random() - 0.5) * 120, pt.y, true);
       }
-      if (Math.random() < 0.04 && pulses.length < 9) pulses.push(new LaserPulse());
+      if (frame >= nextPulseAt) {
+        pulses.push(new LaserPulse());
+        nextPulseAt = frame + PULSE_PERIOD;
+      }
     }
 
     sources = sources.filter(s => s.update());
@@ -700,6 +747,7 @@
     });
     if (!reduceMotion && frame % 2 === 0) updateStrip();
     drawStrip();
+    drawSpeckle();
     drawZones();
     drawReturns();
     drawInterrogator();
@@ -736,7 +784,6 @@
     const p = canvasPoint(e);
     if (!p) return;
     spawnSource(p.x, p.y);
-    pulses.push(new LaserPulse());
   });
 
   if ('IntersectionObserver' in window) {
