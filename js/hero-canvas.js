@@ -22,7 +22,7 @@
   const MAX_SOURCES = 4;
   // The fiber crosses a mine, a pipeline and a road; each section only reports events plausible there.
   const ZONES = [
-    { toKm: 15, name: 'MINA', classes: ['SISMO', 'TRONADURA', 'DESPRENDIMIENTO DE ROCAS'] },
+    { toKm: 15, name: 'MINA', classes: ['MICROSISMO', 'TRONADURA', 'DESPRENDIMIENTO DE ROCAS'] },
     { toKm: 45, name: 'DUCTO', classes: ['MAQUINARIA CERCA DEL DUCTO', 'POSIBLE FUGA EN DUCTO'] },
     { toKm: FIBER_KM, name: 'CAMINO', classes: ['TRÁNSITO'] }
   ];
@@ -180,6 +180,12 @@
     }
     draw() {
       ctx.save();
+      // rings live in the ground above the record strip; deep sources only show once they rise into it
+      if (strip) {
+        ctx.beginPath();
+        ctx.rect(0, 0, w, strip.y - 4);
+        ctx.clip();
+      }
       ctx.beginPath();
       ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
       ctx.strokeStyle = `rgba(${this.rgb}, ${0.6 * this.fade * Math.min(1, this.strength + 0.3)})`;
@@ -189,17 +195,33 @@
     }
   }
 
+  // P wave first (fast, weaker), S wave behind it (slower, stronger), then the coda:
+  // scattered energy trailing the S wave and decaying over time.
+  function quake(s, reach, scale, codaLife) {
+    if (s.age === 0) {
+      s.wave({ speed: 2.6 * scale.speed, maxRadius: reach + 60, strength: 0.6 * scale.amp });
+      s.wave({ speed: 1.35 * scale.speed, maxRadius: reach + 30, strength: 1.0 * scale.amp, rgb: '0, 255, 163', lineWidth: 2 });
+    } else if (s.age >= 15 && s.age < codaLife) {
+      const k = Math.exp(-(s.age - 15) / 22) * (0.6 + 0.4 * Math.random());
+      s.wave({ speed: 1.35 * scale.speed, maxRadius: reach + 30, strength: 0.45 * k * scale.amp, rgb: '0, 255, 163', lineWidth: 1 });
+    }
+  }
+
   // Each event type has its own signature, so the class shown matches what the visitor sees.
+  // place: 'deep' (far below the fiber), 'below' (in the ground under it), 'any' (either side), or a fixed `near` offset.
   const SIGNATURES = {
-    'SISMO': { life: 1, emit(s) {
-      // P wave first (fast, weaker), S wave behind it (slower, stronger)
-      s.wave({ speed: 2.6, maxRadius: 260, strength: 0.6 });
-      s.wave({ speed: 1.35, maxRadius: 230, strength: 1.0, rgb: '0, 255, 163', lineWidth: 2 });
+    // Natural earthquake: deep source, so the whole cable records a broad, nearly flat arrival.
+    'SISMO': { life: 80, every: 5, place: 'deep', emit(s) {
+      quake(s, s.reach, { speed: 2.2, amp: 1 }, 80);
     } },
-    'TRONADURA': { life: 1, emit(s) {
+    // Mining-induced microseism: shallow source near the excavations, tight arcs.
+    'MICROSISMO': { life: 50, every: 5, place: 'below', emit(s) {
+      quake(s, 150, { speed: 1, amp: 0.75 }, 50);
+    } },
+    'TRONADURA': { life: 1, place: 'any', emit(s) {
       s.wave({ speed: 2.2, maxRadius: 190, strength: 1.4, rgb: '255, 255, 255', lineWidth: 3 });
     } },
-    'DESPRENDIMIENTO DE ROCAS': { life: 26, every: 9, emit(s) {
+    'DESPRENDIMIENTO DE ROCAS': { life: 26, every: 9, place: 'any', emit(s) {
       s.wave({ speed: 1.6, maxRadius: 150, strength: 0.55 });
     } },
     'MAQUINARIA CERCA DEL DUCTO': { life: 100, every: 14, near: 45, emit(s) {
@@ -214,19 +236,32 @@
   };
 
   class Source {
-    constructor(x, y) {
+    // auto: placed by the animation (random side and distance); otherwise it starts where the visitor pointed.
+    constructor(x, y, auto) {
       const hit = closestOnFiber(x, y);
       const zone = zoneAt(hit.progress);
-      this.cls = zone.classes[Math.floor(Math.random() * zone.classes.length)];
+      // Natural earthquakes can be felt anywhere along the cable; the rest depend on the section.
+      this.cls = Math.random() < 0.2 ? 'SISMO' : zone.classes[Math.floor(Math.random() * zone.classes.length)];
       this.sig = SIGNATURES[this.cls];
-      // Sources that hug the fiber (leaks, traffic, machinery) are placed at a fixed offset from it.
-      if (this.sig.near) {
-        const side = y >= hit.y ? 1 : -1;
+      const sig = this.sig;
+      const groundTop = laneTop + 8;
+      const groundBottom = strip ? strip.y - 10 : h;
+      const offset = 20 + Math.random() * 110;
+      let side = auto ? (Math.random() < 0.5 ? -1 : 1) : (y >= hit.y ? 1 : -1);
+      if (sig.near) {
         x = hit.x;
-        y = hit.y + side * this.sig.near;
+        y = hit.y + side * sig.near;
+      } else if (sig.place === 'deep') {
+        x = hit.x + (Math.random() - 0.5) * 160;
+        y = groundBottom + 140 + Math.random() * 160;
+      } else {
+        if (sig.place === 'below') side = 1;
+        if (auto || sig.place === 'below') y = hit.y + side * (auto ? offset : Math.abs(y - hit.y));
       }
+      if (sig.place !== 'deep') y = Math.min(Math.max(y, groundTop), groundBottom);
       this.x = x;
       this.y = y;
+      this.reach = closestOnFiber(this.x, this.y).dist + 220;
       this.age = 0;
       this.reported = false;
     }
@@ -288,9 +323,9 @@
     returns.push({ progress: hit.progress, ev });
   }
 
-  function spawnSource(x, y) {
+  function spawnSource(x, y, auto = false) {
     if (sources.length >= MAX_SOURCES) return false;
-    sources.push(new Source(x, y));
+    sources.push(new Source(x, y, auto));
     return true;
   }
 
@@ -309,7 +344,24 @@
     octx.fillRect(0, 0, cols, rows);
     const pts = [];
     for (let c = 0; c < cols; c++) pts.push(pointAt(c / (cols - 1)));
-    strip = { x: x0, y: lane.stripTop, w: w - x0, h: lane.stripH, cols, rows, off, octx, pts, row: octx.createImageData(cols, 1) };
+    // Coupling: each stretch of fiber senses the ground differently (smooth bands),
+    // plus a few channels that are always noisy or nearly dead, as in field records.
+    const raw = Array.from({ length: cols }, () => Math.random());
+    const gain = raw.map((_, c) => {
+      let s = 0, n = 0;
+      for (let k = -6; k <= 6; k++) { const j = c + k; if (j >= 0 && j < cols) { s += raw[j]; n++; } }
+      return 0.45 + 1.1 * (s / n);
+    });
+    const noiseAmp = gain.map(() => 0.16);
+    for (let c = 0; c < cols; c++) {
+      const r = Math.random();
+      if (r < 0.025) noiseAmp[c] = 0.55;
+      else if (r < 0.035) gain[c] = 0.12;
+    }
+    strip = {
+      x: x0, y: lane.stripTop, w: w - x0, h: lane.stripH, cols, rows, off, octx, pts,
+      row: octx.createImageData(cols, 1), gain, noiseAmp, noise: new Float32Array(cols)
+    };
   }
 
   function stripSample(p) {
@@ -324,11 +376,14 @@
 
   function updateStrip() {
     if (!strip) return;
-    const { cols, rows, octx, off, pts, row } = strip;
+    const { cols, rows, octx, off, pts, row, gain, noiseAmp, noise } = strip;
     octx.drawImage(off, 0, 0, cols, rows - 1, 0, 1, cols, rows - 1);
     const data = row.data;
     for (let c = 0; c < cols; c++) {
-      const v = stripSample(pts[c]) * 2.4 + (Math.random() - 0.5) * 0.16;
+      // ambient noise correlated in time (short streaks) plus a slow, long-wavelength microseism band
+      noise[c] = 0.8 * noise[c] + 0.2 * (Math.random() - 0.5) * 2 * noiseAmp[c];
+      const micro = 0.07 * Math.sin((c / cols) * 9 - frame * 0.02);
+      const v = (stripSample(pts[c]) * 2.4 + micro) * gain[c] + noise[c];
       const a = Math.min(1, Math.abs(v));
       // dark background blended toward cyan (compression) or amber (extension)
       const [r2, g2, b2] = v >= 0 ? [0, 240, 255] : [255, 176, 32];
@@ -624,7 +679,7 @@
       if (t - lastAutoSource > 3.2) {
         lastAutoSource = t;
         const pt = fiberPoints[1 + Math.floor(Math.random() * (fiberPoints.length - 1))];
-        if (pt) spawnSource(pt.x + (Math.random() - 0.5) * 120, pt.y + 40 + Math.random() * 60);
+        if (pt) spawnSource(pt.x + (Math.random() - 0.5) * 120, pt.y, true);
       }
       if (Math.random() < 0.04 && pulses.length < 9) pulses.push(new LaserPulse());
     }

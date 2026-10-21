@@ -425,6 +425,7 @@
       "Los registros crudos quedan en HDF5, el formato habitual de los equipos DAS. Los resultados (catálogo de eventos, ubicaciones, imágenes del subsuelo e informe) se entregan en formatos abiertos que se pueden cargar en otros programas.": "Raw records are stored in HDF5, the usual format of DAS equipment. The results (event catalog, locations, subsurface images and report) are delivered in open formats that can be loaded into other software.",
       "Al menos uno a dos meses de registro. El costo depende del alcance, de la fibra disponible y del equipo; lo definimos en la propuesta, después de la primera reunión técnica.": "At least one to two months of recording. The cost depends on the scope, the available fiber and the equipment; we define it in the proposal, after the first technical meeting.",
       "REGISTRO DAS SIMULADO · DISTANCIA × TIEMPO": "SIMULATED DAS RECORD · DISTANCE × TIME",
+      "MICROSISMO": "MICROSEISMIC EVENT",
       "EVENTO DETECTADO": "EVENT DETECTED",
       "IA": "AI",
       "ANALIZANDO…": "ANALYZING…",
