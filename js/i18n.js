@@ -33,7 +33,7 @@
       "Ir a Contacto": "Go to Contact",
       "GEOFÍSICA + DAS": "GEOPHYSICS + DAS",
     "INTERROGADOR": "INTERROGATOR",
-    "Pulsos de luz infrarroja (1550 nm), invisibles al ojo, recorren la fibra.": "Infrared light pulses (1550 nm), invisible to the eye, travel along the fiber.",
+    "Pulsos de luz láser infrarroja (1550 nm), invisibles al ojo, recorren la fibra.": "Infrared laser pulses (1550 nm), invisible to the eye, travel along the fiber.",
       "· Cómo funciona": "· How it works",
       "De la luz a la decisión": "From light to decision",
       "No fabricamos equipos ni estamos atados a un fabricante: elegimos el interrogador que mejor calza con cada proyecto. Lo nuestro es saber dónde instalar la fibra y qué hacer con la señal.": "We don't build equipment and we are not tied to a manufacturer: we choose the interrogator that best fits each project. Our expertise is knowing where to install the fiber and what to do with the signal.",
