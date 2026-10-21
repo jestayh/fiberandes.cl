@@ -409,7 +409,6 @@
       "04 · CONTACTO": "04 · CONTACT",
       "Registro DAS de un sismo Mw 4.6 en la fibra de un mineroducto": "DAS record of an Mw 4.6 earthquake on the fiber of a slurry pipeline",
       "Registro DAS de una emanación de gases en el Cordón Caulle": "DAS record of a gas emission at Cordón Caulle",
-      "Rack con el interrogador DAS en Yellowstone": "Rack with the DAS interrogator in Yellowstone",
       "Geofísica y geología aplicadas a la fibra óptica": "Geophysics and geology applied to optical fiber",
       "Somos un equipo de geofísicos y geólogos que diseña, mide y analiza con DAS. Trabajamos con universidades y socios en Chile y el extranjero, y avanzamos hacia nuestro primer piloto en minería.": "We are a team of geophysicists and geologists who design, measure and analyze with DAS. We work with universities and partners in Chile and abroad, and we are moving toward our first mining pilot.",
       "Conversemos su caso en una reunión técnica: evaluamos con usted si DAS es la herramienta adecuada y cómo sería un piloto.": "Let's discuss your case in a technical meeting: we assess with you whether DAS is the right tool and what a pilot would look like.",
